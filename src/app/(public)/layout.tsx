@@ -1,3 +1,5 @@
+import Navbar from '@/components/shared/Navbar'
+
 interface PublicLayoutProps {
   children: React.ReactNode
 }
@@ -5,6 +7,7 @@ interface PublicLayoutProps {
 const PublicLayout = ({ children }: PublicLayoutProps) => {
   return (
     <>
+      <Navbar />
       <main className='min-h-screen'>{children}</main>
     </>
   )
