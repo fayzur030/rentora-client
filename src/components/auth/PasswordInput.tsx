@@ -32,6 +32,7 @@ const PasswordInput = ({ value, onChange, error }: PasswordInputProps) => {
       <div className='relative'>
         <input
           id='password'
+          name='password'
           type={showPassword ? 'text' : 'password'}
           value={value}
           onChange={(event) => onChange(event.target.value)}

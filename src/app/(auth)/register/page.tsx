@@ -2,7 +2,15 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { UserRound, Mail, ArrowLeft, ArrowRight } from 'lucide-react'
+import {
+  UserRound,
+  Mail,
+  ArrowLeft,
+  ArrowRight,
+  // Package,
+  // Warehouse,
+  // Check,
+} from 'lucide-react'
 import { toast } from 'sonner'
 
 import Logo from '@/components/shared/Logo'
@@ -10,26 +18,77 @@ import PasswordInput from '@/components/auth/PasswordInput'
 import ImageUpload from '@/components/auth/ImageUpload'
 import { validateEmail } from '@/lib/validation/emailValidation'
 import { validatePassword } from '@/lib/validation/passwordValidation'
+import { authClient } from '@/lib/auth-client'
+import { useRouter } from 'next/navigation'
+
+// signup file
+type SignUpFields = {
+  name: string
+  email: string
+  password: string
+  profileImageUrl: string
+}
 
 const RegisterPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [profileImage, setProfileImage] = useState('')
+  // const [role, setRole] = useState<'Customer' | 'Owner'>('Customer')
   const [emailError, setEmailError] = useState<string | null>(null)
   const [passwordError, setPasswordError] = useState<string | null>(null)
+  const [Loading, setLoading] = useState(false)
+  const router = useRouter()
 
-  const handleCreateAccount = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleCreateAccount = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
     event.preventDefault()
+    const form = event.currentTarget
+    const formData = new FormData(event.currentTarget)
 
-    const nextEmailError = validateEmail(email)
-    const nextPasswordError = validatePassword(password)
+    const userData = Object.fromEntries(formData.entries()) as SignUpFields
+
+    const nextEmailError = validateEmail(userData.email)
+    const nextPasswordError = validatePassword(userData.password)
 
     setEmailError(nextEmailError)
     setPasswordError(nextPasswordError)
 
+    if (!userData.name.trim()) {
+      toast.error('Please enter your full name.')
+      return
+    }
+
     if (nextEmailError || nextPasswordError) {
       toast.error('Please check the highlighted fields.')
       return
+    }
+
+    setLoading(true)
+
+    try {
+      const { data, error } = await authClient.signUp.email({
+        name: userData.name.trim(),
+        email: userData.email.trim(),
+        password: userData.password,
+        image: profileImage || undefined,
+      })
+      console.log(data)
+      if (error) {
+        toast.error(error.message || 'Failed to create account.')
+        return
+      }
+
+      if (data) {
+        toast.success('Account created successfully!')
+      }
+      form.reset()
+      router.push('/login')
+    } catch (error) {
+      console.error('Registration error:', error)
+      toast.error('Something went wrong. Please try again.')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -86,6 +145,105 @@ const RegisterPage = () => {
 
         {/* Registration Form */}
         <form onSubmit={handleCreateAccount} className='space-y-5'>
+          {/* Account Role */}
+          {/* <fieldset className='space-y-3'>
+            <legend className='text-sm font-semibold text-[#39291F]'>
+              I want to
+            </legend>
+
+            <div className='grid gap-3 sm:grid-cols-2'>
+              <label
+                className={`relative cursor-pointer rounded-xl border p-4 transition-all ${
+                  role === 'Customer'
+                    ? 'border-[#F5A623] bg-[#FFF9EF] shadow-[0_8px_20px_rgba(245,166,35,0.12)]'
+                    : 'border-[#EAE2D9] bg-[#FCFBF9] hover:border-[#D9CABC]'
+                }`}
+              >
+                <input
+                  type='radio'
+                  name='role'
+                  value='Customer'
+                  checked={role === 'Customer'}
+                  onChange={() => setRole('Customer')}
+                  className='sr-only'
+                />
+
+                <div className='flex items-start gap-3'>
+                  <div
+                    className={`flex size-10 shrink-0 items-center justify-center rounded-lg ${
+                      role === 'Customer'
+                        ? 'bg-[#F5A623] text-[#241A15]'
+                        : 'bg-[#F3EEE7] text-[#92877E]'
+                    }`}
+                  >
+                    <Package className='size-5' />
+                  </div>
+
+                  <div className='min-w-0 flex-1'>
+                    <div className='flex items-center justify-between gap-2'>
+                      <span className='font-bold text-[#39291F]'>
+                        Customer
+                      </span>
+                      {role === 'Customer' && (
+                        <span className='flex size-5 items-center justify-center rounded-full bg-[#F5A623]'>
+                          <Check className='size-3 text-[#241A15]' />
+                        </span>
+                      )}
+                    </div>
+                    <p className='mt-1 text-xs leading-5 text-[#92877E]'>
+                      I want to rent equipment.
+                    </p>
+                  </div>
+                </div>
+              </label>
+
+              <label
+                className={`relative cursor-pointer rounded-xl border p-4 transition-all ${
+                  role === 'Owner'
+                    ? 'border-[#F5A623] bg-[#FFF9EF] shadow-[0_8px_20px_rgba(245,166,35,0.12)]'
+                    : 'border-[#EAE2D9] bg-[#FCFBF9] hover:border-[#D9CABC]'
+                }`}
+              >
+                <input
+                  type='radio'
+                  name='role'
+                  value='Owner'
+                  checked={role === 'Owner'}
+                  onChange={() => setRole('Owner')}
+                  className='sr-only'
+                />
+
+                <div className='flex items-start gap-3'>
+                  <div
+                    className={`flex size-10 shrink-0 items-center justify-center rounded-lg ${
+                      role === 'Owner'
+                        ? 'bg-[#F5A623] text-[#241A15]'
+                        : 'bg-[#F3EEE7] text-[#92877E]'
+                    }`}
+                  >
+                    <Warehouse className='size-5' />
+                  </div>
+
+                  <div className='min-w-0 flex-1'>
+                    <div className='flex items-center justify-between gap-2'>
+                      <span className='font-bold text-[#39291F]'>
+                        Owner
+                      </span>
+                      {role === 'Owner' && (
+                        <span className='flex size-5 items-center justify-center rounded-full bg-[#F5A623]'>
+                          <Check className='size-3 text-[#241A15]' />
+                        </span>
+                      )}
+                    </div>
+                    <p className='mt-1 text-xs leading-5 text-[#92877E]'>
+                      I want to list my equipment for rent.
+                    </p>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </fieldset> */}
+
           {/* Name */}
           <div className='space-y-2'>
             <label
@@ -154,50 +312,13 @@ const RegisterPage = () => {
           {/* Create Account */}
           <button
             type='submit'
+            disabled={Loading}
             className='group flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#F5A623] text-sm font-bold text-[#241A15] shadow-[0_8px_20px_rgba(245,166,35,0.18)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#E99B19] hover:shadow-[0_12px_25px_rgba(245,166,35,0.25)] active:translate-y-0'
           >
-            Create Account
+            {Loading ? 'Creating Account...' : 'Create Account'}
             <ArrowRight className='size-4 transition-transform duration-200 group-hover:translate-x-1' />
           </button>
         </form>
-
-        {/* Divider */}
-        {/* <div className='my-6 flex items-center gap-4'>
-          <div className='h-px flex-1 bg-[#EAE2D9]' />
-
-          <span className='text-[11px] font-bold tracking-[0.14em] text-[#A99B8F]'>
-            OR CONTINUE WITH
-          </span>
-
-          <div className='h-px flex-1 bg-[#EAE2D9]' />
-        </div> */}
-
-        {/* Google Login */}
-        {/* <button
-          type='button'
-          onClick={handleGoogleLogin}
-          className='flex h-12 w-full items-center justify-center gap-3 rounded-xl border border-[#EAE2D9] bg-white text-sm font-semibold text-[#39291F] transition-all duration-200 hover:border-[#F5A623] hover:bg-[#FFFBF4] active:scale-[0.99]'
-        >
-          <svg viewBox='0 0 24 24' className='size-5' aria-hidden='true'>
-            <path
-              fill='#4285F4'
-              d='M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.05 5.05 0 0 1-2.2 3.31v2.77h3.57c2.09-1.92 3.27-4.75 3.27-8.09z'
-            />
-            <path
-              fill='#34A853'
-              d='M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.99.66-2.25 1.06-3.71 1.06-2.86 0-5.28-1.93-6.15-4.53H2.16v2.84A11 11 0 0 0 12 23z'
-            />
-            <path
-              fill='#FBBC05'
-              d='M5.85 14.1a6.6 6.6 0 0 1 0-4.2V7.06H2.16a11 11 0 0 0 0 9.88l3.69-2.84z'
-            />
-            <path
-              fill='#EA4335'
-              d='M12 4.36c1.62 0 3.06.56 4.21 1.64l3.15-3.15A10.55 10.55 0 0 0 12 0 11 11 0 0 0 2.16 7.06l3.69 2.84C6.72 7.3 9.14 4.36 12 4.36z'
-            />
-          </svg>
-          Continue with Google
-        </button> */}
 
         {/* Login Link */}
         <p className='mt-7 text-center text-sm text-[#92877E]'>
