@@ -92,21 +92,21 @@ const RegisterPage = () => {
     }
   }
 
-  const handleEmailChange = (value: string) => {
-    setEmail(value)
+  // const handleEmailChange = (value: string) => {
+  //   setEmail(value)
 
-    if (emailError) {
-      setEmailError(validateEmail(value))
-    }
-  }
+  //   if (emailError) {
+  //     setEmailError(validateEmail(value))
+  //   }
+  // }
 
-  const handlePasswordChange = (value: string) => {
-    setPassword(value)
+  // const handlePasswordChange = (value: string) => {
+  //   setPassword(value)
 
-    if (passwordError) {
-      setPasswordError(validatePassword(value))
-    }
-  }
+  //   if (passwordError) {
+  //     setPasswordError(validatePassword(value))
+  //   }
+  // }
 
   // const handleGoogleLogin = () => {
   //   // Authentication will be connected here later.
@@ -283,7 +283,8 @@ const RegisterPage = () => {
                 name='email'
                 type='email'
                 value={email}
-                onChange={(event) => handleEmailChange(event.target.value)}
+                // onChange={(event) => handleEmailChange(event.target.value)}
+                onChange={(event) => setEmail(event.target.value)}
                 placeholder='you@example.com'
                 aria-invalid={emailError ? true : undefined}
                 className={`h-12 w-full rounded-xl border bg-[#FCFBF9] pl-11 pr-4 text-sm text-[#241A15] outline-none transition-all placeholder:text-[#B4AAA0] focus:ring-4 ${
@@ -305,7 +306,8 @@ const RegisterPage = () => {
           {/* Password */}
           <PasswordInput
             value={password}
-            onChange={handlePasswordChange}
+            // onChange={handlePasswordChange}
+            onChange={setPassword}
             error={passwordError || undefined}
           />
 

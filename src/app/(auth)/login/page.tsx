@@ -1,28 +1,82 @@
 'use client'
 
+import { authClient } from '@/lib/auth-client'
+import { validateEmail } from '@/lib/validation/emailValidation'
+import { validatePassword } from '@/lib/validation/passwordValidation'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 import Link from 'next/link'
 import { useState } from 'react'
-import {
-  ArrowLeft,
-  ArrowRight,
-  Mail,
-  LockKeyhole,
-  Eye,
-  EyeOff,
-  Sparkles,
-} from 'lucide-react'
+import { ArrowLeft, Sparkles } from 'lucide-react'
+import PasswordInput from '@/components/auth/PasswordInput'
 
 export default function LoginPage() {
-  const [showPassword, setShowPassword] = useState(false)
+  const router = useRouter()
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  // Form States
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  // Validation States
+  const [emailError, setEmailError] = useState<string | null>(null)
+  const [passwordError, setPasswordError] = useState<string | null>(null)
+
+  // Loading State
+  const [loading, setLoading] = useState(false)
+
+  // Login Handler
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    // Add your login functionality here
+    // Validate Email and Password
+    const nextEmailError = validateEmail(email)
+    const nextPasswordError = validatePassword(password)
+
+    setEmailError(nextEmailError)
+    setPasswordError(nextPasswordError)
+
+    if (nextEmailError || nextPasswordError) {
+      toast.error('Please check your email and password.')
+      return
+    }
+
+    setLoading(true)
+
+    try {
+      const { data, error } = await authClient.signIn.email({
+        email: email.trim(),
+        password,
+      })
+
+      if (error) {
+        toast.error(error.message || 'Invalid email or password.')
+        return
+      }
+
+      if (data) {
+        toast.success(`Welcome back ${data.user.name}`)
+
+        // Reset Form
+        setEmail('')
+        setPassword('')
+        setEmailError(null)
+        setPasswordError(null)
+
+        // Redirect
+        router.push('/')
+        router.refresh()
+      }
+    } catch (error) {
+      console.error('Login error:', error)
+      toast.error('Something went wrong. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
+  // Google Login (Functionality will be added later)
   const handleGoogleLogin = () => {
-    // Add your Google login functionality here
+    // Add Google login functionality here
   }
 
   return (
@@ -65,7 +119,7 @@ export default function LoginPage() {
 
         {/* Login Form */}
         <form onSubmit={handleSubmit} className='space-y-5'>
-          {/* Email */}
+          {/* Email Input */}
           <div className='space-y-2'>
             <label
               htmlFor='email'
@@ -74,102 +128,47 @@ export default function LoginPage() {
               Email Address
             </label>
 
-            <div className='relative'>
-              <Mail
-                size={18}
-                className='absolute left-4 top-1/2 -translate-y-1/2 text-[#A8A29E]'
-              />
-
-              <input
-                id='email'
-                name='email'
-                type='email'
-                placeholder='you@example.com'
-                required
-                className='h-12 w-full rounded-xl border border-[#E7E1D8] bg-[#FFFEFC] pl-11 pr-4 text-sm text-[#292524] outline-none transition-all placeholder:text-[#A8A29E] focus:border-[#F5A623] focus:ring-4 focus:ring-[#F5A623]/10'
-              />
-            </div>
-          </div>
-
-          {/* Password */}
-          <div className='space-y-2'>
-            <div className='flex items-center justify-between'>
-              <label
-                htmlFor='password'
-                className='text-sm font-semibold text-[#44403C]'
-              >
-                Password
-              </label>
-
-              <Link
-                href='/forgot-password'
-                className='text-xs font-semibold text-[#B7791F] transition-colors hover:text-[#925F12]'
-              >
-                Forgot password?
-              </Link>
-            </div>
-
-            <div className='relative'>
-              <LockKeyhole
-                size={18}
-                className='absolute left-4 top-1/2 -translate-y-1/2 text-[#A8A29E]'
-              />
-
-              <input
-                id='password'
-                name='password'
-                type={showPassword ? 'text' : 'password'}
-                placeholder='Enter your password'
-                required
-                className='h-12 w-full rounded-xl border border-[#E7E1D8] bg-[#FFFEFC] pl-11 pr-12 text-sm text-[#292524] outline-none transition-all placeholder:text-[#A8A29E] focus:border-[#F5A623] focus:ring-4 focus:ring-[#F5A623]/10'
-              />
-
-              <button
-                type='button'
-                onClick={() => setShowPassword(!showPassword)}
-                className='absolute right-4 top-1/2 -translate-y-1/2 text-[#A8A29E] transition-colors hover:text-[#57534E]'
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
-              >
-                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-              </button>
-            </div>
-          </div>
-
-          {/* Remember Me */}
-          <div className='flex items-center gap-2'>
             <input
-              id='remember'
-              type='checkbox'
-              className='h-4 w-4 cursor-pointer accent-[#F5A623]'
+              id='email'
+              name='email'
+              type='email'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder='Enter your email'
+              className='h-12 w-full rounded-xl border border-[#E7E1D8] px-4 text-sm text-[#292524] outline-none transition-all placeholder:text-[#A8A29E] focus:border-[#F5A623] focus:ring-2 focus:ring-[#F5A623]/20'
             />
 
-            <label
-              htmlFor='remember'
-              className='cursor-pointer text-sm text-[#78716C]'
-            >
-              Remember me
-            </label>
+            {emailError && <p className='text-xs text-red-500'>{emailError}</p>}
           </div>
 
-          {/* Submit */}
+          {/* Password Input */}
+          <div className='space-y-2'>
+            <PasswordInput
+              value={password}
+              onChange={setPassword}
+              error={passwordError || undefined}
+              showRequirements={false}
+            />
+          </div>
+
+          {/* Submit Button */}
           <button
             type='submit'
-            className='group flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#F5A623] text-sm font-bold text-[#241A10] transition-all hover:bg-[#E99A15] active:scale-[0.99]'
+            disabled={loading}
+            className='flex h-12 w-full items-center justify-center rounded-xl bg-[#F5A623] text-sm font-bold text-[#241A10] transition-all hover:bg-[#E99A16] disabled:cursor-not-allowed disabled:opacity-60'
           >
-            Sign In
-            <ArrowRight
-              size={17}
-              className='transition-transform group-hover:translate-x-1'
-            />
+            {loading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
 
         {/* Divider */}
         <div className='my-7 flex items-center gap-4'>
           <div className='h-px flex-1 bg-[#EAE4DA]' />
+
           <span className='text-xs font-medium text-[#A8A29E]'>
             OR CONTINUE WITH
           </span>
+
           <div className='h-px flex-1 bg-[#EAE4DA]' />
         </div>
 
@@ -177,7 +176,7 @@ export default function LoginPage() {
         <button
           type='button'
           onClick={handleGoogleLogin}
-          className='flex h-12 w-full items-center justify-center gap-3 rounded-xl border border-[#E7E1D8] bg-white text-sm font-semibold text-[#44403C] transition-all hover:bg-[#FAF8F4] hover:border-[#D6CFC3]'
+          className='flex h-12 w-full items-center justify-center gap-3 rounded-xl border border-[#E7E1D8] bg-white text-sm font-semibold text-[#44403C] transition-all hover:border-[#D6CFC3] hover:bg-[#FAF8F4]'
         >
           <svg viewBox='0 0 48 48' className='h-5 w-5'>
             <path

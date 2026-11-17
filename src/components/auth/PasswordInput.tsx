@@ -8,10 +8,17 @@ interface PasswordInputProps {
   value: string
   onChange: (value: string) => void
   error?: string
+  showRequirements?: boolean
 }
 
-const PasswordInput = ({ value, onChange, error }: PasswordInputProps) => {
+const PasswordInput = ({
+  value,
+  onChange,
+  error,
+  showRequirements = true,
+}: PasswordInputProps) => {
   const [showPassword, setShowPassword] = useState(false)
+
   const validation = getPasswordRequirementStatus(value)
 
   const requirements = [
@@ -36,7 +43,7 @@ const PasswordInput = ({ value, onChange, error }: PasswordInputProps) => {
           type={showPassword ? 'text' : 'password'}
           value={value}
           onChange={(event) => onChange(event.target.value)}
-          placeholder='Create a strong password'
+          placeholder='Enter your password'
           aria-invalid={error ? true : undefined}
           className={`h-12 w-full rounded-xl border bg-[#FCFAF7] px-4 pr-12 text-sm text-[#171411] outline-none transition placeholder:text-[#A79A90] focus:ring-4 ${
             error
@@ -59,23 +66,27 @@ const PasswordInput = ({ value, onChange, error }: PasswordInputProps) => {
         </button>
       </div>
 
-      <div className='grid gap-1.5 text-xs sm:grid-cols-1'>
-        {requirements.map((requirement) => (
-          <div
-            key={requirement.text}
-            className={`flex items-center gap-2 ${
-              requirement.valid ? 'text-[#16803C]' : 'text-[#8B8180]'
-            }`}
-          >
-            {requirement.valid ? (
-              <Check className='size-4 shrink-0' />
-            ) : (
-              <Circle className='size-3.5 shrink-0' />
-            )}
-            <span>{requirement.text}</span>
-          </div>
-        ))}
-      </div>
+      {/* Password Requirements */}
+      {showRequirements && (
+        <div className='grid gap-1.5 text-xs sm:grid-cols-1'>
+          {requirements.map((requirement) => (
+            <div
+              key={requirement.text}
+              className={`flex items-center gap-2 ${
+                requirement.valid ? 'text-[#16803C]' : 'text-[#8B8180]'
+              }`}
+            >
+              {requirement.valid ? (
+                <Check className='size-4 shrink-0' />
+              ) : (
+                <Circle className='size-3.5 shrink-0' />
+              )}
+
+              <span>{requirement.text}</span>
+            </div>
+          ))}
+        </div>
+      )}
 
       {error && <p className='text-xs font-medium text-red-600'>{error}</p>}
     </div>
