@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { UserRound, Mail, ArrowLeft, ArrowRight, Sparkles } from 'lucide-react'
+import { UserRound, Mail, ArrowLeft, ArrowRight } from 'lucide-react'
 import { toast } from 'sonner'
 
 import Logo from '@/components/shared/Logo'
@@ -49,9 +49,9 @@ const RegisterPage = () => {
     }
   }
 
-  const handleGoogleLogin = () => {
-    // Authentication will be connected here later.
-  }
+  // const handleGoogleLogin = () => {
+  //   // Authentication will be connected here later.
+  // }
 
   return (
     <main className='relative flex min-h-screen flex-col items-center justify-center bg-[#F5F1EB] px-4 py-10 sm:px-6'>
@@ -162,7 +162,7 @@ const RegisterPage = () => {
         </form>
 
         {/* Divider */}
-        <div className='my-6 flex items-center gap-4'>
+        {/* <div className='my-6 flex items-center gap-4'>
           <div className='h-px flex-1 bg-[#EAE2D9]' />
 
           <span className='text-[11px] font-bold tracking-[0.14em] text-[#A99B8F]'>
@@ -170,10 +170,10 @@ const RegisterPage = () => {
           </span>
 
           <div className='h-px flex-1 bg-[#EAE2D9]' />
-        </div>
+        </div> */}
 
         {/* Google Login */}
-        <button
+        {/* <button
           type='button'
           onClick={handleGoogleLogin}
           className='flex h-12 w-full items-center justify-center gap-3 rounded-xl border border-[#EAE2D9] bg-white text-sm font-semibold text-[#39291F] transition-all duration-200 hover:border-[#F5A623] hover:bg-[#FFFBF4] active:scale-[0.99]'
@@ -197,7 +197,7 @@ const RegisterPage = () => {
             />
           </svg>
           Continue with Google
-        </button>
+        </button> */}
 
         {/* Login Link */}
         <p className='mt-7 text-center text-sm text-[#92877E]'>
@@ -206,7 +206,7 @@ const RegisterPage = () => {
             href='/login'
             className='font-bold text-[#39291F] underline decoration-[#F5A623] decoration-2 underline-offset-4 transition-colors hover:text-[#D78C16]'
           >
-            login
+            Login
           </Link>
         </p>
       </section>
