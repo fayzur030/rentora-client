@@ -11,7 +11,7 @@ const Logo = () => {
         height={40}
       />
 
-      <span className="text-2xl font-extrabold text-foreground">
+      <span className="text-2xl font-extrabold text-white">
         Rent<span className="text-[#F5A623]">ora</span>
       </span>
     </Link>
