@@ -75,8 +75,21 @@ export default function LoginPage() {
   }
 
   // Google Login (Functionality will be added later)
-  const handleGoogleLogin = () => {
-    // Add Google login functionality here
+  const handleGoogleLogin = async () => {
+    try {
+      const { error } = await authClient.signIn.social({
+        provider: 'google',
+        callbackURL: '/',
+      })
+
+      if (error) {
+        toast.error(error.message || 'Google login failed.')
+        return
+      }
+    } catch (error) {
+      console.error('Google login error:', error)
+      toast.error('Something went wrong. Please try again.')
+    }
   }
 
   return (
