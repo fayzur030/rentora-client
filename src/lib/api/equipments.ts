@@ -16,3 +16,17 @@ export const getAllEquipments = async (
 
   return result.data
 }
+
+// get equipmentById
+
+export const getEquipmentById = async (id: string): Promise<Equipment> => {
+  const res = await fetch(`${baseUrl}/api/equipment/equipment/${id}`)
+
+  const result = await res.json()
+
+  if (!res.ok) {
+    throw new Error(result.message || 'Failed to fetch equipment')
+  }
+
+  return result.data
+}
