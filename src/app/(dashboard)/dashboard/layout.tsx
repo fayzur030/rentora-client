@@ -1,16 +1,21 @@
+import { headers } from 'next/headers'
 import DashboardLayout from '@/components/dashboard/dashboard-layout'
-import type { DashboardRole } from '@/types/dashboard'
-
-// The role is fixed for now so every dashboard can be previewed.
-// Later this can come from the logged-in user (no role detection yet).
-const currentRole: DashboardRole = 'customer'
+import { auth } from '@/lib/auth'
 
 interface DashboardLayoutProps {
   children: React.ReactNode
 }
 
-const DashboardLayoutRoute = ({ children }: DashboardLayoutProps) => {
-  return <DashboardLayout role={currentRole}>{children}</DashboardLayout>
+const DashboardLayoutRoute = async ({ children }: DashboardLayoutProps) => {
+  // Get logged-in user session
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  // Get user role
+  const role = session?.user?.role ?? 'customer'
+
+  return <DashboardLayout role={role}>{children}</DashboardLayout>
 }
 
 export default DashboardLayoutRoute

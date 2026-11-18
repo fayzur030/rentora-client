@@ -52,7 +52,10 @@ const DashboardLayout = ({ role, children }: DashboardLayoutProps) => {
         >
           <SheetTitle className='sr-only'>Dashboard Menu</SheetTitle>
 
-          <DashboardSidebar role={role} onNavigate={() => setIsMobileMenuOpen(false)} />
+          <DashboardSidebar
+            role={role}
+            onNavigate={() => setIsMobileMenuOpen(false)}
+          />
         </SheetContent>
       </Sheet>
     </TooltipProvider>

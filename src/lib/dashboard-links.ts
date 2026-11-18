@@ -1,6 +1,7 @@
 import {
   ClipboardList,
   Heart,
+  LayoutDashboard,
   Package,
   Plus,
   User,
@@ -18,7 +19,12 @@ import type {
 // ---------------------------------------------------------------
 export const customerNavItems: DashboardNavItem[] = [
   // The section overview: active only on its own URL, never on child pages
-  { label: 'Dashboard', href: '/dashboard/customer', icon: Package, exact: true },
+  {
+    label: 'Dashboard',
+    href: '/dashboard/customer',
+    icon: LayoutDashboard,
+    exact: true,
+  },
   {
     label: 'My Rentals',
     href: '/dashboard/customer/my-rentals',
@@ -54,6 +60,7 @@ export const ownerNavItems: DashboardNavItem[] = [
 // Admin dashboard navigation
 // ---------------------------------------------------------------
 export const adminNavItems: DashboardNavItem[] = [
+  { label: 'Dashboard', href: '/dashboard/admin', icon: LayoutDashboard },
   { label: 'All Users', href: '/dashboard/admin/users', icon: Users },
   { label: 'All Equipment', href: '/dashboard/admin/equipment', icon: Package },
   {
