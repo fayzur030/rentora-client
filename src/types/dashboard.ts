@@ -9,6 +9,9 @@ export interface DashboardNavItem {
   label: string
   href: string
   icon: LucideIcon
+  // true = only this exact URL counts as active (e.g. the section
+  // overview link should not stay active on its child pages)
+  exact?: boolean
 }
 
 // Navigation list for each role

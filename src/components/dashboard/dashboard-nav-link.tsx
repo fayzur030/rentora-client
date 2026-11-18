@@ -3,16 +3,25 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
+import { isNavItemActive } from '@/lib/dashboard-links'
 import { cn } from '@/lib/utils'
 import type { DashboardNavLinkProps } from '@/types/dashboard'
 
-const DashboardNavLink = ({ item, collapsed = false, onNavigate }: DashboardNavLinkProps) => {
+const DashboardNavLink = ({
+  item,
+  collapsed = false,
+  onNavigate,
+}: DashboardNavLinkProps) => {
   const pathname = usePathname()
   const Icon = item.icon
 
-  // Active when the URL is exactly the link, or a child of the link
-  const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`)
+  // Active state comes from one shared helper in lib/dashboard-links.ts
+  const isActive = isNavItemActive(pathname, item)
 
   const linkClassName = cn(
     'group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200',

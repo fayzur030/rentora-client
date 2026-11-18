@@ -25,6 +25,7 @@ interface ProfileUser {
   name: string
   email: string
   image?: string | null
+  role: string
 }
 
 interface ProfileDropdownProps {
@@ -123,7 +124,9 @@ const ProfileDropdown = ({
         <DropdownMenuSeparator className='bg-white/15' />
         {/* dashboard */}
         <DropdownMenuItem
-          render={<Link href='/dashboard' onClick={closeMenus} />}
+          render={
+            <Link href={`/dashboard/${user.role}`} onClick={closeMenus} />
+          }
           className='group gap-2 rounded-lg py-2.5 text-sm font-medium text-white/80 transition-colors cursor-pointer hover:bg-[#F5A623]/10 hover:text-[#F5A623] focus:bg-[#F5A623]/10 focus:text-[#F5A623]'
         >
           <User

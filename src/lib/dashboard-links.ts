@@ -1,11 +1,29 @@
-import { ClipboardList, Heart, Package, Plus, User, Users, Warehouse } from 'lucide-react'
-import type { DashboardNavItem, DashboardNavItems, DashboardRole } from '@/types/dashboard'
+import {
+  ClipboardList,
+  Heart,
+  Package,
+  Plus,
+  User,
+  Users,
+  Warehouse,
+} from 'lucide-react'
+import type {
+  DashboardNavItem,
+  DashboardNavItems,
+  DashboardRole,
+} from '@/types/dashboard'
 
 // ---------------------------------------------------------------
 // Customer dashboard navigation
 // ---------------------------------------------------------------
 export const customerNavItems: DashboardNavItem[] = [
-  { label: 'My Rentals', href: '/dashboard/customer/my-rentals', icon: Package },
+  // The section overview: active only on its own URL, never on child pages
+  { label: 'Dashboard', href: '/dashboard/customer', icon: Package, exact: true },
+  {
+    label: 'My Rentals',
+    href: '/dashboard/customer/my-rentals',
+    icon: Package,
+  },
   { label: 'Favorites', href: '/dashboard/customer/favorites', icon: Heart },
   { label: 'Profile', href: '/dashboard/customer/profile', icon: User },
 ]
@@ -14,8 +32,16 @@ export const customerNavItems: DashboardNavItem[] = [
 // Owner dashboard navigation
 // ---------------------------------------------------------------
 export const ownerNavItems: DashboardNavItem[] = [
-  { label: 'Add Equipment', href: '/dashboard/owner/add-equipment', icon: Plus },
-  { label: 'My Equipment', href: '/dashboard/owner/my-equipment', icon: Warehouse },
+  {
+    label: 'Add Equipment',
+    href: '/dashboard/owner/add-equipment',
+    icon: Plus,
+  },
+  {
+    label: 'My Equipment',
+    href: '/dashboard/owner/my-equipment',
+    icon: Warehouse,
+  },
   {
     label: 'My Equipment Rental',
     href: '/dashboard/owner/my-equipment-rentals',
@@ -30,7 +56,11 @@ export const ownerNavItems: DashboardNavItem[] = [
 export const adminNavItems: DashboardNavItem[] = [
   { label: 'All Users', href: '/dashboard/admin/users', icon: Users },
   { label: 'All Equipment', href: '/dashboard/admin/equipment', icon: Package },
-  { label: 'All Rentals', href: '/dashboard/admin/rentals', icon: ClipboardList },
+  {
+    label: 'All Rentals',
+    href: '/dashboard/admin/rentals',
+    icon: ClipboardList,
+  },
   { label: 'My Profile', href: '/dashboard/admin/profile', icon: User },
 ]
 
@@ -48,20 +78,38 @@ export const dashboardRoleLabels: Record<DashboardRole, string> = {
   admin: 'Admin Dashboard',
 }
 
+// One shared active check, used by both the sidebar links and the navbar title.
+// - normal items: active on their own URL and on any child page
+// - items with exact: active only on their own URL
+export const isNavItemActive = (
+  pathname: string,
+  item: DashboardNavItem
+): boolean => {
+  if (item.exact) return pathname === item.href
+
+  return pathname === item.href || pathname.startsWith(`${item.href}/`)
+}
+
 // Finds the nav item that matches the current URL.
 // Used by the navbar to show the section and page title.
+// When several items match, the most specific one (longest href) wins,
+// so a parent link never hides the real page title.
 export const findActiveNavItem = (
   pathname: string
 ): { role: DashboardRole; item: DashboardNavItem } | null => {
   const roles = Object.keys(dashboardNavItems) as DashboardRole[]
 
-  for (const role of roles) {
-    const item = dashboardNavItems[role].find(
-      (navItem) => pathname === navItem.href || pathname.startsWith(`${navItem.href}/`)
-    )
+  let activeMatch: { role: DashboardRole; item: DashboardNavItem } | null = null
 
-    if (item) return { role, item }
+  for (const role of roles) {
+    for (const item of dashboardNavItems[role]) {
+      if (!isNavItemActive(pathname, item)) continue
+
+      if (!activeMatch || item.href.length > activeMatch.item.href.length) {
+        activeMatch = { role, item }
+      }
+    }
   }
 
-  return null
+  return activeMatch
 }
