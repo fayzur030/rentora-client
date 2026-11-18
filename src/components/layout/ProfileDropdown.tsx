@@ -4,12 +4,23 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
-import { ChevronDown, LogOut, User } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
-import { authClient } from '@/lib/auth-client'
-import { AvatarBadge, AvatarFallback, AvatarImage } from '../ui/avatar'
+import { LogOut, User } from 'lucide-react'
 
-// The user object that NavAuth passes in
+import { authClient } from '@/lib/auth-client'
+
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+
+// User information
 interface ProfileUser {
   name: string
   email: string
@@ -18,64 +29,9 @@ interface ProfileUser {
 
 interface ProfileDropdownProps {
   user: ProfileUser
-  // Inside the mobile menu the panel opens upward so it stays on screen
   opensUp?: boolean
-  // Closes the mobile menu after a click
   onNavigate?: () => void
 }
-
-interface AvatarProps {
-  user: ProfileUser
-  // Example: 'size-8 text-sm' - kept as plain text so Tailwind can see it
-  sizeClass: string
-}
-
-// Shows the profile image, or the first letter of the name when there is no image
-const Avatar = ({ user, sizeClass }: AvatarProps) => {
-  if (user.image) {
-    return (
-      // Profile images are hosted on Google / ImgBB, so a normal img tag is used
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        src={user.image}
-        alt={user.name}
-        className={`${sizeClass} rounded-full object-cover size-10`}
-      />
-    )
-  }
-
-  return (
-    <span
-      className={`flex ${sizeClass} items-center justify-center rounded-full bg-[#F5A623] font-bold text-[#2b1a12]`}
-    >
-      {user.name.charAt(0).toUpperCase()}
-    </span>
-  )
-}
-
-interface DropdownLinkProps {
-  href: string
-  label: string
-  icon: LucideIcon
-  onClick?: () => void
-}
-
-// A single clickable row inside the dropdown
-const DropdownLink = ({
-  href,
-  label,
-  icon: Icon,
-  onClick,
-}: DropdownLinkProps) => (
-  <Link
-    href={href}
-    onClick={onClick}
-    className='flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-white/80 transition-colors duration-200 hover:bg-white/10 hover:text-white'
-  >
-    <Icon className='size-4 text-[#F5A623]' />
-    {label}
-  </Link>
-)
 
 const ProfileDropdown = ({
   user,
@@ -85,13 +41,16 @@ const ProfileDropdown = ({
   const [isOpen, setIsOpen] = useState(false)
   const router = useRouter()
 
-  // Closes both the dropdown and the mobile menu
+  // User's first letter for avatar fallback
+  const firstLetter = user?.name?.charAt(0).toUpperCase() || 'U'
+
+  // Close dropdown and mobile menu
   const closeMenus = () => {
     setIsOpen(false)
     onNavigate?.()
   }
 
-  // Signs the user out and goes back to the homepage
+  // Sign out
   const handleSignOut = async () => {
     const { error } = await authClient.signOut()
 
@@ -102,85 +61,92 @@ const ProfileDropdown = ({
 
     closeMenus()
     toast.success('Signed out successfully.')
+
     router.push('/')
     router.refresh()
   }
 
-  // The panel opens upward when it is inside the mobile menu
-  const panelPosition = opensUp ? 'bottom-full mb-2' : 'top-full mt-2'
-
   return (
-    <div className='relative'>
-      {/* Invisible layer: clicking anywhere outside closes the dropdown */}
-      {isOpen && (
-        <button
-          type='button'
-          aria-label='Close profile menu'
-          onClick={() => setIsOpen(false)}
-          className='fixed inset-0 z-40 cursor-default'
-        />
-      )}
-
-      {/* Avatar button */}
-      <button
-        type='button'
-        onClick={() => setIsOpen(!isOpen)}
-        aria-expanded={isOpen}
+    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+      {/* Profile Avatar */}
+      <DropdownMenuTrigger
         aria-label='Open profile menu'
-        className='flex items-center gap-2 rounded-lg border border-white/15 bg-white/5 p-1 pr-2 transition-colors duration-200 hover:border-white/30 hover:bg-white/10'
+        className='rounded-full border-2 border-[#F5A623] p-0.5 transition-all duration-200 hover:border-[#E89412] hover:ring-2 hover:ring-[#F5A623]/20'
       >
-        <Avatar user={user} sizeClass='size-8 text-sm' />
+        <Avatar className='size-9'>
+          <AvatarImage
+            src={user?.image || undefined}
+            alt={user?.name || 'User'}
+          />
 
-        <ChevronDown
-          className={`size-4 text-white/70 transition-transform duration-200 ${
-            isOpen ? 'rotate-180' : ''
-          }`}
-        />
-      </button>
+          <AvatarFallback className='bg-[#F5A623] text-base font-bold text-[#2b1a12]'>
+            {firstLetter}
+          </AvatarFallback>
+        </Avatar>
+      </DropdownMenuTrigger>
 
-      {/* Dropdown panel */}
-      {isOpen && (
-        <div
-          className={`absolute right-0 z-50 w-64 rounded-xl border border-white/10 bg-[#171411] p-2 shadow-2xl ${panelPosition}`}
+      {/* Dropdown Content */}
+      <DropdownMenuContent
+        align='end'
+        side={opensUp ? 'top' : 'bottom'}
+        sideOffset={8}
+        className='w-64 border border-white/10 bg-[#171411] p-2 shadow-2xl'
+      >
+        {/* User Information */}
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className='px-2 py-3'>
+            <div className='flex items-center gap-3'>
+              <Avatar className='size-12 shrink-0'>
+                <AvatarImage
+                  src={user?.image || undefined}
+                  alt={user?.name || 'User'}
+                />
+
+                <AvatarFallback className='bg-[#F5A623] text-base font-bold text-[#2b1a12]'>
+                  {firstLetter}
+                </AvatarFallback>
+              </Avatar>
+
+              <div className='min-w-0 space-y-1'>
+                <p className='truncate text-sm font-semibold text-white'>
+                  {user?.name || 'User'}
+                </p>
+
+                <p className='truncate text-xs font-normal text-white/60'>
+                  {user?.email || ''}
+                </p>
+              </div>
+            </div>
+          </DropdownMenuLabel>
+        </DropdownMenuGroup>
+
+        <DropdownMenuSeparator className='bg-white/15' />
+
+        {/* My Profile */}
+        <DropdownMenuItem
+          render={<Link href='/profile' onClick={closeMenus} />}
+          className='group gap-2 rounded-lg py-2.5 text-sm font-medium text-white/80 transition-colors cursor-pointer hover:bg-[#F5A623]/10 hover:text-[#F5A623] focus:bg-[#F5A623]/10 focus:text-[#F5A623]'
         >
-          {/* Profile image, name and email */}
-          <div className='border-b border-white/10 px-3 py-3'>
-            <Avatar user={user} sizeClass='size-11 text-base' />
-            {/* <Avatar>
-              <AvatarImage src={user.image as string} alt='@shadcn' />
-              <AvatarFallback>CN</AvatarFallback>
-              <AvatarBadge className='bg-green-600 dark:bg-green-800' />
-            </Avatar> */}
+          <User
+            color='#F5A623'
+            className='size-4 shrink-0 text-white/80 transition-colors group-hover:text-[#F5A623] group-focus:text-[#F5A623]'
+          />
+          My Profile
+        </DropdownMenuItem>
 
-            <p className='mt-2.5 text-sm font-semibold text-white'>
-              {user.name}
-            </p>
-            <p className='mt-0.5 truncate text-xs text-white/60'>
-              {user.email}
-            </p>
-          </div>
+        <DropdownMenuSeparator className='bg-white/15' />
 
-          {/* My Profile + Sign Out */}
-          <div className='py-1'>
-            <DropdownLink
-              href='/profile'
-              label='My Profile'
-              icon={User}
-              onClick={closeMenus}
-            />
-
-            <button
-              type='button'
-              onClick={handleSignOut}
-              className='flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-red-400 transition-colors duration-200 hover:bg-red-500/10'
-            >
-              <LogOut className='size-4' />
-              Sign Out
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
+        {/* Sign Out */}
+        <DropdownMenuItem
+          variant='destructive'
+          onClick={handleSignOut}
+          className='gap-2 rounded-lg py-2.5 text-sm font-medium text-red-400 focus:bg-red-500/10 focus:text-red-400 cursor-pointer'
+        >
+          <LogOut className='size-4' />
+          Sign Out
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
 
