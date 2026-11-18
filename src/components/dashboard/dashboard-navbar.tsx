@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Home, Menu, PanelLeft, User } from 'lucide-react'
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -19,18 +19,21 @@ import { Separator } from '@/components/ui/separator'
 import { SheetTrigger } from '@/components/ui/sheet'
 import { dashboardRoleLabels, findActiveNavItem } from '@/lib/dashboard-links'
 import type { DashboardNavbarProps } from '@/types/dashboard'
+import { authClient } from '@/lib/auth-client'
 
-// Placeholder user - replace it with the logged-in user later
-const demoUser = {
-  name: 'Rentora User',
-  email: 'user@rentora.com',
-}
-
-const DashboardNavbar = ({ isCollapsed, onToggleCollapse, role }: DashboardNavbarProps) => {
+const DashboardNavbar = ({
+  isCollapsed,
+  onToggleCollapse,
+  role,
+}: DashboardNavbarProps) => {
+  const { data: session } = authClient.useSession()
+  const user = session?.user
   const pathname = usePathname()
   const activeNavItem = findActiveNavItem(pathname)
 
-  const section = activeNavItem ? dashboardRoleLabels[activeNavItem.role] : 'Dashboard'
+  const section = activeNavItem
+    ? dashboardRoleLabels[activeNavItem.role]
+    : 'Dashboard'
   const title = activeNavItem ? activeNavItem.item.label : 'Overview'
 
   return (
@@ -69,8 +72,12 @@ const DashboardNavbar = ({ isCollapsed, onToggleCollapse, role }: DashboardNavba
 
           {/* Section + page title */}
           <div className='min-w-0'>
-            <p className='truncate text-xs font-medium text-muted-foreground'>{section}</p>
-            <h1 className='truncate font-heading text-lg font-bold sm:text-xl'>{title}</h1>
+            <p className='truncate text-xs font-medium text-muted-foreground'>
+              {section}
+            </p>
+            <h1 className='truncate font-heading text-lg font-bold sm:text-xl'>
+              {title}
+            </h1>
           </div>
         </div>
 
@@ -80,9 +87,14 @@ const DashboardNavbar = ({ isCollapsed, onToggleCollapse, role }: DashboardNavba
             aria-label='Open profile menu'
             className='flex shrink-0 items-center rounded-full outline-none transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-ring/50'
           >
-            <Avatar className='size-9'>
+            <Avatar className='size-10'>
+              <AvatarImage
+                className={`border-2 border-amber-500 size-10`}
+                src={user?.image || undefined}
+                alt={user?.name || 'User'}
+              />
               <AvatarFallback className='bg-[#F5A623] font-bold text-[#2b1a12]'>
-                {demoUser.name.charAt(0).toUpperCase()}
+                {user?.name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
@@ -91,9 +103,14 @@ const DashboardNavbar = ({ isCollapsed, onToggleCollapse, role }: DashboardNavba
             <DropdownMenuGroup>
               <DropdownMenuLabel className='px-2 py-2'>
                 <div className='space-y-0.5'>
-                  <p className='truncate text-sm font-semibold text-foreground'>{demoUser.name}</p>
+                  <p className='truncate text-sm font-semibold text-foreground'>
+                    {user?.name}
+                  </p>
                   <p className='truncate text-xs font-normal text-muted-foreground'>
-                    {demoUser.email}
+                    {user?.email}
+                  </p>
+                  <p className='text-xs font-medium capitalize text-[#F5A623]'>
+                    {role}
                   </p>
                 </div>
               </DropdownMenuLabel>

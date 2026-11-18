@@ -96,7 +96,6 @@ const DashboardSidebar = ({
   onNavigate,
 }: DashboardSidebarProps) => {
   const router = useRouter()
-  console.log(role, 'role from user')
 
   //dynamic dashboard use role
   const navItems = dashboardNavItems[role]
@@ -117,7 +116,7 @@ const DashboardSidebar = ({
   }
 
   return (
-    <div className='flex h-full w-full flex-col overflow-hidden bg-gradient-to-b from-[#2b1a12] to-[#171411] text-white'>
+    <div className='flex h-full w-full flex-col overflow-hidden bg-linear-to-b from-[#2b1a12] to-[#171411] text-white'>
       {/* Brand */}
       <div
         className={cn(

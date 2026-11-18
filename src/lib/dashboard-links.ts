@@ -39,6 +39,11 @@ export const customerNavItems: DashboardNavItem[] = [
 // ---------------------------------------------------------------
 export const ownerNavItems: DashboardNavItem[] = [
   {
+    label: 'Dashboard',
+    href: '/dashboard/owner',
+    icon: LayoutDashboard,
+  },
+  {
     label: 'Add Equipment',
     href: '/dashboard/owner/add-equipment',
     icon: Plus,
