@@ -1,15 +1,19 @@
+import EquipmentForm from '@/components/dashboard/add-equipment/equipment-form'
+
 const AddEquipmentPage = () => {
   return (
     <div className='space-y-6'>
-      <div className='space-y-1'>
-        <h2 className='font-heading text-2xl font-bold text-foreground'>Add Equipment</h2>
-        <p className='text-sm text-muted-foreground'>
+      <div className='mx-auto w-full max-w-7xl space-y-1'>
+        <h1 className='font-heading text-2xl font-bold text-foreground sm:text-3xl'>
+          Add equipment
+        </h1>
+        <p className='max-w-2xl text-sm text-muted-foreground'>
           List a new piece of equipment for customers to rent.
         </p>
       </div>
 
-      <div className='rounded-xl border border-border bg-card p-10 text-center shadow-sm'>
-        <p className='text-sm text-muted-foreground'>The equipment form will appear here.</p>
+      <div className='mx-auto w-full max-w-7xl'>
+        <EquipmentForm />
       </div>
     </div>
   )
