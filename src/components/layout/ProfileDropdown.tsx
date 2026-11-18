@@ -121,7 +121,17 @@ const ProfileDropdown = ({
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator className='bg-white/15' />
-
+        {/* dashboard */}
+        <DropdownMenuItem
+          render={<Link href='/dashboard' onClick={closeMenus} />}
+          className='group gap-2 rounded-lg py-2.5 text-sm font-medium text-white/80 transition-colors cursor-pointer hover:bg-[#F5A623]/10 hover:text-[#F5A623] focus:bg-[#F5A623]/10 focus:text-[#F5A623]'
+        >
+          <User
+            color='#F5A623'
+            className='size-4 shrink-0 text-white/80 transition-colors group-hover:text-[#F5A623] group-focus:text-[#F5A623]'
+          />
+          Dashboard
+        </DropdownMenuItem>
         {/* My Profile */}
         <DropdownMenuItem
           render={<Link href='/profile' onClick={closeMenus} />}
