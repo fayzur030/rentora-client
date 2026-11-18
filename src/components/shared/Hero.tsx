@@ -1,6 +1,7 @@
 'use client'
 
 import { motion, MotionConfig } from 'framer-motion'
+import Image from 'next/image'
 import Link from 'next/link'
 
 const containerVariants = {
@@ -40,8 +41,17 @@ const Hero = () => {
           initial={{ opacity: 0, scale: 1.03 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, ease: 'easeOut' }}
-          className="absolute inset-0 bg-[url('/images/banner_bg.png')] bg-cover bg-center"
+          className='absolute inset-0'
         >
+          <Image
+            src='/images/banner_bg.png'
+            alt=''
+            fill
+            preload
+            sizes='100vw'
+            className='object-cover object-center'
+          />
+
           {/* Dark Overlay */}
           <motion.div
             initial={{ opacity: 0 }}

@@ -11,7 +11,7 @@ import MobileMenu from './MobileMenu'
 // Main navigation links - used by the top bar and the mobile menu
 const navLinks = [
   { label: 'Home', href: '/' },
-  { label: 'All Equipment', href: '/equipment' },
+  { label: 'All Equipment', href: '/all-equipments' },
   { label: 'About Us', href: '/about' },
   { label: 'How It Works', href: '/how-it-works' },
   { label: 'Contact Us', href: '/contact' },

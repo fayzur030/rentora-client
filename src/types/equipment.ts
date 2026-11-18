@@ -20,6 +20,8 @@ export interface EquipmentOwner {
 }
 
 export interface Equipment {
+  _id?: string
+  id?: string
   name: string
   description: string
   category: EquipmentCategory
