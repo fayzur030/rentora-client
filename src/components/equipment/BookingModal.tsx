@@ -29,7 +29,36 @@ interface BookingModalProps {
 }
 
 const BookingModal = ({ equipment }: BookingModalProps) => {
+  console.log(equipment)
   const [isOpen, setIsOpen] = useState(false)
+  const [rentalStartDate, setRentalStartDate] = useState('')
+  const [rentalEndDate, setRentalEndDate] = useState('')
+  const [quantity, setQuantity] = useState(1)
+
+  // Calculate total amount
+  let totalAmount = 0
+
+  if (rentalStartDate && rentalEndDate) {
+    const startDate = new Date(rentalStartDate).getTime()
+    const endDate = new Date(rentalEndDate).getTime()
+
+    const days = (endDate - startDate) / 86400000 + 1
+
+    let units = days
+    const rentalType = equipment.rentalType?.toLowerCase() || 'daily'
+
+    if (rentalType.includes('week')) {
+      units = Math.ceil(days / 7)
+    } else if (rentalType.includes('month')) {
+      units = Math.ceil(days / 30)
+    } else if (rentalType.includes('year')) {
+      units = Math.ceil(days / 365)
+    }
+
+    if (days > 0 && quantity > 0 && quantity <= equipment.availableQuantity) {
+      totalAmount = equipment.rentalPrice * units * quantity
+    }
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -37,14 +66,14 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
         render={
           <Button
             type='button'
-            className='h-12 w-full rounded-xl px-6 text-base font-semibold shadow-md shadow-primary/15 transition-all hover:shadow-lg cursor-pointer'
+            className='h-12 w-full cursor-pointer rounded-xl px-6 text-base font-semibold shadow-md shadow-primary/15 transition-all hover:shadow-lg'
           >
             Book Now
           </Button>
         }
       />
 
-      <DialogContent className='w-full sm:w-4xl max-w-5xl lg:w-5xl max-h-[95vh] overflow-hidden rounded-3xl p-0 flex flex-col'>
+      <DialogContent className='flex max-h-[95vh] w-[95vw] max-w-5xl flex-col overflow-hidden rounded-3xl p-0'>
         <DialogHeader className='shrink-0 border-b border-border/70 px-5 py-5 pr-14 sm:px-8 sm:py-6 sm:pr-16'>
           <DialogTitle className='font-heading text-xl font-bold sm:text-2xl'>
             Book This Equipment
@@ -86,7 +115,7 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
                 </span>
 
                 <Badge className='border-accent/50 bg-accent/15 text-accent-foreground'>
-                  / {equipment.rentalType.toLowerCase()}
+                  / {equipment.rentalType?.toLowerCase() || 'daily'}
                 </Badge>
               </div>
 
@@ -100,12 +129,25 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
           <div className='grid gap-5 sm:grid-cols-2'>
             <div className='space-y-2'>
               <Label htmlFor='rental-start-date'>Rental Start Date</Label>
-              <Input id='rental-start-date' type='date' className='h-12' />
+              <Input
+                id='rental-start-date'
+                type='date'
+                className='h-12'
+                value={rentalStartDate}
+                onChange={(e) => setRentalStartDate(e.target.value)}
+              />
             </div>
 
             <div className='space-y-2'>
               <Label htmlFor='rental-end-date'>Rental End Date</Label>
-              <Input id='rental-end-date' type='date' className='h-12' />
+              <Input
+                id='rental-end-date'
+                type='date'
+                min={rentalStartDate}
+                className='h-12'
+                value={rentalEndDate}
+                onChange={(e) => setRentalEndDate(e.target.value)}
+              />
             </div>
 
             <div className='space-y-2'>
@@ -114,7 +156,9 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
                 id='required-quantity'
                 type='number'
                 min='1'
-                placeholder='Enter quantity'
+                max={equipment.availableQuantity}
+                value={quantity}
+                onChange={(e) => setQuantity(Number(e.target.value))}
                 className='h-12'
               />
             </div>
@@ -136,6 +180,18 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
                 placeholder='Enter the complete delivery address'
                 className='min-h-24 resize-y'
               />
+            </div>
+
+            <div className='space-y-2 sm:col-span-2'>
+              <Label>Total Amount</Label>
+
+              <div className='flex h-18 items-center justify-between rounded-md border border-input bg-muted/50 px-3 font-semibold text-primary'>
+                <span>Total</span>
+
+                <span className='text-2xl text-accent'>
+                  ৳{totalAmount.toLocaleString()}
+                </span>
+              </div>
             </div>
 
             <div className='space-y-2 sm:col-span-2'>

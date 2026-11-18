@@ -42,7 +42,7 @@ const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
   const equipmentDetails = [
     {
       label: 'Rental type',
-      value: equipment.rentalType,
+      value: equipment.rentalType ?? 'Daily',
       icon: Package,
     },
     {
@@ -132,7 +132,7 @@ const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
                   ৳{equipment.rentalPrice.toLocaleString()}
                 </span>
                 <span className='text-sm text-muted-foreground'>
-                  / {equipment.rentalType.toLowerCase()}
+                  / {equipment.rentalType?.toLowerCase() || 'daily'}
                 </span>
               </div>
             </div>
