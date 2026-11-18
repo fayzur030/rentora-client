@@ -1,0 +1,126 @@
+'use client'
+
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { Home, Menu, PanelLeft, User } from 'lucide-react'
+
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { Separator } from '@/components/ui/separator'
+import { SheetTrigger } from '@/components/ui/sheet'
+import { dashboardRoleLabels, findActiveNavItem } from '@/lib/dashboard-links'
+import type { DashboardNavbarProps } from '@/types/dashboard'
+
+// Placeholder user - replace it with the logged-in user later
+const demoUser = {
+  name: 'Rentora User',
+  email: 'user@rentora.com',
+}
+
+const DashboardNavbar = ({ isCollapsed, onToggleCollapse, role }: DashboardNavbarProps) => {
+  const pathname = usePathname()
+  const activeNavItem = findActiveNavItem(pathname)
+
+  const section = activeNavItem ? dashboardRoleLabels[activeNavItem.role] : 'Dashboard'
+  const title = activeNavItem ? activeNavItem.item.label : 'Overview'
+
+  return (
+    <header className='sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur-xl'>
+      <div className='flex h-16 items-center justify-between gap-4 px-4 sm:px-6'>
+        {/* Left side: menu buttons + page title */}
+        <div className='flex min-w-0 items-center gap-2 sm:gap-3'>
+          {/* Mobile: opens the sidebar drawer.
+              The SheetTrigger must stay inside the Sheet rendered by DashboardLayout. */}
+          <SheetTrigger
+            render={
+              <Button
+                variant='ghost'
+                size='icon'
+                aria-label='Open navigation menu'
+                className='lg:hidden'
+              />
+            }
+          >
+            <Menu className='size-5' />
+          </SheetTrigger>
+
+          {/* Desktop: collapse / expand the sidebar */}
+          {/* max-lg:hidden so it stays hidden on mobile (media variants beat the base classes) */}
+          <Button
+            variant='ghost'
+            size='icon'
+            aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            className='max-lg:hidden'
+            onClick={onToggleCollapse}
+          >
+            <PanelLeft className='size-5' />
+          </Button>
+
+          <Separator orientation='vertical' className='hidden h-8 lg:block' />
+
+          {/* Section + page title */}
+          <div className='min-w-0'>
+            <p className='truncate text-xs font-medium text-muted-foreground'>{section}</p>
+            <h1 className='truncate font-heading text-lg font-bold sm:text-xl'>{title}</h1>
+          </div>
+        </div>
+
+        {/* Right side: profile avatar */}
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            aria-label='Open profile menu'
+            className='flex shrink-0 items-center rounded-full outline-none transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-ring/50'
+          >
+            <Avatar className='size-9'>
+              <AvatarFallback className='bg-[#F5A623] font-bold text-[#2b1a12]'>
+                {demoUser.name.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent align='end' sideOffset={8} className='w-60 p-2'>
+            <DropdownMenuGroup>
+              <DropdownMenuLabel className='px-2 py-2'>
+                <div className='space-y-0.5'>
+                  <p className='truncate text-sm font-semibold text-foreground'>{demoUser.name}</p>
+                  <p className='truncate text-xs font-normal text-muted-foreground'>
+                    {demoUser.email}
+                  </p>
+                </div>
+              </DropdownMenuLabel>
+            </DropdownMenuGroup>
+
+            <DropdownMenuSeparator />
+
+            <DropdownMenuItem
+              render={<Link href={`/dashboard/${role}/profile`} />}
+              className='cursor-pointer gap-2 py-2 font-medium'
+            >
+              <User />
+              My Profile
+            </DropdownMenuItem>
+
+            <DropdownMenuItem
+              render={<Link href='/' />}
+              className='cursor-pointer gap-2 py-2 font-medium'
+            >
+              <Home />
+              Back to Home
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </header>
+  )
+}
+
+export default DashboardNavbar
