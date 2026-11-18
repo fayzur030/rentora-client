@@ -2,6 +2,8 @@ import { getEquipmentById } from '@/lib/api/equipments'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
+import BookingModal from '@/components/equipment/BookingModal'
+import FavoriteButton from '@/components/equipment/FavoriteButton'
 import Image from 'next/image'
 import Link from 'next/link'
 import {
@@ -111,9 +113,12 @@ const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
             <p className='mb-2 text-xs font-semibold tracking-[0.18em] text-secondary uppercase'>
               Equipment details
             </p>
-            <h1 className='font-heading text-3xl font-bold tracking-tight text-foreground sm:text-4xl'>
-              {equipment.name}
-            </h1>
+            <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
+              <h1 className='min-w-0 font-heading text-3xl font-bold tracking-tight text-foreground sm:text-4xl'>
+                {equipment.name}
+              </h1>
+              <FavoriteButton />
+            </div>
             <p className='mt-4 leading-7 text-muted-foreground'>
               {equipment.description}
             </p>
@@ -145,7 +150,7 @@ const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
                     <p className='text-xs font-medium text-muted-foreground'>
                       {label}
                     </p>
-                    <p className='mt-1 break-words text-sm font-semibold text-foreground'>
+                    <p className='mt-1 wrap-break-word text-sm font-semibold text-foreground'>
                       {value}
                     </p>
                   </div>
@@ -169,6 +174,10 @@ const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
               >
                 {isAvailable ? 'Currently available' : 'Currently unavailable'}
               </span>
+            </div>
+
+            <div className='mt-6'>
+              <BookingModal equipment={equipment} />
             </div>
           </div>
         </section>
