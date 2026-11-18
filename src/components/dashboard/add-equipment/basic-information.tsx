@@ -21,8 +21,12 @@ const equipmentCategories = [
 
 const equipmentConditions = ['New', 'Like New', 'Good', 'Fair']
 
+interface ImageUploadProps {
+  value: string
+  onChange: (value: string) => void
+}
 // Step 1: basic details about the equipment.
-const BasicInformation = () => {
+const BasicInformation = ({ value, onChange }: ImageUploadProps) => {
   return (
     <Card>
       <CardHeader>
@@ -75,7 +79,7 @@ const BasicInformation = () => {
         <FormField id='model' label='Model' placeholder='e.g. 301.7 CR' />
 
         <div className='sm:col-span-2'>
-          <ImageUpload />
+          <ImageUpload value={value} onChange={onChange} />
         </div>
       </CardContent>
     </Card>

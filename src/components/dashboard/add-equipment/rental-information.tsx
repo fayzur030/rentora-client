@@ -45,6 +45,12 @@ const RentalInformation = () => {
           type='number'
           placeholder='e.g. 1'
         />
+        <FormField
+          id='condition'
+          label='condition'
+          type='text'
+          placeholder='e.g. 1'
+        />
 
         <div className='sm:col-span-2'>
           <FormField

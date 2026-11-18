@@ -9,10 +9,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { getSessionFromClient } from '@/lib/server/getSessionFromClient'
 
 // Owner details will come from the logged-in user later.
 // Right now we only show the UI.
 const OwnerInformation = () => {
+  const session = getSessionFromClient()
+  const user = session?.user
   return (
     <div className='grid gap-4 sm:grid-cols-2'>
       <Card>
@@ -35,10 +38,10 @@ const OwnerInformation = () => {
 
           <div className='min-w-0'>
             <p className='truncate text-sm font-semibold text-foreground'>
-              Your name
+              {user?.name}
             </p>
             <p className='truncate text-xs text-muted-foreground'>
-              your.email@example.com
+              {user?.email}
             </p>
           </div>
         </CardContent>
@@ -49,7 +52,7 @@ const OwnerInformation = () => {
           <div className='flex items-center gap-2'>
             <BadgeCheck className='size-4 text-primary' aria-hidden='true' />
             <CardTitle className='text-sm font-semibold'>
-              Equipment status
+       
             </CardTitle>
           </div>
           <CardDescription>Listings are reviewed by an admin.</CardDescription>
