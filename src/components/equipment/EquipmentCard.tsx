@@ -9,16 +9,13 @@ import type { Equipment } from '@/types/equipment'
 
 interface EquipmentCardProps {
   equipment: Equipment
+  priority?: boolean
 }
 
-const EquipmentCard = ({ equipment }: EquipmentCardProps) => {
+const EquipmentCard = ({ equipment, priority = false }: EquipmentCardProps) => {
   const isAvailable = equipment.availableQuantity > 0
   const equipmentId = equipment._id ?? equipment.id
   const imageSrc = equipment.image?.trim()
-  const isLocalImage = Boolean(
-    imageSrc?.startsWith('/') && !imageSrc.startsWith('//')
-  )
-  const isImgBbImage = imageSrc?.startsWith('https://i.ibb.co/') ?? false
 
   return (
     <Card className='group gap-0 overflow-hidden rounded-2xl py-0 ring-1 ring-foreground/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl'>
@@ -29,8 +26,7 @@ const EquipmentCard = ({ equipment }: EquipmentCardProps) => {
             src={imageSrc}
             alt={equipment.name}
             fill
-            loading='lazy'
-            unoptimized={!isLocalImage && !isImgBbImage}
+            priority={priority}
             sizes='(max-width: 767px) calc(100vw - 2rem), (max-width: 1023px) calc((100vw - 20.5rem) / 2), (max-width: 1279px) calc((100vw - 24rem) / 2), 320px'
             className='object-cover transition-transform duration-500 group-hover:scale-105'
           />
@@ -66,7 +62,6 @@ const EquipmentCard = ({ equipment }: EquipmentCardProps) => {
 
       <CardContent className='space-y-4 py-4'>
         <div className='space-y-2'>
-          {/* Category badge */}
           <Badge className='border-primary/20 bg-primary/10 text-primary'>
             {equipment.category}
           </Badge>
@@ -75,14 +70,12 @@ const EquipmentCard = ({ equipment }: EquipmentCardProps) => {
             {equipment.name}
           </h3>
 
-          {/* Location */}
           <div className='flex items-center gap-1.5 text-sm text-muted-foreground'>
             <MapPin className='size-4 shrink-0' aria-hidden='true' />
             <span className='truncate'>{equipment.location}</span>
           </div>
         </div>
 
-        {/* Rental price and rental type */}
         <div className='flex items-center justify-between gap-3'>
           <p className='text-xl font-extrabold text-primary'>
             ৳{equipment.rentalPrice.toLocaleString()}
