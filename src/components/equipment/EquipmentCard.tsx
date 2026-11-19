@@ -1,21 +1,29 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Heart, ImageOff, MapPin } from 'lucide-react'
+import { ImageOff, MapPin } from 'lucide-react'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import type { Equipment } from '@/types/equipment'
+import FavoriteButton from '../shared/FavoriteButton'
+import { getSessionFromServer } from '@/lib/server/getSessionFromServer'
 
 interface EquipmentCardProps {
   equipment: Equipment
   priority?: boolean
 }
 
-const EquipmentCard = ({ equipment, priority = false }: EquipmentCardProps) => {
+const EquipmentCard = async ({
+  equipment,
+  priority = false,
+}: EquipmentCardProps) => {
   const isAvailable = equipment.availableQuantity > 0
   const equipmentId = equipment._id ?? equipment.id
   const imageSrc = equipment.image?.trim()
+  const session = await getSessionFromServer()
+  const user = session?.user
+
 
   return (
     <Card className='group gap-0 overflow-hidden rounded-2xl py-0 ring-1 ring-foreground/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl'>
@@ -40,7 +48,11 @@ const EquipmentCard = ({ equipment, priority = false }: EquipmentCardProps) => {
           className='absolute top-3 right-3 flex size-9 items-center justify-center rounded-full bg-white/90 text-foreground shadow-sm backdrop-blur-sm'
           aria-hidden='true'
         >
-          <Heart className='size-4' />
+          {/* <Heart className='size-4' /> */}
+          <FavoriteButton
+            userId={user?.id || ''}
+            equipmentId={equipment._id || ''}
+          />
         </span>
 
         <Badge

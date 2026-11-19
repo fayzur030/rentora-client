@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import BookingModal from '@/components/equipment/BookingModal'
-import FavoriteButton from '@/components/equipment/FavoriteButton'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import {
@@ -15,6 +15,8 @@ import {
   Package,
   ShieldCheck,
 } from 'lucide-react'
+import FavoriteButton from '@/components/shared/FavoriteButton'
+import { getSessionFromServer } from '@/lib/server/getSessionFromServer'
 
 interface EquipmentDetailsPageProps {
   params: Promise<{
@@ -24,11 +26,11 @@ interface EquipmentDetailsPageProps {
 
 const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
   const { id } = await params
-
   const equipment = await getEquipmentById(id)
   const imageSrc = equipment.image?.trim()
   const isAvailable = equipment.availableQuantity > 0
-
+  const session = await getSessionFromServer()
+  const user = session?.user
   const statusStyles = {
     Approved: 'border-emerald-200 bg-emerald-50 text-emerald-700',
     Pending: 'border-amber-300 bg-amber-50 text-amber-800',
@@ -112,7 +114,11 @@ const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
               <h1 className='min-w-0 font-heading text-3xl font-bold tracking-tight text-foreground sm:text-4xl'>
                 {equipment.name}
               </h1>
-              <FavoriteButton />
+              <FavoriteButton
+                showLabel
+                userId={user?.id || ''}
+                equipmentId={equipment._id || ''}
+              />
             </div>
             <p className='mt-4 leading-7 text-muted-foreground'>
               {equipment.description}
