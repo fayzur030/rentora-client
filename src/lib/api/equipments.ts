@@ -1,11 +1,9 @@
 import { Equipment } from '@/types/equipment'
 import { baseUrl } from '../config'
 
-export const getAllEquipments = async (
-  query: string = ''
-): Promise<Equipment[]> => {
+export const getAllEquipments = async (query = ''): Promise<Equipment[]> => {
   const res = await fetch(`${baseUrl}/api/equipment/equipments?${query}`, {
-    next: { revalidate: 60 },
+    cache: 'no-store',
   })
 
   const result = await res.json()

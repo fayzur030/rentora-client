@@ -5,8 +5,17 @@ import EquipmentSearch from '@/components/equipment/EquipmentSearch'
 import EquipmentSort from '@/components/equipment/EquipmentSort'
 import { getAllEquipments } from '@/lib/api/equipments'
 
-const AllEquipmentsPage = async () => {
-  const allEquipments = await getAllEquipments()
+interface AllEquipmentsPageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+const AllEquipmentsPage = async ({ searchParams }: AllEquipmentsPageProps) => {
+  const { search } = await searchParams
+  const query = new URLSearchParams()
+  if (typeof search === 'string' && search) {
+    query.set('search', search)
+  }
+
+  const allEquipments = await getAllEquipments(query.toString())
 
   return (
     <div className='mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8'>

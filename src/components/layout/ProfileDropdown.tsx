@@ -41,7 +41,6 @@ const ProfileDropdown = ({
 }: ProfileDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const router = useRouter()
-  console.log(user.image)
 
   // User's first letter for avatar fallback
   const firstLetter = user?.name?.charAt(0).toUpperCase() || 'U'
