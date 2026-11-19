@@ -27,10 +27,6 @@ const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
 
   const equipment = await getEquipmentById(id)
   const imageSrc = equipment.image?.trim()
-  const isLocalImage = Boolean(
-    imageSrc?.startsWith('/') && !imageSrc.startsWith('//')
-  )
-  const isImgBbImage = imageSrc?.startsWith('https://i.ibb.co/') ?? false
   const isAvailable = equipment.availableQuantity > 0
 
   const statusStyles = {
@@ -83,7 +79,6 @@ const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
                 alt={equipment.name}
                 fill
                 priority
-                unoptimized={!isLocalImage && !isImgBbImage}
                 sizes='(max-width: 1023px) 100vw, 55vw'
                 className='object-cover'
               />

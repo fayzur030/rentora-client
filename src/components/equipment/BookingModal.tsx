@@ -29,7 +29,6 @@ interface BookingModalProps {
 }
 
 const BookingModal = ({ equipment }: BookingModalProps) => {
-  console.log(equipment)
   const [isOpen, setIsOpen] = useState(false)
   const [rentalStartDate, setRentalStartDate] = useState('')
   const [rentalEndDate, setRentalEndDate] = useState('')

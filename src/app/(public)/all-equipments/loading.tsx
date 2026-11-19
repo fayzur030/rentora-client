@@ -1,7 +1,7 @@
-import Loading from '@/components/shared/Loading'
+import { EquipmentGridSkeleton } from '@/components/shared/skeletons/EquipmentGridSkeleton'
 
 const AllEquipmentsLoading = () => {
-  return <Loading message='Loading available equipment...' />
+  return <EquipmentGridSkeleton count={6} />
 }
 
 export default AllEquipmentsLoading
