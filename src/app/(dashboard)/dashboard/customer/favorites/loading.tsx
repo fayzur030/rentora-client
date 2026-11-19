@@ -5,7 +5,7 @@ const FavoritesLoading = () => {
   return (
     <div className='space-y-6'>
       <PageHeaderSkeleton />
-      <TableSkeleton rows={4} columns={3} />
+      <TableSkeleton rows={4} columns={7} />
     </div>
   )
 }
