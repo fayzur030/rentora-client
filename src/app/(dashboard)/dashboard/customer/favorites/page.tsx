@@ -19,7 +19,7 @@ const FavoritesPage = async () => {
       </div>
 
       {favorites.length > 0 ? (
-        <FavoritesTable equipments={favorites} />
+        <FavoritesTable equipments={favorites} userId={userId ?? ''} />
       ) : (
         <div className='rounded-xl border border-border bg-card p-10 text-center shadow-sm'>
           <p className='text-sm text-muted-foreground'>

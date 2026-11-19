@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { ImageOff } from 'lucide-react'
 
 import { Badge } from '@/components/ui/badge'
+import FavoriteActions from '@/components/dashboard/customer/FavoriteActions'
 import {
   Table,
   TableBody,
@@ -14,9 +15,10 @@ import type { Equipment } from '@/types/equipment'
 
 interface FavoritesTableProps {
   equipments: Equipment[]
+  userId: string
 }
 
-const FavoritesTable = ({ equipments }: FavoritesTableProps) => {
+const FavoritesTable = ({ equipments, userId }: FavoritesTableProps) => {
   return (
     <div className='space-y-2'>
       <p className='text-xs text-muted-foreground sm:hidden'>
@@ -24,7 +26,7 @@ const FavoritesTable = ({ equipments }: FavoritesTableProps) => {
       </p>
 
       <div className='overflow-hidden rounded-xl border border-border bg-card shadow-sm'>
-        <Table className='min-w-[900px]'>
+        <Table className='min-w-[1100px]'>
           <TableHeader className='bg-muted/40'>
             <TableRow className='hover:bg-transparent'>
               <TableHead>Image</TableHead>
@@ -34,17 +36,18 @@ const FavoritesTable = ({ equipments }: FavoritesTableProps) => {
               <TableHead>Location</TableHead>
               <TableHead>Owner</TableHead>
               <TableHead>Availability</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
 
           <TableBody>
             {equipments.map((equipment, index) => {
-              const equipmentId =
-                equipment._id ?? equipment.id ?? `${equipment.name}-${index}`
+              const equipmentId = equipment._id ?? equipment.id
+              const rowKey = equipmentId ?? `${equipment.name}-${index}`
               const isAvailable = equipment.availableQuantity > 0
 
               return (
-                <TableRow key={equipmentId}>
+                <TableRow key={rowKey}>
                   <TableCell>
                     <div className='relative size-14 overflow-hidden rounded-lg bg-muted'>
                       {equipment.image?.trim() ? (
@@ -98,6 +101,20 @@ const FavoritesTable = ({ equipments }: FavoritesTableProps) => {
                     >
                       {isAvailable ? 'Available' : 'Unavailable'}
                     </Badge>
+                  </TableCell>
+
+                  <TableCell>
+                    {equipmentId ? (
+                      <FavoriteActions
+                        userId={userId}
+                        equipmentId={equipmentId}
+                        equipmentName={equipment.name}
+                      />
+                    ) : (
+                      <span className='text-sm text-muted-foreground'>
+                        Actions unavailable
+                      </span>
+                    )}
                   </TableCell>
                 </TableRow>
               )
