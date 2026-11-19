@@ -18,28 +18,24 @@ const AllEquipmentsPage = async ({ searchParams }: AllEquipmentsPageProps) => {
     maxPrice,
     sort,
   } = await searchParams
+
   const query = new URLSearchParams()
-  if (typeof search === 'string' && search) {
-    query.set('search', search)
+
+  const filters = {
+    search,
+    category,
+    rentalType,
+    availability,
+    minPrice,
+    maxPrice,
+    sort,
   }
-  if (typeof category === 'string' && category) {
-    query.set('category', category)
-  }
-  if (typeof rentalType === 'string' && rentalType) {
-    query.set('rentalType', rentalType)
-  }
-  if (typeof minPrice === 'string' && minPrice) {
-    query.set('minPrice', minPrice)
-  }
-  if (typeof maxPrice === 'string' && maxPrice) {
-    query.set('maxPrice', maxPrice)
-  }
-  if (typeof availability === 'string' && availability) {
-    query.set('availability', availability)
-  }
-  if (typeof sort === 'string' && sort) {
-    query.set('sort', sort)
-  }
+
+  Object.entries(filters).forEach(([key, value]) => {
+    if (typeof value === 'string' && value) {
+      query.set(key, value)
+    }
+  })
 
   const allEquipments = await getAllEquipments(query.toString())
 
