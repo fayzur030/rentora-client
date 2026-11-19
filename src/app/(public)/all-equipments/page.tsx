@@ -9,8 +9,15 @@ interface AllEquipmentsPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 const AllEquipmentsPage = async ({ searchParams }: AllEquipmentsPageProps) => {
-  const { search, category, rentalType, availability, minPrice, maxPrice } =
-    await searchParams
+  const {
+    search,
+    category,
+    rentalType,
+    availability,
+    minPrice,
+    maxPrice,
+    sort,
+  } = await searchParams
   const query = new URLSearchParams()
   if (typeof search === 'string' && search) {
     query.set('search', search)
@@ -29,6 +36,9 @@ const AllEquipmentsPage = async ({ searchParams }: AllEquipmentsPageProps) => {
   }
   if (typeof availability === 'string' && availability) {
     query.set('availability', availability)
+  }
+  if (typeof sort === 'string' && sort) {
+    query.set('sort', sort)
   }
 
   const allEquipments = await getAllEquipments(query.toString())
