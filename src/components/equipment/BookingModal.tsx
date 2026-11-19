@@ -20,6 +20,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import type { Equipment } from '@/types/equipment'
+import { validateBookingForm } from '../../lib/validation/booking.validation'
+import { BookingFormErrors } from '@/types/booking'
 
 interface BookingModalProps {
   equipment: Pick<
@@ -34,6 +36,13 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
   const [rentalEndDate, setRentalEndDate] = useState('')
   const [quantity, setQuantity] = useState(1)
 
+  //todo: validation state
+
+  const [contactNumber, setContactNumber] = useState('')
+  const [deliveryAddress, setDeliveryAddress] = useState('')
+  const [additionalNotes, setAdditionalNotes] = useState('')
+
+  const [errors, setErrors] = useState<BookingFormErrors>({})
   // Calculate total amount
   let totalAmount = 0
 
@@ -57,6 +66,36 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
     if (days > 0 && quantity > 0 && quantity <= equipment.availableQuantity) {
       totalAmount = equipment.rentalPrice * units * quantity
     }
+  }
+
+  // todo: handleBooking logic
+
+  const handleBooking = () => {
+    const validationErrors = validateBookingForm(
+      {
+        rentalStartDate,
+        rentalEndDate,
+        quantity,
+        contactNumber,
+        deliveryAddress,
+      },
+      equipment.availableQuantity
+    )
+    setErrors(validationErrors)
+
+    if (Object.keys(validationErrors).length > 0) {
+      return
+    }
+    const bookingData = {
+      rentalStartDate,
+      rentalEndDate,
+      quantity,
+      contactNumber,
+      deliveryAddress,
+      additionalNotes,
+      totalAmount,
+    }
+    console.log(bookingData)
   }
 
   return (
@@ -135,6 +174,11 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
                 value={rentalStartDate}
                 onChange={(e) => setRentalStartDate(e.target.value)}
               />
+              {errors.rentalStartDate && (
+                <p className='text-sm text-destructive'>
+                  {errors.rentalStartDate}
+                </p>
+              )}
             </div>
 
             <div className='space-y-2'>
@@ -147,6 +191,11 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
                 value={rentalEndDate}
                 onChange={(e) => setRentalEndDate(e.target.value)}
               />
+              {errors.rentalEndDate && (
+                <p className='text-sm text-destructive'>
+                  {errors.rentalEndDate}
+                </p>
+              )}
             </div>
 
             <div className='space-y-2'>
@@ -160,6 +209,9 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
                 onChange={(e) => setQuantity(Number(e.target.value))}
                 className='h-12'
               />
+              {errors.quantity && (
+                <p className='text-sm text-destructive'>{errors.quantity}</p>
+              )}
             </div>
 
             <div className='space-y-2'>
@@ -169,7 +221,14 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
                 type='tel'
                 placeholder='e.g. +880 1XXX-XXXXXX'
                 className='h-12'
+                value={contactNumber}
+                onChange={(e) => setContactNumber(e.target.value)}
               />
+              {errors.contactNumber && (
+                <p className='text-sm text-destructive'>
+                  {errors.contactNumber}
+                </p>
+              )}
             </div>
 
             <div className='space-y-2 sm:col-span-2'>
@@ -178,7 +237,14 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
                 id='delivery-address'
                 placeholder='Enter the complete delivery address'
                 className='min-h-24 resize-y'
+                value={deliveryAddress}
+                onChange={(e) => setDeliveryAddress(e.target.value)}
               />
+              {errors.deliveryAddress && (
+                <p className='text-sm text-destructive'>
+                  {errors.deliveryAddress}
+                </p>
+              )}
             </div>
 
             <div className='space-y-2 sm:col-span-2'>
@@ -199,6 +265,8 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
                 id='additional-notes'
                 placeholder='Add any special instructions (optional)'
                 className='min-h-24 resize-y'
+                value={additionalNotes}
+                onChange={(e) => setAdditionalNotes(e.target.value)}
               />
             </div>
           </div>
@@ -220,6 +288,7 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
           <Button
             type='button'
             className='h-11 rounded-xl px-7 font-semibold shadow-sm'
+            onClick={handleBooking}
           >
             Confirm Booking
           </Button>
