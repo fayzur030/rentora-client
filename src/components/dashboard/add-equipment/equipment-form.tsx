@@ -25,12 +25,15 @@ import {
 } from '@/types/equipment'
 import { toast } from 'sonner'
 import { useState } from 'react'
+import { getSessionFromClient } from '@/lib/server/getSessionFromClient'
 
 // Main form for the Add Equipment page.
 // It only puts the sections together.
 // Submit / reset logic will be added later.
 
 const EquipmentForm = () => {
+  const session = getSessionFromClient()
+  const user = session?.user
   const [image, setImage] = useState('')
   const handleCreateEquipment = async (
     event: React.FormEvent<HTMLFormElement>
@@ -54,8 +57,9 @@ const EquipmentForm = () => {
       rentalTerms: formData.get('rentalTerms') as string,
       status: 'pending' as EquipmentStatus,
       owner: {
-        name: 'Test Owner',
-        email: 'owner@example.com',
+        name: user?.name ?? '',
+        email: user?.email ?? '',
+        image: user?.image ?? '',
       } as EquipmentOwner,
     }
 

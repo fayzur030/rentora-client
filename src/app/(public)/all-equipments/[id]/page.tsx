@@ -72,7 +72,7 @@ const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
         </Link>
 
         <section className='grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10'>
-          <div className='relative min-h-72 overflow-hidden rounded-3xl border border-border/70 bg-card shadow-lg shadow-primary/5 sm:min-h-[440px]'>
+          <div className='relative min-h-72 overflow-hidden rounded-3xl border border-border/70 bg-card shadow-lg shadow-primary/5 sm:min-h-110'>
             {imageSrc ? (
               <Image
                 src={imageSrc}
@@ -192,12 +192,13 @@ const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
 
               <div className='mt-6 flex items-center gap-4'>
                 <Avatar className='size-14'>
-                  {equipment.owner.image ? (
+                  {equipment.owner.image && (
                     <AvatarImage
                       src={equipment.owner.image}
                       alt={equipment.owner.name}
                     />
-                  ) : null}
+                  )}
+
                   <AvatarFallback className='bg-primary/10 text-lg font-semibold text-primary'>
                     {equipment.owner.name.charAt(0).toUpperCase()}
                   </AvatarFallback>
