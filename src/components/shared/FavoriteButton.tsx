@@ -3,7 +3,7 @@
 import { Heart } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { toast } from 'sonner'
 import { addFavorite, removeFavorite } from '@/lib/actions/favorite'
 
@@ -22,10 +22,6 @@ const FavoriteButton = ({
 }: FavoriteButtonProps) => {
   const [isFavorite, setIsFavorite] = useState(initialIsFavorite)
   const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    setIsFavorite(initialIsFavorite)
-  }, [initialIsFavorite])
 
   const handleFavorite = async () => {
     if (!userId) {
@@ -57,7 +53,8 @@ const FavoriteButton = ({
       type='button'
       variant='outline'
       size={showLabel ? 'default' : 'icon'}
-      aria-label='Add to favorites'
+      aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+      aria-pressed={isFavorite}
       disabled={loading}
       onClick={handleFavorite}
     >

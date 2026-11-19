@@ -4,6 +4,8 @@ import EquipmentGrid from '@/components/equipment/EquipmentGrid'
 import EquipmentSearch from '@/components/equipment/EquipmentSearch'
 import EquipmentSort from '@/components/equipment/EquipmentSort'
 import { getAllEquipments } from '@/lib/api/equipments'
+import { getFavorites } from '@/lib/api/favorite'
+import { getSessionFromServer } from '@/lib/server/getSessionFromServer'
 
 interface AllEquipmentsPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
@@ -37,7 +39,16 @@ const AllEquipmentsPage = async ({ searchParams }: AllEquipmentsPageProps) => {
     }
   })
 
-  const allEquipments = await getAllEquipments(query.toString())
+  const [allEquipments, session] = await Promise.all([
+    getAllEquipments(query.toString()),
+    getSessionFromServer(),
+  ])
+  const favorites = session?.user?.id
+    ? await getFavorites(session.user.id)
+    : []
+  const favoriteEquipmentIds = favorites
+    .map((equipment) => equipment._id ?? equipment.id)
+    .filter((id): id is string => Boolean(id))
 
   return (
     <div className='mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8'>
@@ -77,7 +88,10 @@ const AllEquipmentsPage = async ({ searchParams }: AllEquipmentsPageProps) => {
             </div>
           </div>
 
-          <EquipmentGrid equipments={allEquipments} />
+          <EquipmentGrid
+            equipments={allEquipments}
+            favoriteEquipmentIds={favoriteEquipmentIds}
+          />
         </section>
       </div>
     </div>

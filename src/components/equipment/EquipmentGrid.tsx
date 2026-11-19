@@ -3,9 +3,13 @@ import type { Equipment } from '@/types/equipment'
 
 interface EquipmentGridProps {
   equipments: Equipment[]
+  favoriteEquipmentIds?: string[]
 }
 
-const EquipmentGrid = ({ equipments }: EquipmentGridProps) => {
+const EquipmentGrid = ({
+  equipments,
+  favoriteEquipmentIds = [],
+}: EquipmentGridProps) => {
   if (equipments.length === 0) {
     return (
       <div className='rounded-2xl border border-dashed border-foreground/20 bg-card px-6 py-16 text-center'>
@@ -25,6 +29,9 @@ const EquipmentGrid = ({ equipments }: EquipmentGridProps) => {
         <EquipmentCard
           key={equipment._id ?? equipment.id ?? `${equipment.name}-${index}`}
           equipment={equipment}
+          isFavorite={favoriteEquipmentIds.includes(
+            equipment._id ?? equipment.id ?? ''
+          )}
         />
       ))}
     </div>

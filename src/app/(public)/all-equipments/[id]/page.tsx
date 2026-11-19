@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import FavoriteButton from '@/components/shared/FavoriteButton'
 import { getSessionFromServer } from '@/lib/server/getSessionFromServer'
+import { getFavorites } from '@/lib/api/favorite'
 
 interface EquipmentDetailsPageProps {
   params: Promise<{
@@ -31,6 +32,11 @@ const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
   const isAvailable = equipment.availableQuantity > 0
   const session = await getSessionFromServer()
   const user = session?.user
+  const favorites = user?.id ? await getFavorites(user.id) : []
+  const isFavorite = favorites.some(
+    (favorite) =>
+      (favorite._id ?? favorite.id) === (equipment._id ?? equipment.id)
+  )
   const statusStyles = {
     Approved: 'border-emerald-200 bg-emerald-50 text-emerald-700',
     Pending: 'border-amber-300 bg-amber-50 text-amber-800',
@@ -117,7 +123,8 @@ const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
               <FavoriteButton
                 showLabel
                 userId={user?.id || ''}
-                equipmentId={equipment._id || ''}
+                equipmentId={equipment._id ?? equipment.id ?? ''}
+                isFavorite={isFavorite}
               />
             </div>
             <p className='mt-4 leading-7 text-muted-foreground'>

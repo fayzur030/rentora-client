@@ -12,11 +12,13 @@ import { getSessionFromServer } from '@/lib/server/getSessionFromServer'
 interface EquipmentCardProps {
   equipment: Equipment
   priority?: boolean
+  isFavorite?: boolean
 }
 
 const EquipmentCard = async ({
   equipment,
   priority = false,
+  isFavorite = false,
 }: EquipmentCardProps) => {
   const isAvailable = equipment.availableQuantity > 0
   const equipmentId = equipment._id ?? equipment.id
@@ -51,7 +53,8 @@ const EquipmentCard = async ({
           {/* <Heart className='size-4' /> */}
           <FavoriteButton
             userId={user?.id || ''}
-            equipmentId={equipment._id || ''}
+            equipmentId={equipmentId || ''}
+            isFavorite={isFavorite}
           />
         </span>
 
