@@ -2,7 +2,7 @@
 
 import { ImageOff } from 'lucide-react'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -22,16 +22,26 @@ import { Textarea } from '@/components/ui/textarea'
 import type { Equipment } from '@/types/equipment'
 import { validateBookingForm } from '../../lib/validation/booking.validation'
 import { BookingFormErrors } from '@/types/booking'
+import { createBooking } from '@/lib/actions/bookings'
+import { toast } from 'sonner'
+import { getSessionFromClient } from '@/lib/server/getSessionFromClient'
 
 interface BookingModalProps {
   equipment: Pick<
     Equipment,
-    'name' | 'image' | 'rentalPrice' | 'rentalType' | 'availableQuantity'
+    | '_id'
+    | 'name'
+    | 'image'
+    | 'rentalPrice'
+    | 'rentalType'
+    | 'availableQuantity'
   >
 }
 
 const BookingModal = ({ equipment }: BookingModalProps) => {
   const [isOpen, setIsOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
   const [rentalStartDate, setRentalStartDate] = useState('')
   const [rentalEndDate, setRentalEndDate] = useState('')
   const [quantity, setQuantity] = useState(1)
@@ -43,6 +53,8 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
   const [additionalNotes, setAdditionalNotes] = useState('')
 
   const [errors, setErrors] = useState<BookingFormErrors>({})
+  const session = getSessionFromClient()
+  const user = session?.user
   // Calculate total amount
   let totalAmount = 0
 
@@ -50,7 +62,7 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
     const startDate = new Date(rentalStartDate).getTime()
     const endDate = new Date(rentalEndDate).getTime()
 
-    const days = (endDate - startDate) / 86400000 + 1
+    const days = (endDate - startDate) / 86400000
 
     let units = days
     const rentalType = equipment.rentalType?.toLowerCase() || 'daily'
@@ -63,14 +75,16 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
       units = Math.ceil(days / 365)
     }
 
-    if (days > 0 && quantity > 0 && quantity <= equipment.availableQuantity) {
+    if (days > 0 && quantity > 0) {
       totalAmount = equipment.rentalPrice * units * quantity
     }
   }
 
   // todo: handleBooking logic
 
-  const handleBooking = () => {
+  const handleBooking = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    // const form = event.currentTarget
     const validationErrors = validateBookingForm(
       {
         rentalStartDate,
@@ -86,16 +100,42 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
     if (Object.keys(validationErrors).length > 0) {
       return
     }
-    const bookingData = {
-      rentalStartDate,
-      rentalEndDate,
-      quantity,
-      contactNumber,
-      deliveryAddress,
-      additionalNotes,
-      totalAmount,
+
+    if (!equipment._id) {
+      toast.error('Equipment ID is missing. Please refresh and try again.')
+      return
     }
-    console.log(bookingData)
+    if (!user?.email) {
+      toast.error('Please login to continue')
+      return
+    }
+
+    try {
+      setIsLoading(true)
+      const bookingData = {
+        equipmentId: equipment._id,
+        userEmail: user?.email,
+        startDate: rentalStartDate,
+        endDate: rentalEndDate,
+        quantity,
+        contactNumber,
+        deliveryAddress,
+        additionalNotes,
+      }
+      const result = await createBooking(bookingData)
+      if (!result.data?.redirectUrl) {
+        throw new Error('Stripe checkout URL not found')
+      }
+      window.location.href = result.data.redirectUrl
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : 'Something went wrong. Please try again.'
+      )
+
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -122,7 +162,12 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
           </DialogDescription>
         </DialogHeader>
 
-        <div className='flex-1 space-y-6 overflow-y-auto px-5 py-5 sm:px-8 sm:py-7'>
+        <form
+          id='booking-form'
+          noValidate
+          onSubmit={handleBooking}
+          className='flex-1 space-y-6 overflow-y-auto px-5 py-5 sm:px-8 sm:py-7'
+        >
           {/* Equipment Summary */}
           <div className='flex gap-4 rounded-2xl border border-border/80 bg-background/70 p-3 sm:gap-5 sm:p-4'>
             <div className='relative size-20 shrink-0 overflow-hidden rounded-xl bg-muted sm:size-28'>
@@ -170,6 +215,7 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
               <Input
                 id='rental-start-date'
                 type='date'
+                min={new Date().toISOString().split('T')[0]}
                 className='h-12'
                 value={rentalStartDate}
                 onChange={(e) => setRentalStartDate(e.target.value)}
@@ -270,7 +316,7 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
               />
             </div>
           </div>
-        </div>
+        </form>
 
         <DialogFooter className='shrink-0 flex-row justify-end gap-3 border-t border-border/70 bg-background/50 px-5 py-4 sm:px-8'>
           <DialogClose
@@ -286,11 +332,12 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
           />
 
           <Button
-            type='button'
+            type='submit'
+            form='booking-form'
             className='h-11 rounded-xl px-7 font-semibold shadow-sm'
-            onClick={handleBooking}
+            disabled={isLoading}
           >
-            Confirm Booking
+            {isLoading ? 'Redirecting to checkout...' : 'Confirm Booking'}
           </Button>
         </DialogFooter>
       </DialogContent>
