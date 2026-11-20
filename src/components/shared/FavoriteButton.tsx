@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { addFavorite, removeFavorite } from '@/lib/actions/favorite'
+import { getTokenFromClient } from '@/lib/auth/getTokenFromClient'
 
 interface FavoriteButtonProps {
   userId: string
@@ -35,7 +36,14 @@ const FavoriteButton = ({
         setIsFavorite(false)
         toast.success('Removed from favorites')
       } else {
-        await addFavorite(userId, equipmentId)
+        const token = await getTokenFromClient()
+
+        if (!token) {
+          toast.error('Please log in to add favorites')
+          return
+        }
+
+        await addFavorite(userId, equipmentId, token)
         setIsFavorite(true)
         toast.success('Added to favorites')
       }

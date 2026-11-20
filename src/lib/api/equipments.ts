@@ -1,5 +1,6 @@
 import { Equipment } from '@/types/equipment'
 import { baseUrl } from '../config'
+import { getTokenFromServer } from '../auth/getTokenFromServer'
 
 export const getAllEquipments = async (query = ''): Promise<Equipment[]> => {
   const res = await fetch(`${baseUrl}/api/equipment/equipments?${query}`, {
@@ -18,7 +19,17 @@ export const getAllEquipments = async (query = ''): Promise<Equipment[]> => {
 // get equipmentById
 
 export const getEquipmentById = async (id: string): Promise<Equipment> => {
-  const res = await fetch(`${baseUrl}/api/equipment/equipment/${id}`)
+  const token = await getTokenFromServer()
+
+  if (!token) {
+    throw new Error('Please log in to view equipment details')
+  }
+
+  const res = await fetch(`${baseUrl}/api/equipment/equipment/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
 
   const result = await res.json()
 
