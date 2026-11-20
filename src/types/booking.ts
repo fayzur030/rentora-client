@@ -33,3 +33,30 @@ export interface BookingResponse {
     redirectUrl: string
   }
 }
+
+export interface BookingRental {
+  _id: string
+  stripeSessionId: string
+  startDate: string
+  endDate: string
+  rentalDuration: number
+  equipmentId: string
+  equipmentName?: string
+  quantity: number
+  pricePerDay: number
+  totalAmount: number
+  userEmail: string
+  contactNumber: string
+  deliveryAddress: string
+  additionalNotes: string
+  bookingStatus: 'pending' | 'confirmed' | 'cancelled'
+  paymentStatus: 'pending' | 'paid' | 'failed'
+  transaction: {
+    paymentIntentId: string
+    amount: number
+    currency: string
+    paidAt: string
+  }
+  createdAt: string
+  updatedAt: string
+}
