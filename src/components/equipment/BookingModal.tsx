@@ -123,9 +123,11 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
         additionalNotes,
       }
       const result = await createBooking(bookingData)
+
       if (!result.data?.redirectUrl) {
         throw new Error('Stripe checkout URL not found')
       }
+
       window.location.href = result.data.redirectUrl
     } catch (error) {
       toast.error(
