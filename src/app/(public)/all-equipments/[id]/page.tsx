@@ -16,7 +16,7 @@ import {
   ShieldCheck,
 } from 'lucide-react'
 import FavoriteButton from '@/components/shared/FavoriteButton'
-import { getSessionFromServer } from '@/lib/server/getSessionFromServer'
+import { getSessionFromServer } from '@/lib/auth/getSessionFromServer'
 import { getFavorites } from '@/lib/api/favorite'
 
 interface EquipmentDetailsPageProps {

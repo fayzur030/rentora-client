@@ -5,7 +5,7 @@ import EquipmentSearch from '@/components/equipment/EquipmentSearch'
 import EquipmentSort from '@/components/equipment/EquipmentSort'
 import { getAllEquipments } from '@/lib/api/equipments'
 import { getFavorites } from '@/lib/api/favorite'
-import { getSessionFromServer } from '@/lib/server/getSessionFromServer'
+import { getSessionFromServer } from '@/lib/auth/getSessionFromServer'
 
 interface AllEquipmentsPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
@@ -43,9 +43,7 @@ const AllEquipmentsPage = async ({ searchParams }: AllEquipmentsPageProps) => {
     getAllEquipments(query.toString()),
     getSessionFromServer(),
   ])
-  const favorites = session?.user?.id
-    ? await getFavorites(session.user.id)
-    : []
+  const favorites = session?.user?.id ? await getFavorites(session.user.id) : []
   const favoriteEquipmentIds = favorites
     .map((equipment) => equipment._id ?? equipment.id)
     .filter((id): id is string => Boolean(id))

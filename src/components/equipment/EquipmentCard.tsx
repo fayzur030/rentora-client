@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import type { Equipment } from '@/types/equipment'
 import FavoriteButton from '../shared/FavoriteButton'
-import { getSessionFromServer } from '@/lib/server/getSessionFromServer'
+import { getSessionFromServer } from '@/lib/auth/getSessionFromServer'
 
 interface EquipmentCardProps {
   equipment: Equipment
@@ -25,7 +25,6 @@ const EquipmentCard = async ({
   const imageSrc = equipment.image?.trim()
   const session = await getSessionFromServer()
   const user = session?.user
-
 
   return (
     <Card className='group gap-0 overflow-hidden rounded-2xl py-0 ring-1 ring-foreground/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl'>

@@ -9,6 +9,8 @@ import {
   TableRow,
 } from '@/components/ui/table'
 
+import { getTokenFromServer } from '@/lib/auth/getTokenFromServer'
+
 const formatDate = (date: string) => {
   const parsedDate = new Date(date)
 
@@ -36,7 +38,11 @@ const getStatusClassName = (status: string) => {
 }
 
 const MyRentalsPage = async () => {
-  const myRentals = await getMyRentals()
+  const jwtToken = await getTokenFromServer()
+  if (!jwtToken) {
+    throw new Error('Authentication token not found')
+  }
+  const myRentals = await getMyRentals(jwtToken)
 
   return (
     <div className='space-y-6'>
@@ -55,7 +61,7 @@ const MyRentalsPage = async () => {
         </p>
 
         <div className='overflow-hidden rounded-xl border border-border bg-card shadow-sm'>
-          <Table className='min-w-[900px]'>
+          <Table className='min-w-225'>
             <TableHeader className='bg-muted/40'>
               <TableRow className='hover:bg-transparent'>
                 <TableHead>Equipment Name</TableHead>

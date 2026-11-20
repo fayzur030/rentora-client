@@ -1,8 +1,11 @@
 import { BookingRental } from '@/types/booking'
 import { baseUrl } from '../config'
 
-export const getMyRentals = async (query = ''): Promise<BookingRental[]> => {
-  const res = await fetch(`${baseUrl}/api/bookings/my-rentals?${query}`, {
+export const getMyRentals = async (token: string): Promise<BookingRental[]> => {
+  const res = await fetch(`${baseUrl}/api/bookings/my-rentals?`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
     cache: 'no-store',
   })
 

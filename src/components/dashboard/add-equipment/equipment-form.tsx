@@ -25,7 +25,7 @@ import {
 } from '@/types/equipment'
 import { toast } from 'sonner'
 import { useState } from 'react'
-import { getSessionFromClient } from '@/lib/server/getSessionFromClient'
+import { getSessionFromClient } from '@/lib/auth/getSessionFromClient'
 
 // Main form for the Add Equipment page.
 // It only puts the sections together.

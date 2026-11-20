@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { getSessionFromClient } from '@/lib/server/getSessionFromClient'
+import { getSessionFromClient } from '@/lib/auth/getSessionFromClient'
 
 // Owner details will come from the logged-in user later.
 // Right now we only show the UI.
@@ -51,9 +51,7 @@ const OwnerInformation = () => {
         <CardHeader className='pb-3'>
           <div className='flex items-center gap-2'>
             <BadgeCheck className='size-4 text-primary' aria-hidden='true' />
-            <CardTitle className='text-sm font-semibold'>
-       
-            </CardTitle>
+            <CardTitle className='text-sm font-semibold'></CardTitle>
           </div>
           <CardDescription>Listings are reviewed by an admin.</CardDescription>
         </CardHeader>

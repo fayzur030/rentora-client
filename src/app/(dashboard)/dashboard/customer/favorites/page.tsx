@@ -1,5 +1,5 @@
 import { getFavorites } from '@/lib/api/favorite'
-import { getSessionFromServer } from '@/lib/server/getSessionFromServer'
+import { getSessionFromServer } from '@/lib/auth/getSessionFromServer'
 import FavoritesTable from '@/components/dashboard/customer/FavoritesTable'
 
 const FavoritesPage = async () => {

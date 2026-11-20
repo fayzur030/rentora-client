@@ -24,7 +24,7 @@ import { validateBookingForm } from '../../lib/validation/booking.validation'
 import { BookingFormErrors } from '@/types/booking'
 import { createBooking } from '@/lib/actions/bookings'
 import { toast } from 'sonner'
-import { getSessionFromClient } from '@/lib/server/getSessionFromClient'
+import { getSessionFromClient } from '@/lib/auth/getSessionFromClient'
 
 interface BookingModalProps {
   equipment: Pick<
