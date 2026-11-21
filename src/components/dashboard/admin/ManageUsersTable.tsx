@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { LoaderCircle } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -15,8 +14,17 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+
 import { Badge } from '@/components/ui/badge'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+
 import {
   Table,
   TableBody,
@@ -25,18 +33,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+
 import { updateUserRole } from '@/lib/actions/users'
-import type { UserRole, Users } from '@/types/users'
+import type { RoleChange, UserRole, Users } from '@/types/users'
 
 interface ManageUsersTableProps {
   users: Users[]
   errorMessage: string | null
-}
-
-interface RoleChange {
-  userId: string
-  userName: string
-  newRole: UserRole
 }
 
 const userRoles: UserRole[] = ['customer', 'owner', 'admin']
@@ -52,9 +55,6 @@ const roleBadgeStyles: Record<UserRole, string> = {
   owner: 'border-amber-200 bg-amber-50 text-amber-800',
   admin: 'border-primary/20 bg-primary/10 text-primary',
 }
-
-const isUserRole = (role: string): role is UserRole =>
-  userRoles.some((userRole) => userRole === role)
 
 const formatRegistrationDate = (date: string) => {
   const registrationDate = new Date(date)
@@ -74,42 +74,38 @@ const ManageUsersTable = ({
   users: initialUsers,
   errorMessage,
 }: ManageUsersTableProps) => {
-  const router = useRouter()
   const [users, setUsers] = useState(initialUsers)
   const [roleChange, setRoleChange] = useState<RoleChange | null>(null)
   const [isUpdating, setIsUpdating] = useState(false)
 
-  const handleRoleSelection = (user: Users, role: string | null) => {
-    if (!role || !isUserRole(role) || role === user.role) {
-      return
-    }
+  const handleRoleSelection = (user: Users, newRole: string | null) => {
+    if (!newRole || newRole === user.role) return
 
     setRoleChange({
       userId: user._id,
       userName: user.name,
-      newRole: role,
+      newRole: newRole as UserRole,
     })
   }
 
   const handleRoleUpdate = async () => {
-    if (!roleChange) {
-      return
-    }
+    if (!roleChange) return
 
     try {
       setIsUpdating(true)
+
       await updateUserRole(roleChange.userId, roleChange.newRole)
 
-      setUsers((currentUsers) =>
-        currentUsers.map((user) =>
+      setUsers((previousUsers) =>
+        previousUsers.map((user) =>
           user._id === roleChange.userId
             ? { ...user, role: roleChange.newRole }
             : user
         )
       )
-      toast.success(`${roleChange.userName}'s role updated successfully`)
+
+      toast.success('User role updated successfully')
       setRoleChange(null)
-      router.refresh()
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : 'Failed to update user role'
@@ -135,7 +131,7 @@ const ManageUsersTable = ({
           </p>
 
           <div className='overflow-hidden rounded-xl border border-border bg-card shadow-sm'>
-            <Table className='min-w-[760px]'>
+            <Table className='min-w-190'>
               <TableHeader className='bg-muted/40'>
                 <TableRow className='hover:bg-transparent'>
                   <TableHead>Name</TableHead>
@@ -162,22 +158,26 @@ const ManageUsersTable = ({
                       <TableCell className='font-semibold text-foreground'>
                         {user.name}
                       </TableCell>
-                      <TableCell className='text-muted-foreground'>
+
+                      <TableCell className='text-foreground'>
                         {user.email}
                       </TableCell>
+
                       <TableCell>
                         <Badge className={roleBadgeStyles[user.role]}>
                           {roleLabels[user.role]}
                         </Badge>
                       </TableCell>
+
                       <TableCell className='whitespace-nowrap'>
                         {formatRegistrationDate(user.createdAt)}
                       </TableCell>
+
                       <TableCell className='text-right'>
                         <Select
                           value={user.role}
-                          onValueChange={(role) =>
-                            handleRoleSelection(user, role)
+                          onValueChange={(newRole) =>
+                            handleRoleSelection(user, newRole)
                           }
                           disabled={isUpdating}
                         >
@@ -187,6 +187,7 @@ const ManageUsersTable = ({
                           >
                             <SelectValue />
                           </SelectTrigger>
+
                           <SelectContent align='end'>
                             {userRoles.map((role) => (
                               <SelectItem key={role} value={role}>
@@ -213,26 +214,28 @@ const ManageUsersTable = ({
           }
         }}
       >
-        <AlertDialogContent>
+        <AlertDialogContent className='border-border/50 bg-background/90 shadow-2xl'>
           <AlertDialogHeader>
             <AlertDialogTitle>Change user role?</AlertDialogTitle>
+
             <AlertDialogDescription>
               Change {roleChange?.userName}&apos;s role to{' '}
               {roleChange ? roleLabels[roleChange.newRole] : ''}? This will
               update their access to the platform.
             </AlertDialogDescription>
           </AlertDialogHeader>
+
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isUpdating}>
-              Cancel
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleRoleUpdate}
-              disabled={isUpdating}
-            >
+            <AlertDialogCancel disabled={isUpdating}>Cancel</AlertDialogCancel>
+
+            <AlertDialogAction onClick={handleRoleUpdate} disabled={isUpdating}>
               {isUpdating && (
-                <LoaderCircle className='size-4 animate-spin' aria-hidden='true' />
+                <LoaderCircle
+                  className='size-4 animate-spin'
+                  aria-hidden='true'
+                />
               )}
+
               {isUpdating ? 'Updating...' : 'Confirm role change'}
             </AlertDialogAction>
           </AlertDialogFooter>

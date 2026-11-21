@@ -7,3 +7,9 @@ export interface Users {
   createdAt: string
   role: UserRole
 }
+
+export interface RoleChange {
+  userId: string
+  userName: string
+  newRole: UserRole
+}
