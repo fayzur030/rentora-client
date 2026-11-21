@@ -42,6 +42,7 @@ export const deleteEquipment = async (equipmentId: string) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      cache: 'no-store',
     }
   )
 

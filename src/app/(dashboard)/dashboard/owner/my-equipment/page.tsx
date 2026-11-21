@@ -17,7 +17,7 @@ const MyEquipmentPage = async () => {
     <div className='space-y-6'>
       <div className='space-y-1'>
         <h2 className='font-heading text-2xl font-bold text-foreground'>
-          My Equipment
+          My Equipment {myEquipments.length}
         </h2>
         <p className='text-sm text-muted-foreground'>
           Manage the equipment you have listed for rent.
