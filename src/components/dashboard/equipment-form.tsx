@@ -700,7 +700,11 @@ const EquipmentFormDialog = () => {
           </Button>
         }
       />
-      <DialogContent className='h-[min(90dvh,780px)] w-[95vw] max-w-[1400px] p-0'>
+      <DialogContent
+        overlayClassName='backdrop-blur-xs'
+        forceOverlay
+        className='h-[min(90dvh,780px)] w-[95vw] max-w-[1400px] overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-2xl p-0'
+      >
         <EquipmentForm onCancel={() => setIsOpen(false)} />
       </DialogContent>
     </Dialog>

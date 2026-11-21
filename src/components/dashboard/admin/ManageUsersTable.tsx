@@ -214,21 +214,33 @@ const ManageUsersTable = ({
           }
         }}
       >
-        <AlertDialogContent className='border-border/50 bg-background/90 shadow-2xl'>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Change user role?</AlertDialogTitle>
+        <AlertDialogContent className='overflow-hidden rounded-2xl border border-border bg-card p-6 text-card-foreground shadow-2xl sm:max-w-md'>
+          <AlertDialogHeader className='space-y-1.5'>
+            <AlertDialogTitle className='font-heading text-lg font-bold text-foreground'>
+              Change User Role?
+            </AlertDialogTitle>
 
-            <AlertDialogDescription>
-              Change {roleChange?.userName}&apos;s role to{' '}
-              {roleChange ? roleLabels[roleChange.newRole] : ''}? This will
-              update their access to the platform.
+            <AlertDialogDescription className='text-xs text-muted-foreground leading-relaxed'>
+              Are you sure you want to change{' '}
+              <span className='font-semibold text-foreground'>
+                {roleChange?.userName}
+              </span>
+              &apos;s role to{' '}
+              <span className='font-semibold text-primary'>
+                {roleChange ? roleLabels[roleChange.newRole] : ''}
+              </span>
+              ? This will immediately update their access permissions.
             </AlertDialogDescription>
           </AlertDialogHeader>
 
-          <AlertDialogFooter>
+          <AlertDialogFooter className='pt-2'>
             <AlertDialogCancel disabled={isUpdating}>Cancel</AlertDialogCancel>
 
-            <AlertDialogAction onClick={handleRoleUpdate} disabled={isUpdating}>
+            <AlertDialogAction
+              onClick={handleRoleUpdate}
+              disabled={isUpdating}
+              className='gap-2 shadow-2xs'
+            >
               {isUpdating && (
                 <LoaderCircle
                   className='size-4 animate-spin'
@@ -236,7 +248,7 @@ const ManageUsersTable = ({
                 />
               )}
 
-              {isUpdating ? 'Updating...' : 'Confirm role change'}
+              {isUpdating ? 'Updating...' : 'Confirm Role Change'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -1,8 +1,9 @@
 import type { LucideIcon } from 'lucide-react'
 import {
-  CalendarDays,
   Mail,
+  MapPin,
   Pencil,
+  Phone,
   ShieldCheck,
   Store,
   UserRound,
@@ -11,34 +12,33 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { cn } from '@/lib/utils'
-import { formatMemberSince, getInitials } from './profile-utils'
-import type { Profile } from './types'
+import { getInitials } from './profile-utils'
+import type { Profile, UserRole } from './types'
 
 interface ProfileOverviewProps {
   profile: Profile
   onEdit: () => void
 }
 
-interface RoleDetails {
+interface RoleConfig {
   label: string
   icon: LucideIcon
   badgeClassName: string
 }
 
-// The same badge component is used for every role.
-// Only the label, icon and theme tint change.
-const roleDetails: Record<Profile['role'], RoleDetails> = {
+// Role badge styling map for SaaS dashboard look
+const roleConfigs: Record<UserRole, RoleConfig> = {
   customer: {
     label: 'Customer',
     icon: UserRound,
-    badgeClassName: 'border-border bg-muted text-foreground',
+    badgeClassName:
+      'border-emerald-500/25 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
   },
   owner: {
     label: 'Owner',
     icon: Store,
-    badgeClassName: 'border-accent/30 bg-accent/15 text-accent-foreground',
+    badgeClassName:
+      'border-amber-500/25 bg-amber-500/10 text-amber-700 dark:text-amber-400',
   },
   admin: {
     label: 'Admin',
@@ -47,92 +47,91 @@ const roleDetails: Record<Profile['role'], RoleDetails> = {
   },
 }
 
+/**
+ * ProfileOverview: Top SaaS Header Card
+ * Displays avatar, name, role badge, quick contact chips, and "Edit Profile" button.
+ */
 const ProfileOverview = ({ profile, onEdit }: ProfileOverviewProps) => {
-  const role = roleDetails[profile.role]
-  const RoleIcon = role.icon
-
-  const isActive = profile.status !== 'inactive'
-  const statusLabel = isActive ? 'Active' : 'Inactive'
+  const currentRole = profile.role || 'customer'
+  const roleConfig = roleConfigs[currentRole]
+  const RoleIcon = roleConfig.icon
 
   return (
-    <Card className='gap-0 overflow-hidden py-0'>
-      {/* Soft cover band built only from the existing theme colours */}
-      <div className='relative h-28 overflow-hidden border-b border-border bg-linear-to-r from-primary/10 via-secondary/10 to-accent/15 sm:h-32'>
-        <div className='absolute -top-16 -right-8 size-48 rounded-full bg-primary/10 blur-2xl' />
-        <div className='absolute -bottom-20 right-24 size-40 rounded-full bg-accent/20 blur-2xl' />
-      </div>
+    <div className='overflow-hidden rounded-2xl border border-border/80 bg-card shadow-xs'>
+      {/* Decorative gradient banner */}
+      <div className='h-24 bg-gradient-to-r from-primary/10 via-primary/5 to-muted sm:h-28' />
 
-      <div className='px-5 pb-6 sm:px-7'>
-        <div className='flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between'>
+      {/* Main Profile Info Section */}
+      <div className='px-6 pb-6 sm:px-8'>
+        <div className='flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between'>
+          {/* Avatar and Basic Details */}
           <div className='flex flex-col gap-4 sm:flex-row sm:items-start'>
-            <Avatar className='-mt-14 size-28 shrink-0 shadow-lg ring-4 ring-card sm:-mt-16 sm:size-32'>
-              <AvatarImage
-                src={profile.image || undefined}
-                alt={profile.name}
-                className='object-cover'
-              />
-
-              <AvatarFallback className='bg-primary text-2xl font-semibold text-primary-foreground'>
+            {/* Avatar Container with glowing border */}
+            <Avatar className='-mt-12 size-24 shrink-0 rounded-2xl border-4 border-card shadow-md sm:-mt-14 sm:size-28'>
+              {profile.image ? (
+                <AvatarImage
+                  src={profile.image}
+                  alt={profile.name}
+                  className='object-cover'
+                />
+              ) : null}
+              <AvatarFallback className='bg-muted text-xl font-bold text-foreground'>
                 {getInitials(profile.name)}
               </AvatarFallback>
             </Avatar>
 
-            <div className='min-w-0 flex-1 space-y-3 sm:pt-1'>
-              <div className='flex flex-wrap items-center gap-2'>
-                <Badge className={cn('gap-1.5', role.badgeClassName)}>
-                  <RoleIcon className='size-3.5' aria-hidden='true' />
-                  {role.label}
-                </Badge>
-
-                <Badge
-                  className={cn(
-                    'gap-1.5',
-                    isActive
-                      ? 'border-primary/20 bg-primary/10 text-primary'
-                      : 'border-destructive/20 bg-destructive/10 text-destructive'
-                  )}
-                >
-                  <span className='size-1.5 rounded-full bg-current' />
-                  {statusLabel}
-                </Badge>
-              </div>
-
-              <div className='space-y-1.5'>
-                <h1 className='font-heading text-2xl font-bold tracking-tight text-foreground sm:text-3xl'>
+            {/* Name, Role Badge, and Quick Meta Tags */}
+            <div className='space-y-2 sm:pt-2'>
+              <div className='flex flex-wrap items-center gap-2.5'>
+                <h1 className='font-heading text-xl font-bold tracking-tight text-foreground sm:text-2xl'>
                   {profile.name}
                 </h1>
 
-                <p className='flex items-center gap-1.5 text-sm text-muted-foreground'>
-                  <Mail className='size-4 shrink-0' aria-hidden='true' />
-                  <span className='break-all'>{profile.email}</span>
-                </p>
+                {/* Role Badge */}
+                <Badge
+                  className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium shadow-2xs ${roleConfig.badgeClassName}`}
+                >
+                  <RoleIcon className='size-3.5' aria-hidden='true' />
+                  {roleConfig.label}
+                </Badge>
               </div>
 
-              {profile.bio ? (
-                <p className='max-w-2xl text-sm leading-6 text-muted-foreground'>
-                  {profile.bio}
-                </p>
-              ) : null}
+              {/* Quick Info Chips */}
+              <div className='flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground'>
+                <span className='inline-flex items-center gap-1.5'>
+                  <Mail className='size-3.5 text-muted-foreground/80' />
+                  {profile.email}
+                </span>
 
-              <p className='flex items-center gap-1.5 text-xs font-medium text-muted-foreground'>
-                <CalendarDays className='size-3.5 shrink-0' aria-hidden='true' />
-                {formatMemberSince(profile.createdAt)}
-              </p>
+                {profile.phone && (
+                  <span className='inline-flex items-center gap-1.5'>
+                    <Phone className='size-3.5 text-muted-foreground/80' />
+                    {profile.phone}
+                  </span>
+                )}
+
+                {profile.address && (
+                  <span className='inline-flex items-center gap-1.5'>
+                    <MapPin className='size-3.5 text-muted-foreground/80' />
+                    {profile.address}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
 
+          {/* Action Button: Edit Profile */}
           <Button
             type='button'
-            size='lg'
             onClick={onEdit}
-            className='h-10 w-full gap-2 px-4 sm:w-auto lg:mb-1'
+            className='gap-2 shadow-2xs sm:self-center'
           >
             <Pencil className='size-4' aria-hidden='true' />
-            Edit profile
+            Edit Profile
           </Button>
         </div>
       </div>
-    </Card>
+    </div>
   )
 }
 

@@ -1,42 +1,57 @@
 'use client'
 
 import { useState } from 'react'
+import { toast } from 'sonner'
 
-import AdditionalInformation from './AdditionalInformation'
-import AddressInformation from './AddressInformation'
 import EditProfileDialog from './EditProfileDialog'
-import ProfileInformation from './ProfileInformation'
+import ProfileDetails from './ProfileDetails'
 import ProfileOverview from './ProfileOverview'
-import type { Profile } from './types'
+import type { Profile, ProfileFormValues } from './types'
 
 interface ProfilePageProps {
   profile: Profile
 }
 
-// This is the shared profile view for Customer, Owner and Admin.
-// The role only changes the badge inside ProfileOverview.
+/**
+ * Reusable Master Profile Page Component
+ * Shared across Customer, Owner, and Admin Dashboards.
+ *
+ * Displays the 5 required fields:
+ * 1. Name
+ * 2. Email
+ * 3. Profile Image
+ * 4. Phone Number
+ * 5. Address
+ */
 const ProfilePage = ({ profile }: ProfilePageProps) => {
+  // Manage profile data in local state
+  const [currentProfile, setCurrentProfile] = useState<Profile>(profile)
   const [isEditOpen, setIsEditOpen] = useState(false)
 
-  const handleSave = () => {
-    // The backend update is not connected yet.
-    // Closing the dialog keeps this step simple until the API is ready.
+  // Handle saving updated profile data (ready for backend API integration)
+  const handleSave = (updatedValues: ProfileFormValues) => {
+    setCurrentProfile((prev) => ({
+      ...prev,
+      ...updatedValues,
+    }))
     setIsEditOpen(false)
+    toast.success('Profile updated successfully!')
   }
 
   return (
-    <div className='space-y-5 sm:space-y-6'>
-      <ProfileOverview profile={profile} onEdit={() => setIsEditOpen(true)} />
+    <div className='space-y-6'>
+      {/* 1. Header Overview Card with Avatar, Role Badge, and Edit Button */}
+      <ProfileOverview
+        profile={currentProfile}
+        onEdit={() => setIsEditOpen(true)}
+      />
 
-      <div className='grid grid-cols-1 gap-5 xl:grid-cols-2'>
-        <ProfileInformation profile={profile} />
-        <AddressInformation profile={profile} />
-      </div>
+      {/* 2. Detailed Profile Information Card */}
+      <ProfileDetails profile={currentProfile} />
 
-      <AdditionalInformation profile={profile} />
-
+      {/* 3. Reusable Edit Profile Modal Dialog */}
       <EditProfileDialog
-        profile={profile}
+        profile={currentProfile}
         open={isEditOpen}
         onOpenChange={setIsEditOpen}
         onSave={handleSave}

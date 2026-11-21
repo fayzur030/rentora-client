@@ -154,13 +154,17 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
         }
       />
 
-      <DialogContent className='flex max-h-[95vh] w-[95vw] max-w-5xl flex-col overflow-hidden rounded-3xl p-0'>
-        <DialogHeader className='shrink-0 border-b border-border/70 px-5 py-5 pr-14 sm:px-8 sm:py-6 sm:pr-16'>
-          <DialogTitle className='font-heading text-xl font-bold sm:text-2xl'>
+      <DialogContent
+        overlayClassName='backdrop-blur-xs'
+        forceOverlay
+        className='flex max-h-[92vh] w-[95vw] max-w-4xl flex-col overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-2xl p-0'
+      >
+        <DialogHeader className='shrink-0 border-b border-border px-6 py-5 pr-14 sm:px-8'>
+          <DialogTitle className='font-heading text-xl font-bold text-foreground sm:text-2xl'>
             Book This Equipment
           </DialogTitle>
 
-          <DialogDescription className='mt-1'>
+          <DialogDescription className='text-xs text-muted-foreground mt-0.5'>
             Add your rental details to prepare your booking.
           </DialogDescription>
         </DialogHeader>
@@ -321,27 +325,29 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
           </div>
         </form>
 
-        <DialogFooter className='shrink-0 flex-row justify-end gap-3 border-t border-border/70 bg-background/50 px-5 py-4 sm:px-8'>
-          <DialogClose
-            render={
-              <Button
-                type='button'
-                variant='outline'
-                className='h-11 rounded-xl px-6'
-              >
-                Cancel
-              </Button>
-            }
-          />
+        <DialogFooter className='shrink-0 border-t border-border bg-muted/20 px-6 py-4 sm:px-8'>
+          <div className='flex w-full flex-col-reverse justify-end gap-2 sm:flex-row'>
+            <DialogClose
+              render={
+                <Button
+                  type='button'
+                  variant='outline'
+                  className='w-full sm:w-auto'
+                >
+                  Cancel
+                </Button>
+              }
+            />
 
-          <Button
-            type='submit'
-            form='booking-form'
-            className='h-11 rounded-xl px-7 font-semibold shadow-sm'
-            disabled={isLoading}
-          >
-            {isLoading ? 'Redirecting to checkout...' : 'Confirm Booking'}
-          </Button>
+            <Button
+              type='submit'
+              form='booking-form'
+              className='w-full gap-2 font-semibold shadow-2xs sm:w-auto'
+              disabled={isLoading}
+            >
+              {isLoading ? 'Redirecting to checkout...' : 'Confirm Booking'}
+            </Button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

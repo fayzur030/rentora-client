@@ -92,26 +92,6 @@ const RegisterPage = () => {
     }
   }
 
-  // const handleEmailChange = (value: string) => {
-  //   setEmail(value)
-
-  //   if (emailError) {
-  //     setEmailError(validateEmail(value))
-  //   }
-  // }
-
-  // const handlePasswordChange = (value: string) => {
-  //   setPassword(value)
-
-  //   if (passwordError) {
-  //     setPasswordError(validatePassword(value))
-  //   }
-  // }
-
-  // const handleGoogleLogin = () => {
-  //   // Authentication will be connected here later.
-  // }
-
   return (
     <main className='relative flex min-h-screen flex-col items-center justify-center bg-[#F5F1EB] px-4 py-10 sm:px-6'>
       {/* Back to Home */}
@@ -146,103 +126,6 @@ const RegisterPage = () => {
         {/* Registration Form */}
         <form onSubmit={handleCreateAccount} className='space-y-5'>
           {/* Account Role */}
-          {/* <fieldset className='space-y-3'>
-            <legend className='text-sm font-semibold text-[#39291F]'>
-              I want to
-            </legend>
-
-            <div className='grid gap-3 sm:grid-cols-2'>
-              <label
-                className={`relative cursor-pointer rounded-xl border p-4 transition-all ${
-                  role === 'Customer'
-                    ? 'border-[#F5A623] bg-[#FFF9EF] shadow-[0_8px_20px_rgba(245,166,35,0.12)]'
-                    : 'border-[#EAE2D9] bg-[#FCFBF9] hover:border-[#D9CABC]'
-                }`}
-              >
-                <input
-                  type='radio'
-                  name='role'
-                  value='Customer'
-                  checked={role === 'Customer'}
-                  onChange={() => setRole('Customer')}
-                  className='sr-only'
-                />
-
-                <div className='flex items-start gap-3'>
-                  <div
-                    className={`flex size-10 shrink-0 items-center justify-center rounded-lg ${
-                      role === 'Customer'
-                        ? 'bg-[#F5A623] text-[#241A15]'
-                        : 'bg-[#F3EEE7] text-[#92877E]'
-                    }`}
-                  >
-                    <Package className='size-5' />
-                  </div>
-
-                  <div className='min-w-0 flex-1'>
-                    <div className='flex items-center justify-between gap-2'>
-                      <span className='font-bold text-[#39291F]'>
-                        Customer
-                      </span>
-                      {role === 'Customer' && (
-                        <span className='flex size-5 items-center justify-center rounded-full bg-[#F5A623]'>
-                          <Check className='size-3 text-[#241A15]' />
-                        </span>
-                      )}
-                    </div>
-                    <p className='mt-1 text-xs leading-5 text-[#92877E]'>
-                      I want to rent equipment.
-                    </p>
-                  </div>
-                </div>
-              </label>
-
-              <label
-                className={`relative cursor-pointer rounded-xl border p-4 transition-all ${
-                  role === 'Owner'
-                    ? 'border-[#F5A623] bg-[#FFF9EF] shadow-[0_8px_20px_rgba(245,166,35,0.12)]'
-                    : 'border-[#EAE2D9] bg-[#FCFBF9] hover:border-[#D9CABC]'
-                }`}
-              >
-                <input
-                  type='radio'
-                  name='role'
-                  value='Owner'
-                  checked={role === 'Owner'}
-                  onChange={() => setRole('Owner')}
-                  className='sr-only'
-                />
-
-                <div className='flex items-start gap-3'>
-                  <div
-                    className={`flex size-10 shrink-0 items-center justify-center rounded-lg ${
-                      role === 'Owner'
-                        ? 'bg-[#F5A623] text-[#241A15]'
-                        : 'bg-[#F3EEE7] text-[#92877E]'
-                    }`}
-                  >
-                    <Warehouse className='size-5' />
-                  </div>
-
-                  <div className='min-w-0 flex-1'>
-                    <div className='flex items-center justify-between gap-2'>
-                      <span className='font-bold text-[#39291F]'>
-                        Owner
-                      </span>
-                      {role === 'Owner' && (
-                        <span className='flex size-5 items-center justify-center rounded-full bg-[#F5A623]'>
-                          <Check className='size-3 text-[#241A15]' />
-                        </span>
-                      )}
-                    </div>
-                    <p className='mt-1 text-xs leading-5 text-[#92877E]'>
-                      I want to list my equipment for rent.
-                    </p>
-                  </div>
-                </div>
-              </label>
-            </div>
-          </fieldset> */}
 
           {/* Name */}
           <div className='space-y-2'>

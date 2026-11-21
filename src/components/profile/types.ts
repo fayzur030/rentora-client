@@ -1,45 +1,27 @@
-// The profile information used by every role.
-// Customer, Owner and Admin all share this exact shape.
+// Supported user roles on Rentora
+export type UserRole = 'customer' | 'owner' | 'admin'
 
+/**
+ * Standard Profile Interface
+ * Strictly contains the 5 required assignment fields plus the user's role.
+ */
 export interface Profile {
   name: string
   email: string
   image?: string
   phone?: string
-  dateOfBirth?: string
-  gender?: string
   address?: string
-  city?: string
-  state?: string
-  country?: string
-  postalCode?: string
-  bio?: string
-  companyName?: string
-  website?: string
-  preferredLanguage?: string
-  timeZone?: string
-  role: 'customer' | 'owner' | 'admin'
-  status?: 'active' | 'inactive'
+  role?: UserRole
   createdAt?: string
 }
 
-// The edit form needs every field to be a string.
-// Empty strings are easier to bind to inputs than undefined.
+/**
+ * Form values used when updating profile information in the Edit Dialog
+ */
 export interface ProfileFormValues {
-  image: string
   name: string
   email: string
+  image: string
   phone: string
-  dateOfBirth: string
-  gender: string
   address: string
-  city: string
-  state: string
-  country: string
-  postalCode: string
-  bio: string
-  companyName: string
-  website: string
-  preferredLanguage: string
-  timeZone: string
 }

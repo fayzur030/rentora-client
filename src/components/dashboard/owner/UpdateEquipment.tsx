@@ -117,11 +117,13 @@ const UpdateEquipment = ({
       <DialogContent
         overlayClassName='backdrop-blur-xs'
         forceOverlay
-        className='gap-0 p-0 sm:max-w-2xl'
+        className='gap-0 p-0 sm:max-w-2xl overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-2xl'
       >
         <DialogHeader className='border-b border-border px-5 py-5 pr-14 sm:px-6'>
-          <DialogTitle>Update equipment</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className='font-heading text-lg font-bold text-foreground sm:text-xl'>
+            Update Equipment
+          </DialogTitle>
+          <DialogDescription className='text-xs text-muted-foreground'>
             Update your equipment details and rental information.
           </DialogDescription>
         </DialogHeader>
@@ -289,30 +291,31 @@ const UpdateEquipment = ({
             </div>
           </div>
 
-          <DialogFooter className='border-t border-border px-5 py-4 sm:px-6'>
-            <Button
-              type='button'
-              variant='outline'
-              onClick={() => onOpenChange(false)}
-              disabled={isUpdating}
-              className={` cursor-pointer py-4`}
-            >
-              Cancel
-            </Button>
+          <DialogFooter className='border-t border-border bg-muted/20 px-5 py-4 sm:px-6'>
+            <div className='flex w-full flex-col-reverse justify-end gap-2 sm:flex-row'>
+              <Button
+                type='button'
+                variant='outline'
+                onClick={() => onOpenChange(false)}
+                disabled={isUpdating}
+              >
+                Cancel
+              </Button>
 
-            <Button
-              type='submit'
-              disabled={isUpdating}
-              className='gap-2 cursor-pointer py-4'
-            >
-              {isUpdating ? (
-                <LoaderCircle className='size-4 animate-spin' />
-              ) : (
-                <Send className='size-4' />
-              )}
+              <Button
+                type='submit'
+                disabled={isUpdating}
+                className='gap-2 shadow-2xs'
+              >
+                {isUpdating ? (
+                  <LoaderCircle className='size-4 animate-spin' />
+                ) : (
+                  <Send className='size-4' />
+                )}
 
-              {isUpdating ? 'Updating...' : 'Update equipment'}
-            </Button>
+                {isUpdating ? 'Updating...' : 'Update Equipment'}
+              </Button>
+            </div>
           </DialogFooter>
         </form>
       </DialogContent>
