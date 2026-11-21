@@ -1,18 +1,33 @@
-const AdminProfilePage = () => {
-  return (
-    <div className='space-y-6'>
-      <div className='space-y-1'>
-        <h2 className='font-heading text-2xl font-bold text-foreground'>My Profile</h2>
-        <p className='text-sm text-muted-foreground'>
-          Manage your admin profile information.
-        </p>
-      </div>
+import ProfilePage from '@/components/profile/ProfilePage'
+import type { Profile } from '@/components/profile/types'
 
-      <div className='rounded-xl border border-border bg-card p-10 text-center shadow-sm'>
-        <p className='text-sm text-muted-foreground'>Your profile form will appear here.</p>
-      </div>
-    </div>
-  )
+// Temporary sample data.
+// This will be replaced with the authenticated user's data from the API.
+const adminProfile: Profile = {
+  name: 'Nusrat Jahan',
+  email: 'nusrat.jahan@example.com',
+  image:
+    'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=256&q=80',
+  phone: '+880 1913 246810',
+  dateOfBirth: '1993-12-11',
+  gender: 'Female',
+  address: 'Level 5, House 22, Gulshan Avenue',
+  city: 'Dhaka',
+  state: 'Dhaka Division',
+  country: 'Bangladesh',
+  postalCode: '1212',
+  bio: 'Operations lead at Rentora, focused on trusted listings and a smooth rental experience.',
+  companyName: 'Rentora Operations',
+  website: 'https://rentora.example.com',
+  preferredLanguage: 'English',
+  timeZone: 'Asia/Dhaka',
+  role: 'admin',
+  status: 'active',
+  createdAt: '2024-08-21',
+}
+
+const AdminProfilePage = () => {
+  return <ProfilePage profile={adminProfile} />
 }
 
 export default AdminProfilePage

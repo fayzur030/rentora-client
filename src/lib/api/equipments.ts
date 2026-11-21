@@ -1,4 +1,4 @@
-import { Equipment } from '@/types/equipment'
+import { Equipment, MyEquipment } from '@/types/equipment'
 import { baseUrl } from '../config'
 import { getTokenFromServer } from '../auth/getTokenFromServer'
 
@@ -33,6 +33,31 @@ export const getEquipmentById = async (id: string): Promise<Equipment> => {
 
   const result = await res.json()
 
+  if (!res.ok) {
+    throw new Error(result.message || 'Failed to fetch equipment')
+  }
+
+  return result.data
+}
+
+// owner dashboard: => my equipment
+
+export const getMyEquipments = async (): Promise<MyEquipment> => {
+  const token = await getTokenFromServer()
+
+  if (!token) {
+    throw new Error('Please log in to view equipment details')
+  }
+  const res = await fetch(`${baseUrl}/api/equipment/my-equipments`, {
+    cache: 'no-store',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+
+  const result = await res.json()
+  console.log('API Result:', result)
+  console.log('Equipment Data:', result.data)
   if (!res.ok) {
     throw new Error(result.message || 'Failed to fetch equipment')
   }

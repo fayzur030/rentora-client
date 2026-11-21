@@ -14,6 +14,7 @@ export type EquipmentCondition = 'New' | 'Like New' | 'Good' | 'Fair'
 export type EquipmentStatus = 'Pending' | 'Approved' | 'Rejected'
 
 export interface EquipmentOwner {
+  ownerId: string
   name: string
   email: string
   image: string
@@ -42,4 +43,14 @@ export interface ApiSuccessResponse<T> {
   success: true
   message: string
   data: T
+}
+
+//owner dashboard => my equipments
+
+export interface MyEquipment {
+  equipmentName: string
+  category: string
+  rentalPrice: number
+  availableQuantity: number
+  status: 'pending' | 'approved' | 'rejected'
 }

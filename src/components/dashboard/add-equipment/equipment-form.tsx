@@ -57,6 +57,7 @@ const EquipmentForm = () => {
       rentalTerms: formData.get('rentalTerms') as string,
       status: 'pending' as EquipmentStatus,
       owner: {
+        ownerId: user?.id ?? '',
         name: user?.name ?? '',
         email: user?.email ?? '',
         image: user?.image ?? '',
