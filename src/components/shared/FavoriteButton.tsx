@@ -10,6 +10,7 @@ import { getTokenFromClient } from '@/lib/auth/getTokenFromClient'
 
 interface FavoriteButtonProps {
   userId: string
+  role?: string
   equipmentId: string
   showLabel?: boolean
   isFavorite?: boolean
@@ -17,14 +18,21 @@ interface FavoriteButtonProps {
 
 const FavoriteButton = ({
   userId,
+  role,
   equipmentId,
   showLabel = false,
   isFavorite: initialIsFavorite = false,
 }: FavoriteButtonProps) => {
   const [isFavorite, setIsFavorite] = useState(initialIsFavorite)
   const [loading, setLoading] = useState(false)
+  const isCustomer = role === 'customer'
 
   const handleFavorite = async () => {
+    if (!isCustomer) {
+      toast.error('Only customers can add equipment to favorites')
+      return
+    }
+
     if (!userId) {
       toast.error('Please login to add favorite')
       return
@@ -55,6 +63,8 @@ const FavoriteButton = ({
       setLoading(false)
     }
   }
+
+  if (!isCustomer) return null
 
   return (
     <Button

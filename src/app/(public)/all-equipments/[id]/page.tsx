@@ -123,6 +123,7 @@ const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
               <FavoriteButton
                 showLabel
                 userId={user?.id || ''}
+                role={user?.role}
                 equipmentId={equipment._id ?? equipment.id ?? ''}
                 isFavorite={isFavorite}
               />

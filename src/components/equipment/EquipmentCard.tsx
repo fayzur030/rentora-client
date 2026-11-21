@@ -45,17 +45,19 @@ const EquipmentCard = async ({
           </div>
         )}
 
-        <span
-          className='absolute top-3 right-3 flex size-9 items-center justify-center rounded-full bg-white/90 text-foreground shadow-sm backdrop-blur-sm'
-          aria-hidden='true'
-        >
-          {/* <Heart className='size-4' /> */}
-          <FavoriteButton
-            userId={user?.id || ''}
-            equipmentId={equipmentId || ''}
-            isFavorite={isFavorite}
-          />
-        </span>
+        {user?.role === 'customer' && (
+          <span
+            className='absolute top-3 right-3 flex size-9 items-center justify-center rounded-full bg-white/90 text-foreground shadow-sm backdrop-blur-sm'
+            aria-hidden='true'
+          >
+            <FavoriteButton
+              userId={user.id}
+              role={user.role}
+              equipmentId={equipmentId || ''}
+              isFavorite={isFavorite}
+            />
+          </span>
+        )}
 
         <Badge
           className={`absolute bottom-3 left-3 gap-1.5 shadow-sm ${
