@@ -20,7 +20,6 @@ import {
   EquipmentCategory,
   EquipmentCondition,
   EquipmentOwner,
-  EquipmentStatus,
   RentalType,
 } from '@/types/equipment'
 import { toast } from 'sonner'
@@ -55,7 +54,7 @@ const EquipmentForm = () => {
       model: formData.get('model') as string,
       image: '',
       rentalTerms: formData.get('rentalTerms') as string,
-      status: 'Pending' as EquipmentStatus,
+      status: 'pending',
       owner: {
         ownerId: user?.id ?? '',
         name: user?.name ?? '',

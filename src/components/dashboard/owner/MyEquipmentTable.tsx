@@ -18,18 +18,18 @@ interface MyEquipmentTableProps {
 }
 
 const statusStyles: Record<EquipmentStatus, string> = {
-  Pending: 'border-amber-300 bg-amber-50 text-amber-800',
-  Approved: 'border-emerald-200 bg-emerald-50 text-emerald-700',
-  Rejected: 'border-rose-200 bg-rose-50 text-rose-700',
+  pending: 'border-amber-300 bg-amber-50 text-amber-800',
+  approved: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+  rejected: 'border-rose-200 bg-rose-50 text-rose-700',
 }
 
 const normalizeStatus = (status: EquipmentStatus | string): EquipmentStatus => {
-  if (typeof status !== 'string') return 'Pending'
+  if (typeof status !== 'string') return 'pending'
 
   const normalizedStatus = status.toLowerCase()
-  if (normalizedStatus === 'approved') return 'Approved'
-  if (normalizedStatus === 'rejected') return 'Rejected'
-  return 'Pending'
+  if (normalizedStatus === 'approved') return 'approved'
+  if (normalizedStatus === 'rejected') return 'rejected'
+  return 'pending'
 }
 
 const MyEquipmentTable = ({ equipments }: MyEquipmentTableProps) => {
@@ -56,7 +56,7 @@ const MyEquipmentTable = ({ equipments }: MyEquipmentTableProps) => {
             {equipments.map((equipment, index) => {
               const equipmentId = equipment._id ?? equipment.id
               const rowKey = equipmentId ?? `${equipment.name}-${index}`
-              const status = normalizeStatus(equipment.status ?? 'Pending')
+              const status = normalizeStatus(equipment.status ?? 'pending')
 
               return (
                 <TableRow key={rowKey} className='hover:bg-muted/35'>
@@ -112,7 +112,7 @@ const MyEquipmentTable = ({ equipments }: MyEquipmentTableProps) => {
                         'border-border bg-muted text-muted-foreground'
                       }
                     >
-                      {status}
+                      {status.charAt(0).toUpperCase() + status.slice(1)}
                     </Badge>
                   </TableCell>
 

@@ -38,9 +38,9 @@ const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
       (favorite._id ?? favorite.id) === (equipment._id ?? equipment.id)
   )
   const statusStyles = {
-    Approved: 'border-emerald-200 bg-emerald-50 text-emerald-700',
-    Pending: 'border-amber-300 bg-amber-50 text-amber-800',
-    Rejected: 'border-rose-200 bg-rose-50 text-rose-700',
+    approved: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+    pending: 'border-amber-300 bg-amber-50 text-amber-800',
+    rejected: 'border-rose-200 bg-rose-50 text-rose-700',
   }
 
   const equipmentDetails = [
@@ -109,7 +109,8 @@ const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
                   'border-border bg-muted text-muted-foreground'
                 }
               >
-                {equipment.status}
+                {equipment.status.charAt(0).toUpperCase() +
+                  equipment.status.slice(1)}
               </Badge>
             </div>
 

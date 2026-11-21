@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { ImageOff } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -18,6 +19,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import type { Equipment, EquipmentStatus } from '@/types/equipment'
+import { updateEquipmentStatus } from '@/lib/actions/status'
 
 interface AdminEquipmentTableProps {
   equipments: Equipment[]
@@ -25,22 +27,70 @@ interface AdminEquipmentTableProps {
 }
 
 const statusStyles: Record<EquipmentStatus, string> = {
-  Pending: 'border-amber-300 bg-amber-50 text-amber-800',
-  Approved: 'border-emerald-200 bg-emerald-50 text-emerald-700',
-  Rejected: 'border-rose-200 bg-rose-200/50 text-rose-700',
+  pending: 'border-amber-300 bg-amber-100 text-amber-900',
+  approved: 'border-emerald-300 bg-emerald-100 text-emerald-900',
+  rejected: 'border-rose-300 bg-rose-100 text-rose-900',
+}
+
+const getStatusBadge = (status: EquipmentStatus) => {
+  const normalizedStatus = status.toLowerCase()
+
+  if (
+    normalizedStatus === 'pending' ||
+    normalizedStatus === 'approved' ||
+    normalizedStatus === 'rejected'
+  ) {
+    return {
+      label:
+        normalizedStatus.charAt(0).toUpperCase() + normalizedStatus.slice(1),
+      className: statusStyles[normalizedStatus],
+    }
+  }
+
+  return {
+    label: status,
+    className: 'border-border bg-muted text-muted-foreground',
+  }
 }
 
 const AdminEquipmentTable = ({
   equipments,
   errorMessage,
 }: AdminEquipmentTableProps) => {
-  const [selectedEquipment, setSelectedEquipment] =
-    useState<Equipment | null>(null)
-  const [editingEquipment, setEditingEquipment] =
-    useState<Equipment | null>(null)
+  const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(
+    null
+  )
+  const [editingEquipment, setEditingEquipment] = useState<Equipment | null>(
+    null
+  )
+  const [updatingEquipmentId, setUpdatingEquipmentId] = useState<string | null>(
+    null
+  )
+  const router = useRouter()
 
-  const handleApprove = (equipment: Equipment) => {
-    toast.info(`Approve action for ${equipment.name} is ready to implement.`)
+  const handleApprove = async (equipment: Equipment) => {
+    const equipmentId = equipment._id ?? equipment.id
+
+    if (!equipmentId) {
+      toast.error('Equipment ID is missing')
+      return
+    }
+
+    try {
+      setUpdatingEquipmentId(equipmentId)
+      await updateEquipmentStatus(equipmentId, 'approved')
+
+      toast.success(`${equipment.name} approved successfully.`)
+      router.refresh()
+    } catch (error) {
+      console.error('Approve Error:', error)
+
+      toast.error(
+        error instanceof Error ? error.message : 'Failed to approve equipment.'
+      )
+    } finally {
+      setUpdatingEquipmentId(null)
+    }
   }
 
   const handleReject = (equipment: Equipment) => {
@@ -92,98 +142,110 @@ const AdminEquipmentTable = ({
                 </TableCell>
               </TableRow>
             ) : (
-              equipments.map((equipment, index) => (
-                <TableRow
-                  key={equipment._id ?? equipment.id ?? `${equipment.name}-${index}`}
-                  className='hover:bg-muted/35'
-                >
-                  <TableCell>
-                    <div className='flex min-w-56 items-center gap-3'>
-                      <div className='relative size-14 shrink-0 overflow-hidden rounded-xl border border-border/70 bg-muted'>
-                        {equipment.image?.trim() ? (
-                          <Image
-                            src={equipment.image}
-                            alt={equipment.name}
-                            fill
-                            sizes='56px'
-                            className='object-cover'
-                          />
-                        ) : (
-                          <div className='flex size-full items-center justify-center text-muted-foreground'>
-                            <ImageOff className='size-5' aria-hidden='true' />
-                          </div>
-                        )}
+              equipments.map((equipment, index) => {
+                const statusBadge = getStatusBadge(equipment.status)
+
+                return (
+                  <TableRow
+                    key={
+                      equipment._id ??
+                      equipment.id ??
+                      `${equipment.name}-${index}`
+                    }
+                    className='hover:bg-muted/35'
+                  >
+                    <TableCell>
+                      <div className='flex min-w-56 items-center gap-3'>
+                        <div className='relative size-14 shrink-0 overflow-hidden rounded-xl border border-border/70 bg-muted'>
+                          {equipment.image?.trim() ? (
+                            <Image
+                              src={equipment.image}
+                              alt={equipment.name}
+                              fill
+                              sizes='56px'
+                              className='object-cover'
+                            />
+                          ) : (
+                            <div className='flex size-full items-center justify-center text-muted-foreground'>
+                              <ImageOff className='size-5' aria-hidden='true' />
+                            </div>
+                          )}
+                        </div>
+                        <span className='line-clamp-2 max-w-56 font-semibold text-foreground'>
+                          {equipment.name}
+                        </span>
                       </div>
-                      <span className='line-clamp-2 max-w-56 font-semibold text-foreground'>
-                        {equipment.name}
+                    </TableCell>
+
+                    <TableCell>
+                      <Badge className='border-primary/20 bg-primary/10 text-primary'>
+                        {equipment.category}
+                      </Badge>
+                    </TableCell>
+
+                    <TableCell className='whitespace-nowrap'>
+                      <span className='font-semibold text-foreground'>
+                        ৳{equipment.rentalPrice.toLocaleString()}
                       </span>
-                    </div>
-                  </TableCell>
+                      <span className='ml-1 text-xs text-muted-foreground'>
+                        / {equipment.rentalType.toLowerCase()}
+                      </span>
+                    </TableCell>
 
-                  <TableCell>
-                    <Badge className='border-primary/20 bg-primary/10 text-primary'>
-                      {equipment.category}
-                    </Badge>
-                  </TableCell>
+                    <TableCell>
+                      {equipment.availableQuantity}{' '}
+                      {equipment.availableQuantity === 1 ? 'unit' : 'units'}
+                    </TableCell>
 
-                  <TableCell className='whitespace-nowrap'>
-                    <span className='font-semibold text-foreground'>
-                      ৳{equipment.rentalPrice.toLocaleString()}
-                    </span>
-                    <span className='ml-1 text-xs text-muted-foreground'>
-                      / {equipment.rentalType.toLowerCase()}
-                    </span>
-                  </TableCell>
+                    <TableCell>
+                      <Badge className={statusBadge.className}>
+                        {statusBadge.label}
+                      </Badge>
+                    </TableCell>
 
-                  <TableCell>
-                    {equipment.availableQuantity}{' '}
-                    {equipment.availableQuantity === 1 ? 'unit' : 'units'}
-                  </TableCell>
-
-                  <TableCell>
-                    <Badge className={statusStyles[equipment.status]}>
-                      {equipment.status}
-                    </Badge>
-                  </TableCell>
-
-                  <TableCell>
-                    <div className='flex min-w-64 justify-end gap-2'>
-                      <Button
-                        type='button'
-                        size='sm'
-                        variant='secondary'
-                        onClick={() => handleApprove(equipment)}
-                      >
-                        Approve
-                      </Button>
-                      <Button
-                        type='button'
-                        size='sm'
-                        variant='outline'
-                        onClick={() => handleReject(equipment)}
-                      >
-                        Reject
-                      </Button>
-                      <Button
-                        type='button'
-                        size='sm'
-                        variant='outline'
-                        onClick={() => handleUpdate(equipment)}
-                      >
-                        Update
-                      </Button>
-                      <Button
-                        type='button'
-                        size='sm'
-                        variant='destructive'
-                        onClick={() => setSelectedEquipment(equipment)}
-                      >
-                        Delete
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
+                    <TableCell>
+                      <div className='flex min-w-64 justify-end gap-2'>
+                        <Button
+                          type='button'
+                          size='sm'
+                          variant='secondary'
+                          disabled={updatingEquipmentId !== null}
+                          onClick={() => handleApprove(equipment)}
+                        >
+                          {updatingEquipmentId ===
+                          (equipment._id ?? equipment.id)
+                            ? 'Approving...'
+                            : 'Approve'}
+                        </Button>
+                        <Button
+                          type='button'
+                          size='sm'
+                          variant='outline'
+                          onClick={() => handleReject(equipment)}
+                        >
+                          Reject
+                        </Button>
+                        <Button
+                          type='button'
+                          size='sm'
+                          variant='outline'
+                          onClick={() => handleUpdate(equipment)}
+                        >
+                          Update
+                        </Button>
+                        <Button
+                          type='button'
+                          size='sm'
+                          variant='destructive'
+                          onClick={() => setSelectedEquipment(equipment)}
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                )
+              })
             )}
           </TableBody>
         </Table>

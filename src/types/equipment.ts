@@ -11,7 +11,7 @@ export type RentalType = 'Daily' | 'Weekly' | 'Monthly'
 
 export type EquipmentCondition = 'New' | 'Like New' | 'Good' | 'Fair'
 
-export type EquipmentStatus = 'Pending' | 'Approved' | 'Rejected'
+export type EquipmentStatus = 'pending' | 'approved' | 'rejected'
 
 export interface EquipmentOwner {
   ownerId: string

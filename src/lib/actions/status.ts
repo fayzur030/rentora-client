@@ -1,9 +1,10 @@
 import { getTokenFromClient } from '../auth/getTokenFromClient'
 import { baseUrl } from '../config'
+import type { EquipmentStatus } from '@/types/equipment'
 
 export const updateEquipmentStatus = async (
   equipmentId: string,
-  status: string
+  status: EquipmentStatus
 ) => {
   const token = await getTokenFromClient()
 
@@ -11,20 +12,17 @@ export const updateEquipmentStatus = async (
     throw new Error('Please log in to update equipment status')
   }
 
-  const res = await fetch(
-    `${baseUrl}/api/equipment/update-status/${equipmentId}`,
-    {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ status }),
-    }
-  )
+  const res = await fetch(`${baseUrl}/api/users/update-status/${equipmentId}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ status }),
+  })
 
   const result = await res.json()
-
+  console.log(result)
   if (!res.ok) {
     throw new Error(result.message || 'Failed to update equipment status')
   }
