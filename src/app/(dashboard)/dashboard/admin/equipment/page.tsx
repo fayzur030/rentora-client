@@ -1,16 +1,34 @@
-const AllEquipmentPage = () => {
+import AdminEquipmentTable from '@/components/dashboard/admin/AdminEquipmentTable'
+import { getAllEquipments } from '@/lib/api/equipments'
+import type { Equipment } from '@/types/equipment'
+
+const AllEquipmentPage = async () => {
+  let equipments: Equipment[] = []
+  let errorMessage: string | null = null
+
+  try {
+    equipments = await getAllEquipments()
+  } catch (error) {
+    console.error('Get Equipment Error:', error)
+    errorMessage =
+      error instanceof Error ? error.message : 'Failed to load equipment'
+  }
+
   return (
     <div className='space-y-6'>
       <div className='space-y-1'>
-        <h2 className='font-heading text-2xl font-bold text-foreground'>All Equipment</h2>
+        <h2 className='font-heading text-2xl font-bold text-foreground'>
+          All Equipment
+        </h2>
         <p className='text-sm text-muted-foreground'>
           Approve, update or remove every equipment listing.
         </p>
       </div>
 
-      <div className='rounded-xl border border-border bg-card p-10 text-center shadow-sm'>
-        <p className='text-sm text-muted-foreground'>All equipment will appear here.</p>
-      </div>
+      <AdminEquipmentTable
+        equipments={equipments}
+        errorMessage={errorMessage}
+      />
     </div>
   )
 }

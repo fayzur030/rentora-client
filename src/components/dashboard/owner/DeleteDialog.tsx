@@ -29,12 +29,17 @@ const DeleteDialog = ({
   const [isDeleting, setIsDeleting] = useState(false)
 
   const handleDelete = async () => {
-    if (!selectedEquipment?._id) return
+    const equipmentId = selectedEquipment?._id ?? selectedEquipment?.id
+
+    if (!selectedEquipment || !equipmentId) {
+      toast.error('Equipment ID is missing')
+      return
+    }
 
     try {
       setIsDeleting(true)
 
-      const result = await deleteEquipment(selectedEquipment._id)
+      const result = await deleteEquipment(equipmentId)
 
       if (result.success) {
         toast.success(result.message || 'Equipment deleted successfully')
