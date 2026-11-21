@@ -1,43 +1,25 @@
 'use client'
 
-import { useEffect } from 'react'
-
-import { Button } from '@/components/ui/button'
+import ErrorState from '@/components/shared/ErrorState'
 
 interface MyEquipmentRentalsErrorProps {
   error: Error & { digest?: string }
-  retry: () => void
+  reset: () => void
 }
 
-const MyEquipmentRentalsError = ({
+/**
+ * Error boundary for Owner My Equipment Rentals page
+ */
+export default function MyEquipmentRentalsError({
   error,
-  retry,
-}: MyEquipmentRentalsErrorProps) => {
-  useEffect(() => {
-    console.error(error)
-  }, [error])
-
+  reset,
+}: MyEquipmentRentalsErrorProps) {
   return (
-    <div className='space-y-6'>
-      <div className='space-y-1'>
-        <h2 className='font-heading text-2xl font-bold text-foreground'>
-          My Equipment Rental
-        </h2>
-        <p className='text-sm text-muted-foreground'>
-          See which customer has booked your equipment.
-        </p>
-      </div>
-
-      <div className='rounded-xl border border-border bg-card p-10 text-center shadow-sm'>
-        <p className='text-sm text-muted-foreground'>
-          Rental bookings could not be loaded. Please try again.
-        </p>
-        <Button onClick={retry} className='mt-4'>
-          Try again
-        </Button>
-      </div>
-    </div>
+    <ErrorState
+      error={error}
+      reset={reset}
+      title='Rental Bookings Error'
+      message='Failed to load rental bookings for your equipment. Please try again.'
+    />
   )
 }
-
-export default MyEquipmentRentalsError
