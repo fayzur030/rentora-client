@@ -1,13 +1,32 @@
 'use client'
 
 import Image from 'next/image'
-import { useState } from 'react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ImageOff } from 'lucide-react'
+import { useState } from 'react'
+import {
+  Check,
+  Eye,
+  ImageOff,
+  Loader2,
+  MapPin,
+  MoreHorizontal,
+  PackageOpen,
+  Pencil,
+  Trash2,
+  X,
+} from 'lucide-react'
 import { toast } from 'sonner'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import DeleteDialog from '@/components/dashboard/owner/DeleteDialog'
 import UpdateEquipment from '@/components/dashboard/owner/UpdateEquipment'
 import {
@@ -18,38 +37,52 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import type { Equipment, EquipmentStatus } from '@/types/equipment'
+import { cn } from '@/lib/utils'
 import { updateEquipmentStatus } from '@/lib/actions/status'
+import type { Equipment, EquipmentStatus } from '@/types/equipment'
 
 interface AdminEquipmentTableProps {
   equipments: Equipment[]
   errorMessage: string | null
 }
 
-const statusStyles: Record<EquipmentStatus, string> = {
-  pending: 'border-amber-300 bg-amber-100 text-amber-900',
-  approved: 'border-emerald-300 bg-emerald-100 text-emerald-900',
-  rejected: 'border-rose-300 bg-rose-100 text-rose-900',
+const normalizeStatus = (status?: string): EquipmentStatus => {
+  if (!status) return 'pending'
+  const lower = status.toLowerCase()
+  if (lower === 'approved') return 'approved'
+  if (lower === 'rejected') return 'rejected'
+  return 'pending'
 }
 
-const getStatusBadge = (status: EquipmentStatus) => {
-  const normalizedStatus = status.toLowerCase()
+const getStatusBadge = (status?: string) => {
+  const normalized = normalizeStatus(status)
 
-  if (
-    normalizedStatus === 'pending' ||
-    normalizedStatus === 'approved' ||
-    normalizedStatus === 'rejected'
-  ) {
+  if (normalized === 'approved') {
     return {
-      label:
-        normalizedStatus.charAt(0).toUpperCase() + normalizedStatus.slice(1),
-      className: statusStyles[normalizedStatus],
+      label: 'Approved',
+      badgeClass:
+        'border-emerald-500/25 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 dark:border-emerald-500/30',
+      dotClass: 'bg-emerald-500',
+      pulse: false,
+    }
+  }
+
+  if (normalized === 'rejected') {
+    return {
+      label: 'Rejected',
+      badgeClass:
+        'border-rose-500/25 bg-rose-500/10 text-rose-700 dark:text-rose-400 dark:border-rose-500/30',
+      dotClass: 'bg-rose-500',
+      pulse: false,
     }
   }
 
   return {
-    label: status,
-    className: 'border-border bg-muted text-muted-foreground',
+    label: 'Pending',
+    badgeClass:
+      'border-amber-500/25 bg-amber-500/10 text-amber-700 dark:text-amber-400 dark:border-amber-500/30',
+    dotClass: 'bg-amber-500',
+    pulse: true,
   }
 }
 
@@ -57,77 +90,85 @@ const AdminEquipmentTable = ({
   equipments,
   errorMessage,
 }: AdminEquipmentTableProps) => {
-  const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(
-    null
-  )
-  const [editingEquipment, setEditingEquipment] = useState<Equipment | null>(
-    null
-  )
-  const [updatingEquipmentId, setUpdatingEquipmentId] = useState<string | null>(
-    null
-  )
   const router = useRouter()
+  const [selectedEquipment, setSelectedEquipment] =
+    useState<Equipment | null>(null)
+  const [editingEquipment, setEditingEquipment] =
+    useState<Equipment | null>(null)
+  const [updatingId, setUpdatingId] = useState<string | null>(null)
+  const [updatingAction, setUpdatingAction] = useState<EquipmentStatus | null>(
+    null
+  )
 
-  const handleApprove = async (equipment: Equipment) => {
+  const handleStatusUpdate = async (
+    equipment: Equipment,
+    newStatus: EquipmentStatus
+  ) => {
     const equipmentId = equipment._id ?? equipment.id
-
     if (!equipmentId) {
       toast.error('Equipment ID is missing')
       return
     }
 
     try {
-      setUpdatingEquipmentId(equipmentId)
-      await updateEquipmentStatus(equipmentId, 'approved')
+      setUpdatingId(equipmentId)
+      setUpdatingAction(newStatus)
 
-      toast.success(`${equipment.name} approved successfully.`)
+      await updateEquipmentStatus(equipmentId, newStatus)
+      toast.success(
+        `Equipment ${equipment.name} is now ${newStatus === 'approved' ? 'Approved' : 'Rejected'}`
+      )
       router.refresh()
     } catch (error) {
-      console.error('Approve Error:', error)
-
       toast.error(
-        error instanceof Error ? error.message : 'Failed to approve equipment.'
+        error instanceof Error ? error.message : 'Failed to update status'
       )
     } finally {
-      setUpdatingEquipmentId(null)
+      setUpdatingId(null)
+      setUpdatingAction(null)
     }
-  }
-
-  const handleReject = (equipment: Equipment) => {
-    toast.info(`Reject action for ${equipment.name} is ready to implement.`)
-  }
-
-  const handleUpdate = (equipment: Equipment) => {
-    setEditingEquipment(equipment)
   }
 
   if (errorMessage) {
     return (
       <div
         role='alert'
-        className='rounded-xl border border-destructive/20 bg-destructive/5 p-6 text-sm text-destructive'
+        className='rounded-xl border border-destructive/20 bg-destructive/5 p-6 text-sm text-destructive shadow-xs'
       >
-        {errorMessage}
+        <p className='font-semibold'>Error loading equipment</p>
+        <p className='mt-1 text-muted-foreground'>{errorMessage}</p>
       </div>
     )
   }
 
   return (
-    <div className='space-y-2'>
+    <div className='space-y-3'>
       <p className='text-xs text-muted-foreground sm:hidden'>
-        Swipe sideways to see all table columns.
+        Swipe sideways to view all columns.
       </p>
 
-      <div className='overflow-hidden rounded-xl border border-border bg-card shadow-sm'>
-        <Table className='min-w-275'>
-          <TableHeader className='bg-muted/40'>
+      <div className='overflow-hidden rounded-2xl border border-border/80 bg-card shadow-xs'>
+        <Table className='min-w-220'>
+          <TableHeader className='border-b border-border/70 bg-muted/50'>
             <TableRow className='hover:bg-transparent'>
-              <TableHead>Equipment</TableHead>
-              <TableHead>Category</TableHead>
-              <TableHead>Rental Price</TableHead>
-              <TableHead>Available Quantity</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className='text-right'>Actions</TableHead>
+              <TableHead className='py-3.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground'>
+                Equipment
+              </TableHead>
+              <TableHead className='py-3.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground'>
+                Category
+              </TableHead>
+              <TableHead className='py-3.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground'>
+                Rental Price
+              </TableHead>
+              <TableHead className='py-3.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground'>
+                Available
+              </TableHead>
+              <TableHead className='py-3.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground'>
+                Status
+              </TableHead>
+              <TableHead className='py-3.5 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground'>
+                Actions
+              </TableHead>
             </TableRow>
           </TableHeader>
 
@@ -136,111 +177,238 @@ const AdminEquipmentTable = ({
               <TableRow>
                 <TableCell
                   colSpan={6}
-                  className='h-28 text-center text-muted-foreground'
+                  className='h-48 text-center text-muted-foreground'
                 >
-                  No equipment found.
+                  <div className='flex flex-col items-center justify-center gap-2'>
+                    <PackageOpen
+                      className='size-10 text-muted-foreground/60'
+                      aria-hidden='true'
+                    />
+                    <p className='text-base font-semibold text-foreground'>
+                      No equipment found
+                    </p>
+                    <p className='text-xs text-muted-foreground'>
+                      Equipment listings added by owners will appear here.
+                    </p>
+                  </div>
                 </TableCell>
               </TableRow>
             ) : (
               equipments.map((equipment, index) => {
+                const equipmentId = equipment._id ?? equipment.id
+                const rowKey = equipmentId ?? `${equipment.name}-${index}`
                 const statusBadge = getStatusBadge(equipment.status)
+                const currentStatus = normalizeStatus(equipment.status)
+                const isItemUpdating = updatingId === equipmentId
 
                 return (
                   <TableRow
-                    key={
-                      equipment._id ??
-                      equipment.id ??
-                      `${equipment.name}-${index}`
-                    }
-                    className='hover:bg-muted/35'
+                    key={rowKey}
+                    className='group border-b border-border/40 transition-colors hover:bg-muted/30 last:border-0'
                   >
-                    <TableCell>
-                      <div className='flex min-w-56 items-center gap-3'>
-                        <div className='relative size-14 shrink-0 overflow-hidden rounded-xl border border-border/70 bg-muted'>
+                    {/* Equipment Details */}
+                    <TableCell className='py-3.5'>
+                      <div className='flex min-w-56 items-center gap-3.5'>
+                        <div className='relative size-12 shrink-0 overflow-hidden rounded-xl border border-border/70 bg-muted/60 shadow-2xs'>
                           {equipment.image?.trim() ? (
                             <Image
                               src={equipment.image}
                               alt={equipment.name}
                               fill
-                              sizes='56px'
-                              className='object-cover'
+                              sizes='48px'
+                              className='object-cover transition-transform duration-300 group-hover:scale-105'
                             />
                           ) : (
                             <div className='flex size-full items-center justify-center text-muted-foreground'>
-                              <ImageOff className='size-5' aria-hidden='true' />
+                              <ImageOff
+                                className='size-5'
+                                aria-hidden='true'
+                              />
                             </div>
                           )}
                         </div>
-                        <span className='line-clamp-2 max-w-56 font-semibold text-foreground'>
-                          {equipment.name}
-                        </span>
+
+                        <div className='min-w-0 flex-1 space-y-1'>
+                          <p className='line-clamp-1 text-sm font-semibold text-foreground transition-colors group-hover:text-primary'>
+                            {equipment.name}
+                          </p>
+
+                          <div className='flex items-center gap-2 text-xs text-muted-foreground'>
+                            {equipment.location && (
+                              <span className='inline-flex items-center gap-1 truncate'>
+                                <MapPin
+                                  className='size-3 shrink-0 text-muted-foreground/80'
+                                  aria-hidden='true'
+                                />
+                                {equipment.location}
+                              </span>
+                            )}
+                            {equipment.owner?.name && (
+                              <>
+                                <span className='size-1 rounded-full bg-border' />
+                                <span className='truncate text-muted-foreground/80'>
+                                  By {equipment.owner.name}
+                                </span>
+                              </>
+                            )}
+                          </div>
+                        </div>
                       </div>
                     </TableCell>
 
-                    <TableCell>
-                      <Badge className='border-primary/20 bg-primary/10 text-primary'>
+                    {/* Category */}
+                    <TableCell className='py-3.5'>
+                      <Badge className='rounded-md border-primary/20 bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary shadow-2xs'>
                         {equipment.category}
                       </Badge>
                     </TableCell>
 
-                    <TableCell className='whitespace-nowrap'>
-                      <span className='font-semibold text-foreground'>
+                    {/* Rental Price */}
+                    <TableCell className='py-3.5 whitespace-nowrap'>
+                      <span className='text-sm font-semibold tracking-tight text-foreground'>
                         ৳{equipment.rentalPrice.toLocaleString()}
                       </span>
                       <span className='ml-1 text-xs text-muted-foreground'>
-                        / {equipment.rentalType.toLowerCase()}
+                        /{equipment.rentalType.toLowerCase()}
                       </span>
                     </TableCell>
 
-                    <TableCell>
-                      {equipment.availableQuantity}{' '}
-                      {equipment.availableQuantity === 1 ? 'unit' : 'units'}
+                    {/* Available Quantity */}
+                    <TableCell className='py-3.5'>
+                      <span
+                        className={cn(
+                          'inline-flex items-center gap-1.5 text-xs font-medium',
+                          equipment.availableQuantity > 0
+                            ? 'text-foreground'
+                            : 'font-semibold text-destructive'
+                        )}
+                      >
+                        <span
+                          className={cn(
+                            'size-1.5 rounded-full',
+                            equipment.availableQuantity > 0
+                              ? 'bg-emerald-500'
+                              : 'bg-destructive'
+                          )}
+                        />
+                        {equipment.availableQuantity}{' '}
+                        {equipment.availableQuantity === 1 ? 'unit' : 'units'}
+                      </span>
                     </TableCell>
 
-                    <TableCell>
-                      <Badge className={statusBadge.className}>
+                    {/* Status */}
+                    <TableCell className='py-3.5'>
+                      <Badge
+                        className={cn(
+                          'inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium shadow-2xs',
+                          statusBadge.badgeClass
+                        )}
+                      >
+                        <span
+                          className={cn(
+                            'size-1.5 rounded-full',
+                            statusBadge.dotClass,
+                            statusBadge.pulse && 'animate-pulse'
+                          )}
+                        />
                         {statusBadge.label}
                       </Badge>
                     </TableCell>
 
-                    <TableCell>
-                      <div className='flex min-w-64 justify-end gap-2'>
-                        <Button
-                          type='button'
-                          size='sm'
-                          variant='secondary'
-                          disabled={updatingEquipmentId !== null}
-                          onClick={() => handleApprove(equipment)}
-                        >
-                          {updatingEquipmentId ===
-                          (equipment._id ?? equipment.id)
-                            ? 'Approving...'
-                            : 'Approve'}
-                        </Button>
-                        <Button
-                          type='button'
-                          size='sm'
-                          variant='outline'
-                          onClick={() => handleReject(equipment)}
-                        >
-                          Reject
-                        </Button>
-                        <Button
-                          type='button'
-                          size='sm'
-                          variant='outline'
-                          onClick={() => handleUpdate(equipment)}
-                        >
-                          Update
-                        </Button>
-                        <Button
-                          type='button'
-                          size='sm'
-                          variant='destructive'
-                          onClick={() => setSelectedEquipment(equipment)}
-                        >
-                          Delete
-                        </Button>
+                    {/* Actions */}
+                    <TableCell className='py-3.5 text-right'>
+                      <div className='flex items-center justify-end gap-1.5'>
+                        {/* Quick Action: Approve (when not approved) */}
+                        {currentStatus !== 'approved' && (
+                          <Button
+                            type='button'
+                            size='sm'
+                            disabled={isItemUpdating}
+                            onClick={() =>
+                              handleStatusUpdate(equipment, 'approved')
+                            }
+                            className='h-8 gap-1 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-2.5 text-xs font-medium text-emerald-700 shadow-2xs transition-colors hover:bg-emerald-500/20 hover:text-emerald-800 dark:text-emerald-400 dark:hover:text-emerald-300'
+                          >
+                            {isItemUpdating &&
+                            updatingAction === 'approved' ? (
+                              <Loader2 className='size-3.5 animate-spin' />
+                            ) : (
+                              <Check className='size-3.5' />
+                            )}
+                            <span className='hidden sm:inline'>Approve</span>
+                          </Button>
+                        )}
+
+                        {/* Quick Action: Reject (when not rejected) */}
+                        {currentStatus !== 'rejected' && (
+                          <Button
+                            type='button'
+                            size='sm'
+                            variant='ghost'
+                            disabled={isItemUpdating}
+                            onClick={() =>
+                              handleStatusUpdate(equipment, 'rejected')
+                            }
+                            className='h-8 gap-1 rounded-lg border border-rose-500/30 bg-rose-500/10 px-2.5 text-xs font-medium text-rose-700 shadow-2xs transition-colors hover:bg-rose-500/20 hover:text-rose-800 dark:text-rose-400 dark:hover:text-rose-300'
+                          >
+                            {isItemUpdating &&
+                            updatingAction === 'rejected' ? (
+                              <Loader2 className='size-3.5 animate-spin' />
+                            ) : (
+                              <X className='size-3.5' />
+                            )}
+                            <span className='hidden sm:inline'>Reject</span>
+                          </Button>
+                        )}
+
+                        {/* More Actions Dropdown Menu */}
+                        <DropdownMenu>
+                          <DropdownMenuTrigger
+                            type='button'
+                            aria-label={`More actions for ${equipment.name}`}
+                            className='inline-flex size-8 items-center justify-center rounded-lg border border-border/80 bg-background text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50'
+                          >
+                            <MoreHorizontal
+                              className='size-4'
+                              aria-hidden='true'
+                            />
+                          </DropdownMenuTrigger>
+
+                          <DropdownMenuContent align='end' className='w-44'>
+                            {equipmentId && (
+                              <DropdownMenuItem
+                                render={
+                                  <Link
+                                    href={`/all-equipments/${equipmentId}`}
+                                  />
+                                }
+                                className='cursor-pointer gap-2'
+                              >
+                                <Eye className='size-4' aria-hidden='true' />
+                                View Details
+                              </DropdownMenuItem>
+                            )}
+
+                            <DropdownMenuItem
+                              onClick={() => setEditingEquipment(equipment)}
+                              className='cursor-pointer gap-2'
+                            >
+                              <Pencil className='size-4' aria-hidden='true' />
+                              Update
+                            </DropdownMenuItem>
+
+                            <DropdownMenuSeparator />
+
+                            <DropdownMenuItem
+                              variant='destructive'
+                              onClick={() => setSelectedEquipment(equipment)}
+                              className='cursor-pointer gap-2'
+                            >
+                              <Trash2 className='size-4' aria-hidden='true' />
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -251,11 +419,13 @@ const AdminEquipmentTable = ({
         </Table>
       </div>
 
+      {/* Delete Confirmation Dialog */}
       <DeleteDialog
         selectedEquipment={selectedEquipment}
         setSelectedEquipment={setSelectedEquipment}
       />
 
+      {/* Update Equipment Modal */}
       {editingEquipment && (
         <UpdateEquipment
           equipment={editingEquipment}
