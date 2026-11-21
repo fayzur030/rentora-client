@@ -56,8 +56,6 @@ export const getMyEquipments = async (): Promise<MyEquipment> => {
   })
 
   const result = await res.json()
-  console.log('API Result:', result)
-  console.log('Equipment Data:', result.data)
   if (!res.ok) {
     throw new Error(result.message || 'Failed to fetch equipment')
   }

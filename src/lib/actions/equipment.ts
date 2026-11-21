@@ -27,3 +27,29 @@ export const createEquipment = async (payload: Equipment) => {
   }
   return result
 }
+
+export const deleteEquipment = async (equipmentId: string) => {
+  const token = await getTokenFromClient()
+
+  if (!token) {
+    throw new Error('Please log in to delete equipment')
+  }
+
+  const res = await fetch(
+    `${baseUrl}/api/equipment/delete-equipment/${equipmentId}`,
+    {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  )
+
+  const result = await res.json()
+
+  if (!res.ok) {
+    throw new Error(result.message || 'Failed to delete equipment')
+  }
+
+  return result
+}

@@ -375,6 +375,7 @@ const initialFormValues: EquipmentFormValues = {
 }
 
 const mockOwner: EquipmentOwner = {
+  ownerId: '',
   name: 'Alex Morgan',
   email: 'alex.morgan@example.com',
   image: '',

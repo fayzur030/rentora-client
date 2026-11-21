@@ -45,12 +45,5 @@ export interface ApiSuccessResponse<T> {
   data: T
 }
 
-//owner dashboard => my equipments
-
-export interface MyEquipment {
-  equipmentName: string
-  category: string
-  rentalPrice: number
-  availableQuantity: number
-  status: 'pending' | 'approved' | 'rejected'
-}
+// Owner dashboard: my equipments
+export type MyEquipment = Equipment[]
