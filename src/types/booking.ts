@@ -42,6 +42,7 @@ export interface BookingRental {
   rentalDuration: number
   equipmentId: string
   equipmentName?: string
+  customerName?: string
   quantity: number
   pricePerDay: number
   totalAmount: number

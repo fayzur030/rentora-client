@@ -114,6 +114,7 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
       setIsLoading(true)
       const bookingData = {
         equipmentId: equipment._id,
+        userName: user?.name,
         userEmail: user?.email,
         startDate: rentalStartDate,
         endDate: rentalEndDate,

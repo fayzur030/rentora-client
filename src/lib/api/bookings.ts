@@ -17,3 +17,24 @@ export const getMyRentals = async (token: string): Promise<BookingRental[]> => {
 
   return result.data
 }
+
+// owner dashboard: => rentals of my equipment
+
+export const getMyEquipmentRentals = async (
+  token: string
+): Promise<BookingRental[]> => {
+  const res = await fetch(`${baseUrl}/api/equipment/my-equipment-rentals`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    cache: 'no-store',
+  })
+
+  const result = await res.json()
+
+  if (!res.ok) {
+    throw new Error(result.message || 'Failed to fetch equipment rentals')
+  }
+
+  return result.data
+}
