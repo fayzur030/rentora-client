@@ -8,7 +8,7 @@ export type UserRole = 'customer' | 'owner' | 'admin'
 export interface Profile {
   name: string
   email: string
-  image?: string
+  image?: string | null
   phone?: string
   address?: string
   role?: UserRole

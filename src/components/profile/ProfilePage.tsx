@@ -12,17 +12,6 @@ interface ProfilePageProps {
   profile: Profile
 }
 
-/**
- * Reusable Master Profile Page Component
- * Shared across Customer, Owner, and Admin Dashboards.
- *
- * Displays the 5 required fields:
- * 1. Name
- * 2. Email
- * 3. Profile Image
- * 4. Phone Number
- * 5. Address
- */
 const ProfilePage = ({ profile }: ProfilePageProps) => {
   // Manage profile data in local state
   const [currentProfile, setCurrentProfile] = useState<Profile>(profile)

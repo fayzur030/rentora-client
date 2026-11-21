@@ -1,19 +1,43 @@
+'use client'
+
 import ProfilePage from '@/components/profile/ProfilePage'
-import type { Profile } from '@/components/profile/types'
+import { authClient } from '@/lib/auth-client'
+import { LoaderCircle } from 'lucide-react'
 
-// Sample Customer profile containing strictly the 5 required fields
-const customerProfile: Profile = {
-  name: 'Ayesha Rahman',
-  email: 'ayesha.rahman@example.com',
-  image:
-    'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=256&q=80',
-  phone: '+880 1712 345678',
-  address: 'House 12, Road 7, Dhanmondi, Dhaka',
-  role: 'customer',
-}
+const CustomerProfile = () => {
+  const { data: session, isPending } = authClient.useSession()
 
-const CustomerProfilePage = () => {
+  if (isPending) {
+    return (
+      <div className='flex min-h-[60vh] flex-col items-center justify-center gap-4'>
+        <div className='flex size-14 items-center justify-center rounded-2xl bg-[#F5A623]/10'>
+          <LoaderCircle className='size-7 animate-spin text-[#F5A623]' />
+        </div>
+
+        <div className='text-center'>
+          <h2 className='text-base font-bold text-[#241A15]'>
+            Loading Profile
+          </h2>
+          <p className='mt-1 text-sm text-[#92877E]'>
+            Please wait while we fetch your information.
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  const user = session?.user
+
+  const customerProfile = {
+    name: user?.name || '',
+    email: user?.email || '',
+    image: user?.image,
+    phone: user?.phone || '',
+    address: user?.address || '',
+    role: user?.role,
+  }
+
   return <ProfilePage profile={customerProfile} />
 }
 
-export default CustomerProfilePage
+export default CustomerProfile

@@ -53,13 +53,14 @@ const roleConfigs: Record<UserRole, RoleConfig> = {
  */
 const ProfileOverview = ({ profile, onEdit }: ProfileOverviewProps) => {
   const currentRole = profile.role || 'customer'
+  console.log(currentRole)
   const roleConfig = roleConfigs[currentRole]
   const RoleIcon = roleConfig.icon
 
   return (
     <div className='overflow-hidden rounded-2xl border border-border/80 bg-card shadow-xs'>
       {/* Decorative gradient banner */}
-      <div className='h-24 bg-gradient-to-r from-primary/10 via-primary/5 to-muted sm:h-28' />
+      <div className='h-24 bg-linear-to-r from-primary/10 via-primary/5 to-muted sm:h-28' />
 
       {/* Main Profile Info Section */}
       <div className='px-6 pb-6 sm:px-8'>
