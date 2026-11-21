@@ -12,14 +12,17 @@ import {
 } from '@/components/ui/dropdown-menu'
 import type { Equipment } from '@/types/equipment'
 import DeleteDialog from './DeleteDialog'
+import UpdateEquipment from './UpdateEquipment'
 
 interface EquipmentActionsProps {
   equipment: Equipment
 }
 
 const EquipmentActions = ({ equipment }: EquipmentActionsProps) => {
-  const [selectedEquipment, setSelectedEquipment] =
-    useState<Equipment | null>(null)
+  const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(
+    null
+  )
+  const [isUpdateOpen, setIsUpdateOpen] = useState(false)
   const equipmentId = equipment._id ?? equipment.id
 
   return (
@@ -43,11 +46,7 @@ const EquipmentActions = ({ equipment }: EquipmentActionsProps) => {
           </DropdownMenuItem>
 
           <DropdownMenuItem
-            render={
-              <Link
-                href={`/dashboard/owner/my-equipment/edit/${equipmentId}`}
-              />
-            }
+            onClick={() => setIsUpdateOpen(true)}
             className='cursor-pointer gap-2'
           >
             <Pencil aria-hidden='true' />
@@ -68,6 +67,11 @@ const EquipmentActions = ({ equipment }: EquipmentActionsProps) => {
       <DeleteDialog
         selectedEquipment={selectedEquipment}
         setSelectedEquipment={setSelectedEquipment}
+      />
+      <UpdateEquipment
+        equipment={equipment}
+        open={isUpdateOpen}
+        onOpenChange={setIsUpdateOpen}
       />
     </>
   )

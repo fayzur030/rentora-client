@@ -28,6 +28,8 @@ export const createEquipment = async (payload: Equipment) => {
   return result
 }
 
+// delete equipment
+
 export const deleteEquipment = async (equipmentId: string) => {
   const token = await getTokenFromClient()
 
@@ -54,3 +56,36 @@ export const deleteEquipment = async (equipmentId: string) => {
 
   return result
 }
+
+// update equipment
+// update equipment
+export const updateEquipment = async (equipmentId: string, data: Equipment) => {
+  const token = await getTokenFromClient()
+
+  if (!token) {
+    throw new Error('Please log in to update equipment')
+  }
+
+  const res = await fetch(
+    `${baseUrl}/api/equipment/update-equipment/${equipmentId}`,
+    {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      cache: 'no-store',
+      body: JSON.stringify(data),
+    }
+  )
+
+  const result = await res.json()
+
+  if (!res.ok) {
+    throw new Error(result.message || 'Failed to update equipment')
+  }
+
+  return result
+}
+
+// unauthorize
