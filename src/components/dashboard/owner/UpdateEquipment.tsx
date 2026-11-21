@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, ArrowRight, LoaderCircle, Send } from 'lucide-react'
+import { LoaderCircle, Send } from 'lucide-react'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
@@ -26,7 +26,12 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import ImageUpload from '@/components/dashboard/add-equipment/image-upload'
 import { updateEquipment } from '@/lib/actions/equipment'
-import type { Equipment } from '@/types/equipment'
+import type {
+  Equipment,
+  EquipmentCategory,
+  EquipmentCondition,
+  RentalType,
+} from '@/types/equipment'
 
 interface UpdateEquipmentProps {
   equipment: Equipment
@@ -34,17 +39,17 @@ interface UpdateEquipmentProps {
   onOpenChange: (open: boolean) => void
 }
 
-const categories = [
+const categories: EquipmentCategory[] = [
   'Construction Equipment',
-  'Photography Equipment',
-  'Vehicles & Transportation',
   'Agriculture Equipment',
+  'Power Tools',
+  'Heavy Machinery',
   'Electronics',
-  'Event Equipment',
+  'Vehicles',
+  'Other',
 ]
-
-const conditions = ['New', 'Like New', 'Good', 'Fair']
-const rentalTypes = ['Daily', 'Weekly', 'Monthly']
+const conditions: EquipmentCondition[] = ['New', 'Like New', 'Good', 'Fair']
+const rentalTypes: RentalType[] = ['Daily', 'Weekly', 'Monthly']
 
 const UpdateEquipment = ({
   equipment,
@@ -52,78 +57,51 @@ const UpdateEquipment = ({
   onOpenChange,
 }: UpdateEquipmentProps) => {
   const router = useRouter()
-  const [step, setStep] = useState(1)
+
   const [isUpdating, setIsUpdating] = useState(false)
   const [image, setImage] = useState(equipment.image ?? '')
-  const [name, setName] = useState(equipment.name)
-  const [category, setCategory] = useState(equipment.category)
-  const [description, setDescription] = useState(equipment.description)
-  const [location, setLocation] = useState(equipment.location)
-  const [condition, setCondition] = useState(equipment.condition)
-  const [brand, setBrand] = useState(equipment.brand ?? '')
-  const [model, setModel] = useState(equipment.model ?? '')
-  const [rentalPrice, setRentalPrice] = useState(
-    String(equipment.rentalPrice)
-  )
-  const [rentalType, setRentalType] = useState(equipment.rentalType)
-  const [availableQuantity, setAvailableQuantity] = useState(
-    String(equipment.availableQuantity)
-  )
-  const [rentalTerms, setRentalTerms] = useState(equipment.rentalTerms)
 
   const equipmentId = equipment._id ?? equipment.id
 
-  const resetForm = () => {
-    setStep(1)
-    setImage(equipment.image ?? '')
-    setName(equipment.name)
-    setCategory(equipment.category)
-    setDescription(equipment.description)
-    setLocation(equipment.location)
-    setCondition(equipment.condition)
-    setBrand(equipment.brand ?? '')
-    setModel(equipment.model ?? '')
-    setRentalPrice(String(equipment.rentalPrice))
-    setRentalType(equipment.rentalType)
-    setAvailableQuantity(String(equipment.availableQuantity))
-    setRentalTerms(equipment.rentalTerms)
-  }
+  const handleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
 
-  const closeModal = () => {
-    if (!isUpdating) {
-      onOpenChange(false)
-      resetForm()
-    }
-  }
-
-  const handleUpdate = async () => {
     if (!equipmentId) {
       toast.error('Equipment ID is missing')
       return
     }
 
+    const form = e.currentTarget
+    const formData = new FormData(form)
+
     const updatedEquipment: Equipment = {
       ...equipment,
-      name,
-      category,
-      description,
-      location,
-      condition,
-      brand,
-      model,
+      name: String(formData.get('name') ?? ''),
+      category: String(formData.get('category') ?? '') as Equipment['category'],
+      description: String(formData.get('description') ?? ''),
+      location: String(formData.get('location') ?? ''),
+      condition: String(
+        formData.get('condition') ?? ''
+      ) as Equipment['condition'],
+      brand: String(formData.get('brand') ?? ''),
+      model: String(formData.get('model') ?? ''),
       image,
-      rentalPrice: Number(rentalPrice),
-      rentalType,
-      availableQuantity: Number(availableQuantity),
-      rentalTerms,
+      rentalPrice: Number(formData.get('rentalPrice')),
+      rentalType: String(
+        formData.get('rentalType') ?? ''
+      ) as Equipment['rentalType'],
+      availableQuantity: Number(formData.get('availableQuantity')),
+      rentalTerms: String(formData.get('rentalTerms') ?? ''),
     }
 
     try {
       setIsUpdating(true)
+
       await updateEquipment(equipmentId, updatedEquipment)
+
       toast.success('Equipment updated successfully')
+
       onOpenChange(false)
-      resetForm()
       router.refresh()
     } catch (error) {
       toast.error(
@@ -135,12 +113,7 @@ const UpdateEquipment = ({
   }
 
   return (
-    <Dialog
-      open={open}
-      onOpenChange={(nextOpen) => {
-        if (!nextOpen) closeModal()
-      }}
-    >
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         overlayClassName='backdrop-blur-xs'
         forceOverlay
@@ -148,30 +121,30 @@ const UpdateEquipment = ({
       >
         <DialogHeader className='border-b border-border px-5 py-5 pr-14 sm:px-6'>
           <DialogTitle>Update equipment</DialogTitle>
-          <DialogDescription>Step {step} of 3</DialogDescription>
+          <DialogDescription>
+            Update your equipment details and rental information.
+          </DialogDescription>
         </DialogHeader>
 
-        <div className='max-h-[70vh] overflow-y-auto px-5 py-5 sm:px-6'>
-          {step === 1 && (
+        <form onSubmit={handleUpdate}>
+          <div className='max-h-[70vh] overflow-y-auto px-5 py-5 sm:px-6'>
             <div className='grid gap-5 sm:grid-cols-2'>
               <div className='space-y-2'>
                 <Label htmlFor='update-name'>Equipment name</Label>
                 <Input
                   id='update-name'
-                  value={name}
-                  onChange={(event) => setName(event.target.value)}
+                  name='name'
+                  defaultValue={equipment.name}
+                  required
                   className='h-11'
                 />
               </div>
 
               <div className='space-y-2'>
                 <Label>Category</Label>
-                <Select
-                  value={category}
-                  onValueChange={(value) => setCategory(value as Equipment['category'])}
-                >
-                  <SelectTrigger className='h-11 w-full'>
-                    <SelectValue />
+                <Select name='category' defaultValue={equipment.category}>
+                  <SelectTrigger className='h-11 w-full py-5.5'>
+                    <SelectValue placeholder='Select category' />
                   </SelectTrigger>
                   <SelectContent>
                     {categories.map((option) => (
@@ -187,8 +160,9 @@ const UpdateEquipment = ({
                 <Label htmlFor='update-description'>Description</Label>
                 <Textarea
                   id='update-description'
-                  value={description}
-                  onChange={(event) => setDescription(event.target.value)}
+                  name='description'
+                  defaultValue={equipment.description}
+                  required
                   className='min-h-28'
                 />
               </div>
@@ -197,22 +171,18 @@ const UpdateEquipment = ({
                 <Label htmlFor='update-location'>Location</Label>
                 <Input
                   id='update-location'
-                  value={location}
-                  onChange={(event) => setLocation(event.target.value)}
+                  name='location'
+                  defaultValue={equipment.location}
+                  required
                   className='h-11'
                 />
               </div>
 
               <div className='space-y-2'>
                 <Label>Equipment condition</Label>
-                <Select
-                  value={condition}
-                  onValueChange={(value) =>
-                    setCondition(value as Equipment['condition'])
-                  }
-                >
+                <Select name='condition' defaultValue={equipment.condition}>
                   <SelectTrigger className='h-11 w-full'>
-                    <SelectValue />
+                    <SelectValue placeholder='Select condition' />
                   </SelectTrigger>
                   <SelectContent>
                     {conditions.map((option) => (
@@ -228,8 +198,8 @@ const UpdateEquipment = ({
                 <Label htmlFor='update-brand'>Brand</Label>
                 <Input
                   id='update-brand'
-                  value={brand}
-                  onChange={(event) => setBrand(event.target.value)}
+                  name='brand'
+                  defaultValue={equipment.brand ?? ''}
                   className='h-11'
                 />
               </div>
@@ -238,8 +208,8 @@ const UpdateEquipment = ({
                 <Label htmlFor='update-model'>Model</Label>
                 <Input
                   id='update-model'
-                  value={model}
-                  onChange={(event) => setModel(event.target.value)}
+                  name='model'
+                  defaultValue={equipment.model ?? ''}
                   className='h-11'
                 />
               </div>
@@ -247,32 +217,25 @@ const UpdateEquipment = ({
               <div className='sm:col-span-2'>
                 <ImageUpload value={image} onChange={setImage} />
               </div>
-            </div>
-          )}
 
-          {step === 2 && (
-            <div className='grid gap-5 sm:grid-cols-2'>
               <div className='space-y-2'>
                 <Label htmlFor='update-price'>Rental price</Label>
                 <Input
                   id='update-price'
+                  name='rentalPrice'
                   type='number'
-                  value={rentalPrice}
-                  onChange={(event) => setRentalPrice(event.target.value)}
+                  min='1'
+                  defaultValue={equipment.rentalPrice}
+                  required
                   className='h-11'
                 />
               </div>
 
               <div className='space-y-2'>
                 <Label>Rental type</Label>
-                <Select
-                  value={rentalType}
-                  onValueChange={(value) =>
-                    setRentalType(value as Equipment['rentalType'])
-                  }
-                >
+                <Select name='rentalType' defaultValue={equipment.rentalType}>
                   <SelectTrigger className='h-11 w-full'>
-                    <SelectValue />
+                    <SelectValue placeholder='Select rental type' />
                   </SelectTrigger>
                   <SelectContent>
                     {rentalTypes.map((option) => (
@@ -288,9 +251,25 @@ const UpdateEquipment = ({
                 <Label htmlFor='update-quantity'>Available quantity</Label>
                 <Input
                   id='update-quantity'
+                  name='availableQuantity'
                   type='number'
-                  value={availableQuantity}
-                  onChange={(event) => setAvailableQuantity(event.target.value)}
+                  min='1'
+                  defaultValue={equipment.availableQuantity}
+                  required
+                  className='h-11'
+                />
+              </div>
+
+              <div className='space-y-2'>
+                <Label htmlFor='update-condition'>Equipment condition</Label>
+
+                <Input
+                  id='update-condition'
+                  name='condition'
+                  type='text'
+                  defaultValue={equipment.condition}
+                  required
+                  placeholder='Enter equipment condition'
                   className='h-11'
                 />
               </div>
@@ -301,80 +280,41 @@ const UpdateEquipment = ({
                 </Label>
                 <Textarea
                   id='update-terms'
-                  value={rentalTerms}
-                  onChange={(event) => setRentalTerms(event.target.value)}
+                  name='rentalTerms'
+                  defaultValue={equipment.rentalTerms}
+                  required
                   className='min-h-28'
                 />
               </div>
             </div>
-          )}
+          </div>
 
-          {step === 3 && (
-            <div className='grid gap-4 sm:grid-cols-2'>
-              <div className='rounded-xl border border-border p-4'>
-                <p className='text-xs text-muted-foreground'>Owner name</p>
-                <p className='mt-1 font-semibold'>{equipment.owner.name}</p>
-              </div>
-              <div className='rounded-xl border border-border p-4'>
-                <p className='text-xs text-muted-foreground'>Owner email</p>
-                <p className='mt-1 font-semibold'>{equipment.owner.email}</p>
-              </div>
-              <div className='rounded-xl border border-border p-4 sm:col-span-2'>
-                <p className='text-xs text-muted-foreground'>Listing status</p>
-                <p className='mt-1 font-semibold'>{equipment.status}</p>
-              </div>
-            </div>
-          )}
-        </div>
-
-        <DialogFooter className='border-t border-border px-5 py-4 sm:px-6'>
-          {step > 1 ? (
+          <DialogFooter className='border-t border-border px-5 py-4 sm:px-6'>
             <Button
               type='button'
               variant='outline'
-              onClick={() => setStep(step - 1)}
+              onClick={() => onOpenChange(false)}
               disabled={isUpdating}
-              className='gap-2'
-            >
-              <ArrowLeft className='size-4' />
-              Previous
-            </Button>
-          ) : (
-            <Button
-              type='button'
-              variant='outline'
-              onClick={closeModal}
-              disabled={isUpdating}
+              className={` cursor-pointer py-4`}
             >
               Cancel
             </Button>
-          )}
 
-          {step < 3 ? (
             <Button
-              type='button'
-              onClick={() => setStep(step + 1)}
-              className='gap-2'
-            >
-              Next
-              <ArrowRight className='size-4' />
-            </Button>
-          ) : (
-            <Button
-              type='button'
-              onClick={handleUpdate}
+              type='submit'
               disabled={isUpdating}
-              className='gap-2'
+              className='gap-2 cursor-pointer py-4'
             >
               {isUpdating ? (
                 <LoaderCircle className='size-4 animate-spin' />
               ) : (
                 <Send className='size-4' />
               )}
+
               {isUpdating ? 'Updating...' : 'Update equipment'}
             </Button>
-          )}
-        </DialogFooter>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   )
