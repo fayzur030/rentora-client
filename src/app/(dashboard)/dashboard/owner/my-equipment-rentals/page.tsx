@@ -1,7 +1,9 @@
 import Image from 'next/image'
 import { ImageOff } from 'lucide-react'
 
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
+import { getInitials } from '@/components/profile/profile-utils'
 import {
   Table,
   TableBody,
@@ -76,7 +78,7 @@ const MyEquipmentRentalsPage = async () => {
         </p>
 
         <div className='overflow-hidden rounded-xl border border-border bg-card shadow-sm'>
-          <Table className='min-w-287.5'>
+          <Table className='min-w-318.5'>
             <TableHeader className='bg-muted/40'>
               <TableRow className='hover:bg-transparent'>
                 <TableHead>Customer Information</TableHead>
@@ -98,33 +100,46 @@ const MyEquipmentRentalsPage = async () => {
                   return (
                     <TableRow key={rental._id}>
                       <TableCell>
-                        <div className='space-y-0.5'>
-                          <p className='font-semibold text-foreground'>
-                            {rental.customerName || '—'}
-                          </p>
-                          <p className='text-xs text-muted-foreground'>
-                            {rental.userEmail}
-                          </p>
-                          <p className='text-xs text-muted-foreground'>
-                            {rental.contactNumber}
-                          </p>
+                        <div className='flex min-w-56 items-center gap-3'>
+                          <Avatar className='size-8 shrink-0'>
+                            <AvatarFallback className='bg-primary/10 font-semibold text-primary'>
+                              {getInitials(
+                                rental.customerName || rental.userEmail
+                              )}
+                            </AvatarFallback>
+                          </Avatar>
+
+                          <div className='min-w-0'>
+                            <p className='truncate font-semibold text-foreground'>
+                              {rental.customerName || '—'}
+                            </p>
+                            <p className='truncate text-xs text-muted-foreground'>
+                              {rental.userEmail}
+                            </p>
+                            <p className='truncate text-xs text-muted-foreground'>
+                              {rental.contactNumber}
+                            </p>
+                          </div>
                         </div>
                       </TableCell>
 
                       <TableCell>
-                        <div className='flex min-w-48 items-center gap-3'>
+                        <div className='flex min-w-46 items-center gap-3'>
                           <div className='relative size-14 shrink-0 overflow-hidden rounded-lg bg-muted'>
                             {equipmentImage?.trim() ? (
                               <Image
                                 src={equipmentImage}
                                 alt={rental.equipmentName || 'Equipment'}
                                 fill
-                                sizes='56px'
+                                sizes='48px'
                                 className='object-cover'
                               />
                             ) : (
                               <div className='flex size-full items-center justify-center text-muted-foreground'>
-                                <ImageOff className='size-5' aria-hidden='true' />
+                                <ImageOff
+                                  className='size-5'
+                                  aria-hidden='true'
+                                />
                               </div>
                             )}
                           </div>
