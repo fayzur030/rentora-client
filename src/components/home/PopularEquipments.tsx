@@ -3,34 +3,38 @@ import Link from 'next/link'
 import { ArrowUpRight, ImageOff } from 'lucide-react'
 
 import { getPopularEquipments } from '@/lib/api/equipments'
+import PopularEquipmentsMotion from '@/components/home/PopularEquipmentsMotion'
 
 const PopularEquipments = async () => {
   const popularEquipments = await getPopularEquipments()
   const categories = popularEquipments.slice(0, 6)
 
   return (
-    <section className='relative overflow-hidden border-y border-border/70 bg-background py-16 sm:py-20'>
-      <div
-        className='pointer-events-none absolute -top-24 right-0 size-72 rounded-full bg-accent/10 blur-3xl'
-        aria-hidden='true'
-      />
-
-      <div className='relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8'>
-        <div className='mb-9 text-center sm:mb-12'>
-          <div className='flex items-center justify-center gap-3 sm:gap-4'>
-            <span className='h-px w-8 bg-primary/30 sm:w-12' aria-hidden='true' />
-            <h2 className='font-heading text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl'>
-              Popular Categories
-            </h2>
-            <span className='h-px w-8 bg-primary/30 sm:w-12' aria-hidden='true' />
-          </div>
-          <p className='mt-3 text-sm leading-6 text-muted-foreground sm:text-base'>
-            Find the right gear for your next project or adventure.
+    <PopularEquipmentsMotion>
+      <div className='mx-auto grid w-full max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-14 lg:px-8'>
+        <div className='max-w-xl'>
+          <span className='inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-primary'>
+            <span className='h-px w-7 bg-primary' aria-hidden='true' />
+            Find your category
+          </span>
+          <h2 className='mt-5 font-heading text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-4xl lg:text-5xl'>
+            The right gear for every big idea.
+          </h2>
+          <p className='mt-4 max-w-md text-sm leading-7 text-muted-foreground sm:text-base'>
+            From weekend plans to ambitious projects, discover equipment that
+            helps you get things moving.
           </p>
+          <Link
+            href='/all-equipments'
+            className='mt-7 inline-flex h-11 items-center gap-2 rounded-full bg-[#F5A623] px-5 text-sm font-bold text-[#2b1a12] transition-colors hover:bg-[#ffc04f]'
+          >
+            Explore all equipment
+            <ArrowUpRight className='size-4' aria-hidden='true' />
+          </Link>
         </div>
 
         {categories.length === 0 ? (
-          <div className='rounded-2xl border border-dashed border-border bg-background px-6 py-14 text-center'>
+          <div className='rounded-2xl border border-dashed border-border bg-card px-6 py-14 text-center'>
             <h3 className='font-heading text-lg font-semibold text-foreground'>
               No popular categories yet
             </h3>
@@ -39,22 +43,21 @@ const PopularEquipments = async () => {
             </p>
           </div>
         ) : (
-          <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6'>
-            {categories.map((category) => (
+          <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
+            {categories.map((category, index) => (
               <Link
                 key={`${category.slug}-${category.name}`}
                 href={`/all-equipments?category=${encodeURIComponent(category.name)}`}
                 aria-label={`Browse ${category.name} equipment`}
-                className='group flex min-h-48 flex-col items-center rounded-2xl border border-border/80 bg-card px-4 py-5 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:border-accent/60 hover:shadow-lg hover:shadow-primary/5'
+                className='group flex min-h-28 items-center gap-4 rounded-2xl border border-border/80 bg-card p-3.5 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-accent/60 hover:shadow-lg hover:shadow-primary/5 sm:p-4'
               >
-                <div className='flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-accent/10 ring-1 ring-primary/5 transition duration-300 group-hover:scale-105 group-hover:bg-accent/20'>
+                <div className='relative flex size-[4.25rem] shrink-0 items-center justify-center overflow-hidden rounded-xl bg-accent/10 ring-1 ring-border/50 transition duration-300 group-hover:scale-[1.03]'>
                   {category.image ? (
                     <Image
                       src={category.image}
                       alt=''
-                      width={64}
-                      height={64}
-                      sizes='64px'
+                      fill
+                      sizes='68px'
                       className='size-full object-cover'
                     />
                   ) : (
@@ -65,17 +68,18 @@ const PopularEquipments = async () => {
                   )}
                 </div>
 
-                <h3 className='mt-4 line-clamp-2 text-sm font-bold leading-5 text-foreground'>
-                  {category.name}
-                </h3>
-                <p className='mt-1 text-xs leading-5 text-muted-foreground'>
-                  Find gear for your next project
-                </p>
+                <div className='min-w-0 flex-1'>
+                  <p className='text-[10px] font-semibold uppercase tracking-[0.16em] text-primary/70'>
+                    Category {String(index + 1).padStart(2, '0')}
+                  </p>
+                  <h3 className='mt-1 line-clamp-2 text-sm font-bold leading-5 text-foreground sm:text-[15px]'>
+                    {category.name}
+                  </h3>
+                </div>
 
-                <span className='mt-3 inline-flex items-center gap-1 rounded-full border border-primary/10 bg-primary/[0.03] px-2.5 py-1 text-[11px] font-medium text-primary/80 transition-colors group-hover:border-accent/40 group-hover:bg-accent/10'>
-                  Explore
+                <span className='flex size-9 shrink-0 items-center justify-center rounded-full border border-border text-muted-foreground transition duration-300 group-hover:border-accent group-hover:bg-accent group-hover:text-accent-foreground'>
                   <ArrowUpRight
-                    className='size-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5'
+                    className='size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5'
                     aria-hidden='true'
                   />
                 </span>
@@ -83,18 +87,8 @@ const PopularEquipments = async () => {
             ))}
           </div>
         )}
-
-        <div className='mt-8 text-center'>
-          <Link
-            href='/all-equipments'
-            className='inline-flex h-10 items-center gap-2 rounded-lg border border-border bg-card px-4 text-sm font-semibold text-foreground transition-colors hover:border-primary/30 hover:bg-primary/5'
-          >
-            View all equipment
-            <ArrowUpRight className='size-4' aria-hidden='true' />
-          </Link>
-        </div>
       </div>
-    </section>
+    </PopularEquipmentsMotion>
   )
 }
 
