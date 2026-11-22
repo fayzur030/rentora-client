@@ -1,37 +1,203 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Rentora – Equipment Rental Platform
 
-## Getting Started
+**Rentora** is a modern equipment rental platform that connects equipment owners with customers. Users can explore available equipment, book rentals for specific dates, and make secure online payments. Equipment owners can manage their listings and bookings, while administrators oversee the entire platform.
 
-First, run the development server:
+---
+
+## Live Website
+
+🔗 **Live Demo:** [Rentora](https://rentora-client-amber.vercel.app)
+
+---
+
+## Features
+
+### 👤 Authentication & User Management
+
+- Secure user authentication.
+- Role-based access control.
+- Separate dashboards for Customers, Owners, and Admins.
+- User profile management.
+
+### 🔍 Equipment Browsing
+
+- Browse available equipment.
+- Explore equipment by category.
+- View detailed equipment information.
+- Discover recently added equipment.
+- View equipment details after authentication.
+
+### 📦 Equipment Management
+
+- Owners can add new equipment.
+- Manage their own equipment listings.
+- Update equipment information.
+- Delete their own listings.
+- Admin approval system for equipment listings.
+
+### 📅 Rental Booking
+
+- Book equipment for specific rental dates.
+- Select rental duration and quantity.
+- Calculate rental costs.
+- Provide delivery information.
+- Manage rental bookings.
+
+### 💳 Payment Integration
+
+- Secure online payment with Stripe.
+- Payment status tracking.
+- Transaction information management.
+- Booking confirmation after successful payment.
+
+### 🛡️ Admin Dashboard
+
+- Manage all users and equipment.
+- Review pending equipment listings.
+- Approve or reject equipment submissions.
+- Monitor rental activities.
+- Manage platform resources.
+
+---
+
+## Technologies Used
+
+### Frontend
+
+- Next.js
+- TypeScript
+- Tailwind CSS
+- shadcn/ui
+- Lucide React
+
+### Backend
+
+- Node.js
+- Express.js
+- MongoDB
+
+### Authentication & Payment
+
+- Better Auth
+- Stripe
+
+### Deployment
+
+- Vercel (Frontend)
+- Backend deployment configured separately.
+
+---
+
+## User Roles
+
+| Role     | Permissions                                                |
+| -------- | ---------------------------------------------------------- |
+| Customer | Browse equipment, book rentals, and manage bookings.       |
+| Owner    | Add equipment and manage own listings and bookings.        |
+| Admin    | Manage users, equipment, approvals, and rental activities. |
+
+---
+
+## Project Structure
+
+### Client
+
+
+rentora-client/
+├── public/
+├── src/
+│   ├── app/
+│   ├── components/
+│   ├── hooks/
+│   ├── lib/
+│   │   ├── api/
+│   │   └── auth.ts
+│   ├── types/
+│   └── proxy.ts
+├── .env.local
+├── package.json
+└── README.md
+
+
+### Server
+
+
+rentora-server/
+├── src/
+│   ├── routes/
+│   ├── middlewares/
+│   └── config/
+├── .env
+├── index.js
+└── package.json
+
+
+---
+
+## Installation & Setup
+
+### Prerequisites
+
+Make sure you have installed:
+
+- Node.js
+- npm
+- MongoDB account
+- Stripe account
+
+### 1. Clone the Repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/fayzur030/rentora-client
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+For the backend:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+git https://github.com/fayzur030/rentora-server
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 2. Setup Frontend
 
-## Learn More
+Navigate to the client directory:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+cd rentora-client
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Install dependencies:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm install
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Frontend will run at:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# rentora-client
+```text
+http://localhost:3000
+```
+
+---
+
+## Future Improvements
+
+- Advanced equipment filtering and sorting.
+- Improved booking management.
+- Rental availability calendar.
+- Enhanced notification system.
+- More detailed analytics for administrators.
+
+---
+
+## Author
+
+**Md. Fayzur Rahman**
+
+Full-Stack Web Developer
+
+- GitHub: [@fayzur030](https://github.com/fayzur030)
+- LinkedIn: [Md. Fayzur Rahman](https://www.linkedin.com/in/md-fayzur-rahman/)
+
+---
+
+⭐ If you find this project interesting, consider giving it a star!
