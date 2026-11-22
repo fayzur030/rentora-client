@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowUpRight, ImageOff, Sparkles } from 'lucide-react'
+import { ArrowUpRight, ImageOff } from 'lucide-react'
 
 import { getPopularEquipments } from '@/lib/api/equipments'
 
@@ -9,34 +9,24 @@ const PopularEquipments = async () => {
   const categories = popularEquipments.slice(0, 6)
 
   return (
-    <section className='relative overflow-hidden border-y border-border/70 bg-card py-16 sm:py-20'>
+    <section className='relative overflow-hidden border-y border-border/70 bg-background py-16 sm:py-20'>
       <div
         className='pointer-events-none absolute -top-24 right-0 size-72 rounded-full bg-accent/10 blur-3xl'
         aria-hidden='true'
       />
 
       <div className='relative mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8'>
-        <div className='mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between'>
-          <div className='max-w-2xl'>
-            <div className='inline-flex items-center gap-2 rounded-full border border-primary/10 bg-primary/5 px-3 py-1.5 text-xs font-semibold tracking-wide text-primary'>
-              <Sparkles className='size-3.5' aria-hidden='true' />
-              CUSTOMER FAVORITES
-            </div>
-            <h2 className='mt-4 font-heading text-2xl font-bold tracking-tight text-foreground sm:text-3xl'>
-              Browse by Category
+        <div className='mb-9 text-center sm:mb-12'>
+          <div className='flex items-center justify-center gap-3 sm:gap-4'>
+            <span className='h-px w-8 bg-primary/30 sm:w-12' aria-hidden='true' />
+            <h2 className='font-heading text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl'>
+              Popular Categories
             </h2>
-            <p className='mt-2 text-sm leading-6 text-muted-foreground sm:text-base'>
-              Browse the equipment categories renters are exploring right now.
-            </p>
+            <span className='h-px w-8 bg-primary/30 sm:w-12' aria-hidden='true' />
           </div>
-
-          <Link
-            href='/all-equipments'
-            className='inline-flex h-10 w-fit items-center gap-2 rounded-lg border border-border bg-background px-4 text-sm font-semibold text-foreground transition-colors hover:border-primary/30 hover:bg-primary/5'
-          >
-            Explore all equipment
-            <ArrowUpRight className='size-4' aria-hidden='true' />
-          </Link>
+          <p className='mt-3 text-sm leading-6 text-muted-foreground sm:text-base'>
+            Find the right gear for your next project or adventure.
+          </p>
         </div>
 
         {categories.length === 0 ? (
@@ -49,54 +39,60 @@ const PopularEquipments = async () => {
             </p>
           </div>
         ) : (
-          <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'>
-            {categories.map((category, index) => (
+          <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6'>
+            {categories.map((category) => (
               <Link
                 key={`${category.slug}-${category.name}`}
                 href={`/all-equipments?category=${encodeURIComponent(category.name)}`}
                 aria-label={`Browse ${category.name} equipment`}
-                className='group relative isolate aspect-[4/3] overflow-hidden rounded-2xl bg-primary shadow-sm ring-1 ring-foreground/10 transition duration-300 hover:-translate-y-1 hover:shadow-xl'
+                className='group flex min-h-48 flex-col items-center rounded-2xl border border-border/80 bg-card px-4 py-5 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:border-accent/60 hover:shadow-lg hover:shadow-primary/5'
               >
-                {category.image ? (
-                  <Image
-                    src={category.image}
-                    alt=''
-                    fill
-                    sizes='(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw'
-                    className='object-cover transition-transform duration-500 group-hover:scale-105'
-                  />
-                ) : (
-                  <div className='absolute inset-0 flex items-center justify-center bg-primary text-primary-foreground/70'>
-                    <ImageOff className='size-10' aria-hidden='true' />
-                  </div>
-                )}
-
-                <div
-                  className='absolute inset-0 bg-linear-to-t from-black/80 via-black/15 to-transparent'
-                  aria-hidden='true'
-                />
-
-                <div className='absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 text-white sm:p-6'>
-                  <div>
-                    <p className='text-xs font-semibold uppercase tracking-[0.16em] text-white/75'>
-                      Popular category {String(index + 1).padStart(2, '0')}
-                    </p>
-                    <h3 className='mt-2 font-heading text-xl font-bold sm:text-2xl'>
-                      {category.name}
-                    </h3>
-                    <p className='mt-1 text-sm text-white/80'>
-                      Explore available rentals
-                    </p>
-                  </div>
-
-                  <span className='flex size-10 shrink-0 items-center justify-center rounded-full border border-white/40 bg-white/15 backdrop-blur transition-colors group-hover:bg-white group-hover:text-primary'>
-                    <ArrowUpRight className='size-5' aria-hidden='true' />
-                  </span>
+                <div className='flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-accent/10 ring-1 ring-primary/5 transition duration-300 group-hover:scale-105 group-hover:bg-accent/20'>
+                  {category.image ? (
+                    <Image
+                      src={category.image}
+                      alt=''
+                      width={64}
+                      height={64}
+                      sizes='64px'
+                      className='size-full object-cover'
+                    />
+                  ) : (
+                    <ImageOff
+                      className='size-7 text-primary/50'
+                      aria-hidden='true'
+                    />
+                  )}
                 </div>
+
+                <h3 className='mt-4 line-clamp-2 text-sm font-bold leading-5 text-foreground'>
+                  {category.name}
+                </h3>
+                <p className='mt-1 text-xs leading-5 text-muted-foreground'>
+                  Find gear for your next project
+                </p>
+
+                <span className='mt-3 inline-flex items-center gap-1 rounded-full border border-primary/10 bg-primary/[0.03] px-2.5 py-1 text-[11px] font-medium text-primary/80 transition-colors group-hover:border-accent/40 group-hover:bg-accent/10'>
+                  Explore
+                  <ArrowUpRight
+                    className='size-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5'
+                    aria-hidden='true'
+                  />
+                </span>
               </Link>
             ))}
           </div>
         )}
+
+        <div className='mt-8 text-center'>
+          <Link
+            href='/all-equipments'
+            className='inline-flex h-10 items-center gap-2 rounded-lg border border-border bg-card px-4 text-sm font-semibold text-foreground transition-colors hover:border-primary/30 hover:bg-primary/5'
+          >
+            View all equipment
+            <ArrowUpRight className='size-4' aria-hidden='true' />
+          </Link>
+        </div>
       </div>
     </section>
   )
