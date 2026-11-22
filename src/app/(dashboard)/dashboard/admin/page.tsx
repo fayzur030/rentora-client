@@ -1,10 +1,14 @@
 import StatsGrid from '@/components/dashboard/StatsGrid'
+import AdminAnalyticsCharts from '@/components/dashboard/admin/AdminAnalyticsCharts'
 import { getAllAdminEquipments } from '@/lib/api/equipments'
 
 import { getAllRentals } from '@/lib/api/rental'
 import { getAllUsers } from '@/lib/api/users'
 
-import { getAdminDashboardStats } from '@/lib/dashboard-stats'
+import {
+  getAdminDashboardAnalytics,
+  getAdminDashboardStats,
+} from '@/lib/dashboard-stats'
 
 const AdminDashboard = async () => {
   const [users, equipments, rentals] = await Promise.all([
@@ -14,6 +18,7 @@ const AdminDashboard = async () => {
   ])
 
   const stats = getAdminDashboardStats(users, equipments, rentals)
+  const analytics = getAdminDashboardAnalytics(users, rentals)
 
   return (
     <section className='space-y-6'>
@@ -26,6 +31,7 @@ const AdminDashboard = async () => {
         </p>
       </div>
       <StatsGrid stats={stats} />
+      <AdminAnalyticsCharts analytics={analytics} />
     </section>
   )
 }

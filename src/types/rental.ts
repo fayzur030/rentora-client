@@ -58,6 +58,12 @@ export interface Rental {
   additionalNotes: string
   bookingStatus: string
   paymentStatus: string
+  payment?: {
+    paymentStatus: string
+    amount: number
+    currency: string
+    paidAt: string
+  } | null
   transaction: RentalTransaction
   createdAt: string
   updatedAt: string
