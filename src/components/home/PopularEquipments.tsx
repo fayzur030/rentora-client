@@ -23,7 +23,7 @@ const PopularEquipments = async () => {
               CUSTOMER FAVORITES
             </div>
             <h2 className='mt-4 font-heading text-2xl font-bold tracking-tight text-foreground sm:text-3xl'>
-              Popular Equipment
+              Browse by Category
             </h2>
             <p className='mt-2 text-sm leading-6 text-muted-foreground sm:text-base'>
               Browse the equipment categories renters are exploring right now.
