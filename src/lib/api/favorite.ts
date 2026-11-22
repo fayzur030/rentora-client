@@ -6,7 +6,7 @@ export const getFavorites = async (userId: string): Promise<Equipment[]> => {
   const token = await getTokenFromServer()
 
   if (!token) {
-    throw new Error('Please log in to view favorites')
+    return []
   }
 
   const query = new URLSearchParams({ userId })

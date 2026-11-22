@@ -1,6 +1,7 @@
 import AdminRentalsTable from '@/components/dashboard/admin/AdminRentalsTable'
 import { getAllRentals } from '@/lib/api/rental'
 import type { Rental } from '@/types/rental'
+import { unstable_rethrow } from 'next/navigation'
 
 const AllRentalsPage = async () => {
   let rentals: Rental[] = []
@@ -10,6 +11,7 @@ const AllRentalsPage = async () => {
   try {
     rentals = await getAllRentals()
   } catch (error) {
+    unstable_rethrow(error)
     console.error('Get All Rentals Error:', error)
     errorMessage =
       error instanceof Error ? error.message : 'Failed to load rentals'

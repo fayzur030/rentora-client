@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/table'
 
 import { getTokenFromServer } from '@/lib/auth/getTokenFromServer'
+import { redirect } from 'next/navigation'
 
 const formatDate = (date: string) => {
   const parsedDate = new Date(date)
@@ -40,7 +41,7 @@ const getStatusClassName = (status: string) => {
 const MyRentalsPage = async () => {
   const jwtToken = await getTokenFromServer()
   if (!jwtToken) {
-    throw new Error('Authentication token not found')
+    redirect('/login')
   }
   const myRentals = await getMyRentals(jwtToken)
 

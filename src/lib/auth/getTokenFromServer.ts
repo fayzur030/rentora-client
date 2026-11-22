@@ -1,6 +1,7 @@
 import 'server-only'
 
 import { headers } from 'next/headers'
+import { unstable_rethrow } from 'next/navigation'
 import { auth } from '@/lib/auth'
 
 export async function getTokenFromServer() {
@@ -11,6 +12,7 @@ export async function getTokenFromServer() {
 
     return result.token
   } catch (error) {
+    unstable_rethrow(error)
     console.error('Get Token Error:', error)
     return null
   }

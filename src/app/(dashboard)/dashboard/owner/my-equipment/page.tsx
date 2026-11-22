@@ -2,6 +2,7 @@ import { getMyEquipments } from '@/lib/api/equipments'
 import MyEquipmentTable from '@/components/dashboard/owner/MyEquipmentTable'
 import { PackageOpen } from 'lucide-react'
 import { getCategories } from '@/lib/api/category'
+import { unstable_rethrow } from 'next/navigation'
 
 const MyEquipmentPage = async () => {
   const categories = await getCategories()
@@ -11,6 +12,7 @@ const MyEquipmentPage = async () => {
   try {
     myEquipments = await getMyEquipments()
   } catch (error) {
+    unstable_rethrow(error)
     fetchError =
       error instanceof Error ? error : new Error('Failed to load equipment')
   }

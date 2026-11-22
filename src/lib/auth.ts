@@ -4,10 +4,15 @@ import { jwt } from 'better-auth/plugins'
 
 import { client, clientPromise, db } from '@/lib/mongodb'
 
+const authUrl = process.env.BETTER_AUTH_URL
+
 // Ensure MongoDB connection is established
 await clientPromise
 
 export const auth = betterAuth({
+  baseURL: authUrl,
+  trustedOrigins: authUrl ? [authUrl] : [],
+
   emailAndPassword: {
     enabled: true,
     autoSignIn: false,
@@ -47,6 +52,10 @@ export const auth = betterAuth({
       strategy: 'jwt',
       maxAge: 7 * 24 * 60 * 60,
     },
+  },
+
+  advanced: {
+    useSecureCookies: process.env.NODE_ENV === 'production',
   },
 
   database: mongodbAdapter(db, {

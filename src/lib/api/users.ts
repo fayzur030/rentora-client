@@ -4,9 +4,11 @@ import { getTokenFromServer } from '../auth/getTokenFromServer'
 
 export const getAllUsers = async (): Promise<Users[]> => {
   const token = await getTokenFromServer()
+
   if (!token) {
-    throw new Error('Please log in to view users')
+    return []
   }
+
   const res = await fetch(`${baseUrl}/api/users/all-users`, {
     headers: {
       Authorization: `Bearer ${token}`,

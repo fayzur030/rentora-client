@@ -1,6 +1,7 @@
 import { getAllUsers } from '@/lib/api/users'
 import ManageUsersTable from '@/components/dashboard/admin/ManageUsersTable'
 import type { Users } from '@/types/users'
+import { unstable_rethrow } from 'next/navigation'
 
 const AllUsersPage = async () => {
   let users: Users[] = []
@@ -9,6 +10,7 @@ const AllUsersPage = async () => {
   try {
     users = await getAllUsers()
   } catch (error) {
+    unstable_rethrow(error)
     console.error('Get Users Error:', error)
     errorMessage =
       error instanceof Error ? error.message : 'Failed to load registered users'

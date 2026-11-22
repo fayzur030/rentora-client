@@ -3,6 +3,7 @@ import { getAllAdminEquipments, getAllEquipments } from '@/lib/api/equipments'
 import type { Equipment } from '@/types/equipment'
 import { getCategories } from '@/lib/api/category'
 import type { Category } from '@/types/category'
+import { unstable_rethrow } from 'next/navigation'
 
 const AllEquipmentPage = async () => {
   const categories: Category[] = await getCategories()
@@ -12,6 +13,7 @@ const AllEquipmentPage = async () => {
   try {
     equipments = await getAllAdminEquipments()
   } catch (error) {
+    unstable_rethrow(error)
     console.error('Get Equipment Error:', error)
     errorMessage =
       error instanceof Error ? error.message : 'Failed to load equipment'

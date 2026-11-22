@@ -5,6 +5,10 @@ import { baseUrl } from '../config'
 export const getAllRentals = async (): Promise<Rental[]> => {
   const token = await getTokenFromServer()
 
+  if (!token) {
+    return []
+  }
+
   const response = await fetch(`${baseUrl}/api/bookings/admin/rentals`, {
     headers: {
       Authorization: `Bearer ${token}`,

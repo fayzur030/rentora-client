@@ -2,6 +2,8 @@ import { headers } from 'next/headers'
 import DashboardLayout from '@/components/dashboard/dashboard-layout'
 import { auth } from '@/lib/auth'
 
+export const dynamic = 'force-dynamic'
+
 interface DashboardLayoutProps {
   children: React.ReactNode
 }

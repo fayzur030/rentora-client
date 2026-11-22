@@ -1,6 +1,7 @@
 import { Equipment, MyEquipment, PopularEquipments } from '@/types/equipment'
 import { baseUrl } from '../config'
 import { getTokenFromServer } from '../auth/getTokenFromServer'
+import { redirect } from 'next/navigation'
 
 export const getAllEquipments = async (query = ''): Promise<Equipment[]> => {
   const res = await fetch(`${baseUrl}/api/equipment/equipments?${query}`, {
@@ -22,7 +23,7 @@ export const getEquipmentById = async (id: string): Promise<Equipment> => {
   const token = await getTokenFromServer()
 
   if (!token) {
-    throw new Error('Please log in to view equipment details')
+    redirect('/login')
   }
 
   const res = await fetch(`${baseUrl}/api/equipment/equipment/${id}`, {
@@ -46,7 +47,7 @@ export const getMyEquipments = async (): Promise<MyEquipment> => {
   const token = await getTokenFromServer()
 
   if (!token) {
-    throw new Error('Please log in to view equipment details')
+    return []
   }
   const res = await fetch(`${baseUrl}/api/equipment/my-equipments`, {
     cache: 'no-store',
@@ -67,6 +68,10 @@ export const getMyEquipments = async (): Promise<MyEquipment> => {
 
 export const getAllAdminEquipments = async (): Promise<Equipment[]> => {
   const token = await getTokenFromServer()
+
+  if (!token) {
+    return []
+  }
 
   const res = await fetch(`${baseUrl}/api/equipment/admin/equipments`, {
     headers: {

@@ -15,6 +15,7 @@ import {
 import { getMyEquipmentRentals } from '@/lib/api/bookings'
 import { getMyEquipments } from '@/lib/api/equipments'
 import { getTokenFromServer } from '@/lib/auth/getTokenFromServer'
+import { redirect } from 'next/navigation'
 
 const formatDate = (date: string) => {
   const parsedDate = new Date(date)
@@ -45,7 +46,7 @@ const getStatusClassName = (status: string) => {
 const MyEquipmentRentalsPage = async () => {
   const jwtToken = await getTokenFromServer()
   if (!jwtToken) {
-    throw new Error('Authentication token not found')
+    redirect('/login')
   }
 
   const myRentals = await getMyEquipmentRentals(jwtToken)
