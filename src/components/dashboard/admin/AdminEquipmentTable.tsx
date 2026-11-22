@@ -40,9 +40,11 @@ import {
 import { cn } from '@/lib/utils'
 import { updateEquipmentStatus } from '@/lib/actions/status'
 import type { Equipment, EquipmentStatus } from '@/types/equipment'
+import type { Category } from '@/types/category'
 
 interface AdminEquipmentTableProps {
   equipments: Equipment[]
+  categories: Category[]
   errorMessage: string | null
 }
 
@@ -88,6 +90,7 @@ const getStatusBadge = (status?: string) => {
 
 const AdminEquipmentTable = ({
   equipments,
+  categories,
   errorMessage,
 }: AdminEquipmentTableProps) => {
   const router = useRouter()
@@ -429,6 +432,7 @@ const AdminEquipmentTable = ({
       {editingEquipment && (
         <UpdateEquipment
           equipment={editingEquipment}
+          categories={categories}
           open
           onOpenChange={(open) => {
             if (!open) {

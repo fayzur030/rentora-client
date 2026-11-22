@@ -28,31 +28,24 @@ import ImageUpload from '@/components/dashboard/add-equipment/image-upload'
 import { updateEquipment } from '@/lib/actions/equipment'
 import type {
   Equipment,
-  EquipmentCategory,
   EquipmentCondition,
   RentalType,
 } from '@/types/equipment'
+import type { Category } from '@/types/category'
 
 interface UpdateEquipmentProps {
   equipment: Equipment
+  categories: Category[]
   open: boolean
   onOpenChange: (open: boolean) => void
 }
 
-const categories: EquipmentCategory[] = [
-  'Construction Equipment',
-  'Agriculture Equipment',
-  'Power Tools',
-  'Heavy Machinery',
-  'Electronics',
-  'Vehicles',
-  'Other',
-]
 const conditions: EquipmentCondition[] = ['New', 'Like New', 'Good', 'Fair']
 const rentalTypes: RentalType[] = ['Daily', 'Weekly', 'Monthly']
 
 const UpdateEquipment = ({
   equipment,
+  categories,
   open,
   onOpenChange,
 }: UpdateEquipmentProps) => {
@@ -77,7 +70,9 @@ const UpdateEquipment = ({
     const updatedEquipment: Equipment = {
       ...equipment,
       name: String(formData.get('name') ?? ''),
-      category: String(formData.get('category') ?? '') as Equipment['category'],
+      category: String(
+        formData.get('category') ?? equipment.category
+      ) as Equipment['category'],
       description: String(formData.get('description') ?? ''),
       location: String(formData.get('location') ?? ''),
       condition: String(
@@ -144,16 +139,29 @@ const UpdateEquipment = ({
 
               <div className='space-y-2'>
                 <Label>Category</Label>
-                <Select name='category' defaultValue={equipment.category}>
+                <Select
+                  name='category'
+                  defaultValue={equipment.category}
+                  disabled={categories.length === 0}
+                >
                   <SelectTrigger className='h-11 w-full py-5.5'>
                     <SelectValue placeholder='Select category' />
                   </SelectTrigger>
                   <SelectContent>
-                    {categories.map((option) => (
-                      <SelectItem key={option} value={option}>
-                        {option}
+                    {categories.length === 0 ? (
+                      <SelectItem value='no-categories' disabled>
+                        No categories available
                       </SelectItem>
-                    ))}
+                    ) : (
+                      categories.map((category) => (
+                        <SelectItem
+                          key={category._id}
+                          value={category.name}
+                        >
+                          {category.name}
+                        </SelectItem>
+                      ))
+                    )}
                   </SelectContent>
                 </Select>
               </div>

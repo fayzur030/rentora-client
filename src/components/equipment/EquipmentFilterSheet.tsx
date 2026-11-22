@@ -14,9 +14,10 @@ import {
 } from '@/components/ui/sheet'
 
 import EquipmentFilters from './EquipmentFilters'
+import type { Category } from '@/types/category'
 
 // On mobile and small tablets the filters open inside a slide-over sheet.
-const EquipmentFilterSheet = () => {
+const EquipmentFilterSheet = ({ categories }: { categories: Category[] }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -38,7 +39,7 @@ const EquipmentFilterSheet = () => {
         </SheetHeader>
 
         <div className='px-4 pb-6'>
-          <EquipmentFilters />
+          <EquipmentFilters categories={categories} />
         </div>
       </SheetContent>
     </Sheet>

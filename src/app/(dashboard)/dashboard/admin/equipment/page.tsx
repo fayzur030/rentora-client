@@ -1,8 +1,11 @@
 import AdminEquipmentTable from '@/components/dashboard/admin/AdminEquipmentTable'
 import { getAllEquipments } from '@/lib/api/equipments'
 import type { Equipment } from '@/types/equipment'
+import { getCategories } from '@/lib/api/category'
+import type { Category } from '@/types/category'
 
 const AllEquipmentPage = async () => {
+  const categories: Category[] = await getCategories()
   let equipments: Equipment[] = []
   let errorMessage: string | null = null
 
@@ -27,6 +30,7 @@ const AllEquipmentPage = async () => {
 
       <AdminEquipmentTable
         equipments={equipments}
+        categories={categories}
         errorMessage={errorMessage}
       />
     </div>

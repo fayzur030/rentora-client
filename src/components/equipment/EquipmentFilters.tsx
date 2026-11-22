@@ -7,16 +7,7 @@ import { useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
-
-const categoryOptions = [
-  'Construction Equipment',
-  'Agriculture Equipment',
-  'Power Tools',
-  'Heavy Machinery',
-  'Electronics',
-  'Vehicles',
-  'Other',
-]
+import type { Category } from '@/types/category'
 
 const rentalTypeOptions = ['Daily', 'Weekly', 'Monthly']
 
@@ -69,7 +60,11 @@ const FilterRadio = ({
 }
 
 // Left sidebar with all filters.
-const EquipmentFilters = () => {
+interface EquipmentFiltersProps {
+  categories: Category[]
+}
+
+const EquipmentFilters = ({ categories }: EquipmentFiltersProps) => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const minPriceParam = searchParams.get('minPrice') || ''
@@ -146,15 +141,21 @@ const EquipmentFilters = () => {
 
       <div className='space-y-5'>
         <FilterGroup title='Category'>
-          {categoryOptions.map((option) => (
-            <FilterRadio
-              key={option}
-              name='category'
-              label={option}
-              checked={searchParams.get('category') === option}
-              onChange={(value) => updateFilter('category', value)}
-            />
-          ))}
+          {categories.length === 0 ? (
+            <p className='text-sm text-muted-foreground'>
+              No categories available.
+            </p>
+          ) : (
+            categories.map((category) => (
+              <FilterRadio
+                key={category._id}
+                name='category'
+                label={category.name}
+                checked={searchParams.get('category') === category.name}
+                onChange={(value) => updateFilter('category', value)}
+              />
+            ))
+          )}
         </FilterGroup>
 
         <Separator />

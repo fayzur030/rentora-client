@@ -11,14 +11,16 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import type { Equipment } from '@/types/equipment'
+import type { Category } from '@/types/category'
 import DeleteDialog from './DeleteDialog'
 import UpdateEquipment from './UpdateEquipment'
 
 interface EquipmentActionsProps {
   equipment: Equipment
+  categories: Category[]
 }
 
-const EquipmentActions = ({ equipment }: EquipmentActionsProps) => {
+const EquipmentActions = ({ equipment, categories }: EquipmentActionsProps) => {
   const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(
     null
   )
@@ -70,6 +72,7 @@ const EquipmentActions = ({ equipment }: EquipmentActionsProps) => {
       />
       <UpdateEquipment
         equipment={equipment}
+        categories={categories}
         open={isUpdateOpen}
         onOpenChange={setIsUpdateOpen}
       />

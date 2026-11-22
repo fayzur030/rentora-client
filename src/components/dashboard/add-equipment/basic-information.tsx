@@ -9,24 +9,21 @@ import {
 import FormField from './form-field'
 import FormSelect from './form-select'
 import ImageUpload from './image-upload'
-
-const equipmentCategories = [
-  'Construction Equipment',
-  'Photography Equipment',
-  'Vehicles & Transportation',
-  'Agriculture Equipment',
-  'Electronics',
-  'Event Equipment',
-]
+import type { Category } from '@/types/category'
 
 const equipmentConditions = ['New', 'Like New', 'Good', 'Fair']
 
 interface ImageUploadProps {
+  categories: Category[]
   value: string
   onChange: (value: string) => void
 }
 // Step 1: basic details about the equipment.
-const BasicInformation = ({ value, onChange }: ImageUploadProps) => {
+const BasicInformation = ({
+  categories,
+  value,
+  onChange,
+}: ImageUploadProps) => {
   return (
     <Card>
       <CardHeader>
@@ -49,7 +46,8 @@ const BasicInformation = ({ value, onChange }: ImageUploadProps) => {
           id='category'
           label='Category'
           placeholder='Choose a category'
-          options={equipmentCategories}
+          options={categories.map((category) => category.name)}
+          required
         />
 
         <div className='sm:col-span-2'>

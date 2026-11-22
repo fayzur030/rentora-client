@@ -25,12 +25,17 @@ import {
 import { toast } from 'sonner'
 import { useState } from 'react'
 import { getSessionFromClient } from '@/lib/auth/getSessionFromClient'
+import type { Category } from '@/types/category'
 
 // Main form for the Add Equipment page.
 // It only puts the sections together.
 // Submit / reset logic will be added later.
 
-const EquipmentForm = () => {
+interface EquipmentFormProps {
+  categories: Category[]
+}
+
+const EquipmentForm = ({ categories }: EquipmentFormProps) => {
   const session = getSessionFromClient()
   const user = session?.user
   const [image, setImage] = useState('')
@@ -91,7 +96,11 @@ const EquipmentForm = () => {
         <Separator />
 
         <CardContent className='space-y-6 pt-6'>
-          <BasicInformation value={image} onChange={setImage} />
+          <BasicInformation
+            categories={categories}
+            value={image}
+            onChange={setImage}
+          />
           <RentalInformation />
           <OwnerInformation />
         </CardContent>

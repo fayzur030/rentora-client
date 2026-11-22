@@ -1,6 +1,9 @@
 import EquipmentForm from '@/components/dashboard/add-equipment/equipment-form'
+import { getCategories } from '@/lib/api/category'
 
-const AddEquipmentPage = () => {
+const AddEquipmentPage = async () => {
+  const categories = await getCategories()
+
   return (
     <div className='space-y-6'>
       <div className='mx-auto w-full max-w-7xl space-y-1'>
@@ -13,7 +16,7 @@ const AddEquipmentPage = () => {
       </div>
 
       <div className='mx-auto w-full max-w-7xl'>
-        <EquipmentForm />
+        <EquipmentForm categories={categories} />
       </div>
     </div>
   )

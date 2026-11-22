@@ -49,6 +49,7 @@ import type {
   EquipmentOwner,
   RentalType,
 } from '@/types/equipment'
+import type { Category } from '@/types/category'
 
 interface EquipmentFormValues {
   name: string
@@ -143,11 +144,17 @@ const FormSelect = ({
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
-        {options.map((option) => (
-          <SelectItem key={option} value={option}>
-            {option}
+        {options.length === 0 ? (
+          <SelectItem value='no-options' disabled>
+            No categories available
           </SelectItem>
-        ))}
+        ) : (
+          options.map((option) => (
+            <SelectItem key={option} value={option}>
+              {option}
+            </SelectItem>
+          ))
+        )}
       </SelectContent>
     </Select>
   </div>
@@ -357,6 +364,7 @@ const ReviewItem = ({ label, value, className = '' }: ReviewItemProps) => (
 
 interface EquipmentFormProps {
   onCancel: () => void
+  categories: Category[]
 }
 
 const initialFormValues: EquipmentFormValues = {
@@ -381,16 +389,6 @@ const mockOwner: EquipmentOwner = {
   image: '',
 }
 
-const equipmentCategories: EquipmentCategory[] = [
-  'Construction Equipment',
-  'Agriculture Equipment',
-  'Power Tools',
-  'Heavy Machinery',
-  'Electronics',
-  'Vehicles',
-  'Other',
-]
-
 const rentalTypes: RentalType[] = ['Daily', 'Weekly', 'Monthly']
 
 const equipmentConditions: EquipmentCondition[] = [
@@ -400,7 +398,7 @@ const equipmentConditions: EquipmentCondition[] = [
   'Fair',
 ]
 
-const EquipmentForm = ({ onCancel }: EquipmentFormProps) => {
+const EquipmentForm = ({ onCancel, categories }: EquipmentFormProps) => {
   const [currentStep, setCurrentStep] = useState(1)
   const [formData, setFormData] =
     useState<EquipmentFormValues>(initialFormValues)
@@ -452,7 +450,7 @@ const EquipmentForm = ({ onCancel }: EquipmentFormProps) => {
               id='category'
               label='Category'
               placeholder='Choose a category'
-              options={equipmentCategories}
+              options={categories.map((category) => category.name)}
               value={formData.category}
               onChange={(value) =>
                 updateFormValue('category', value as EquipmentCategory)
@@ -687,7 +685,7 @@ const EquipmentForm = ({ onCancel }: EquipmentFormProps) => {
   )
 }
 
-const EquipmentFormDialog = () => {
+const EquipmentFormDialog = ({ categories }: { categories: Category[] }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -705,7 +703,10 @@ const EquipmentFormDialog = () => {
         forceOverlay
         className='h-[min(90dvh,780px)] w-[95vw] max-w-[1400px] overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-2xl p-0'
       >
-        <EquipmentForm onCancel={() => setIsOpen(false)} />
+        <EquipmentForm
+          categories={categories}
+          onCancel={() => setIsOpen(false)}
+        />
       </DialogContent>
     </Dialog>
   )

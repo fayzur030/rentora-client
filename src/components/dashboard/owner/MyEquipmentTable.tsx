@@ -11,10 +11,12 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import type { Equipment, EquipmentStatus } from '@/types/equipment'
+import type { Category } from '@/types/category'
 import EquipmentActions from './EquipmentActions'
 
 interface MyEquipmentTableProps {
   equipments: Equipment[]
+  categories: Category[]
 }
 
 const statusStyles: Record<EquipmentStatus, string> = {
@@ -32,7 +34,7 @@ const normalizeStatus = (status: EquipmentStatus | string): EquipmentStatus => {
   return 'pending'
 }
 
-const MyEquipmentTable = ({ equipments }: MyEquipmentTableProps) => {
+const MyEquipmentTable = ({ equipments, categories }: MyEquipmentTableProps) => {
   return (
     <>
       <p className='text-xs text-muted-foreground sm:hidden'>
@@ -118,7 +120,10 @@ const MyEquipmentTable = ({ equipments }: MyEquipmentTableProps) => {
 
                   <TableCell className='text-right'>
                     {equipmentId ? (
-                      <EquipmentActions equipment={equipment} />
+                      <EquipmentActions
+                        equipment={equipment}
+                        categories={categories}
+                      />
                     ) : (
                       <span className='text-sm text-muted-foreground'>
                         Unavailable

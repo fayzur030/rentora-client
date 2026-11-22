@@ -4,6 +4,7 @@ import EquipmentGrid from '@/components/equipment/EquipmentGrid'
 import EquipmentSearch from '@/components/equipment/EquipmentSearch'
 import EquipmentSort from '@/components/equipment/EquipmentSort'
 import { getAllEquipments } from '@/lib/api/equipments'
+import { getCategories } from '@/lib/api/category'
 import { getFavorites } from '@/lib/api/favorite'
 import { getSessionFromServer } from '@/lib/auth/getSessionFromServer'
 
@@ -39,9 +40,10 @@ const AllEquipmentsPage = async ({ searchParams }: AllEquipmentsPageProps) => {
     }
   })
 
-  const [allEquipments, session] = await Promise.all([
+  const [allEquipments, session, categories] = await Promise.all([
     getAllEquipments(query.toString()),
     getSessionFromServer(),
+    getCategories(),
   ])
   const favorites = session?.user?.id ? await getFavorites(session.user.id) : []
   const favoriteEquipmentIds = favorites
@@ -57,7 +59,7 @@ const AllEquipmentsPage = async ({ searchParams }: AllEquipmentsPageProps) => {
       <div className='mt-6 flex flex-col gap-6 lg:flex-row'>
         {/* Left side: filter sidebar (desktop and tablet) */}
         <aside className='hidden w-full shrink-0 md:block md:w-64 lg:w-72'>
-          <EquipmentFilters />
+          <EquipmentFilters categories={categories} />
         </aside>
 
         {/* Right side: equipment listing */}
@@ -79,7 +81,7 @@ const AllEquipmentsPage = async ({ searchParams }: AllEquipmentsPageProps) => {
             <div className='flex flex-wrap items-center gap-3'>
               {/* Filters button only on small screens */}
               <div className='md:hidden'>
-                <EquipmentFilterSheet />
+                <EquipmentFilterSheet categories={categories} />
               </div>
 
               <EquipmentSort />

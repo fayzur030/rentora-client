@@ -1,8 +1,10 @@
 import { getMyEquipments } from '@/lib/api/equipments'
 import MyEquipmentTable from '@/components/dashboard/owner/MyEquipmentTable'
 import { PackageOpen } from 'lucide-react'
+import { getCategories } from '@/lib/api/category'
 
 const MyEquipmentPage = async () => {
+  const categories = await getCategories()
   let myEquipments: Awaited<ReturnType<typeof getMyEquipments>> = []
   let fetchError: Error | null = null
 
@@ -37,7 +39,10 @@ const MyEquipmentPage = async () => {
           </p>
         </div>
       ) : myEquipments?.length > 0 ? (
-        <MyEquipmentTable equipments={myEquipments} />
+        <MyEquipmentTable
+          equipments={myEquipments}
+          categories={categories}
+        />
       ) : (
         <div className='flex min-h-72 flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card px-6 text-center shadow-sm'>
           <span className='flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary'>

@@ -1,11 +1,4 @@
-export type EquipmentCategory =
-  | 'Construction Equipment'
-  | 'Agriculture Equipment'
-  | 'Power Tools'
-  | 'Heavy Machinery'
-  | 'Electronics'
-  | 'Vehicles'
-  | 'Other'
+export type EquipmentCategory = string
 
 export type RentalType = 'Daily' | 'Weekly' | 'Monthly'
 

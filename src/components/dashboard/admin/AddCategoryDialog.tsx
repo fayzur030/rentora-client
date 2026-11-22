@@ -104,7 +104,7 @@ const AddCategoryDialog = ({
                 name='name'
                 value={name}
                 onChange={(event) => handleNameChange(event.target.value)}
-                placeholder='e.g. Construction Equipment'
+                placeholder='Enter a category name'
                 required
                 className='h-11'
               />
