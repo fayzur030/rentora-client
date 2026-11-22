@@ -186,9 +186,9 @@ const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
               </span>
             </div>
 
-            <div className='mt-6'>
+            {user?.role === 'customer' && (
               <BookingModal equipment={equipment} />
-            </div>
+            )}
           </div>
         </section>
 
