@@ -47,7 +47,7 @@ const PopularEquipments = async () => {
             {categories.map((category, index) => (
               <Link
                 key={`${category.slug}-${category.name}`}
-                href={`/all-equipments?category=${encodeURIComponent(category.name)}`}
+                href={`/categories/${encodeURIComponent(category.slug)}`}
                 aria-label={`Browse ${category.name} equipment`}
                 className='group flex min-h-28 items-center gap-4 rounded-2xl border border-border/80 bg-card p-3.5 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-accent/60 hover:shadow-lg hover:shadow-primary/5 sm:p-4'
               >
