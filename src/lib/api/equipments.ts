@@ -1,4 +1,4 @@
-import { Equipment, MyEquipment } from '@/types/equipment'
+import { Equipment, MyEquipment, PopularEquipments } from '@/types/equipment'
 import { baseUrl } from '../config'
 import { getTokenFromServer } from '../auth/getTokenFromServer'
 
@@ -77,6 +77,20 @@ export const getAllAdminEquipments = async (): Promise<Equipment[]> => {
 
   const result = await res.json()
 
+  if (!res.ok) {
+    throw new Error(result.message || 'Failed to fetch equipments')
+  }
+
+  return result.data
+}
+
+//todo: popular equipments
+
+export const getPopularEquipments = async (): Promise<PopularEquipments[]> => {
+  const res = await fetch(`${baseUrl}/api/equipment/popular-equipments`, {
+    cache: 'no-store',
+  })
+  const result = await res.json()
   if (!res.ok) {
     throw new Error(result.message || 'Failed to fetch equipments')
   }

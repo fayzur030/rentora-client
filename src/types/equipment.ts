@@ -40,3 +40,11 @@ export interface ApiSuccessResponse<T> {
 
 // Owner dashboard: my equipments
 export type MyEquipment = Equipment[]
+
+// popular equipments by category
+
+export interface PopularEquipments {
+  name: string
+  slug: string
+  image: string
+}

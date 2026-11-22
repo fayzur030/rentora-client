@@ -2,6 +2,7 @@ import { getFeaturedEquipments } from '@/lib/api/features'
 import EquipmentCard from '@/components/equipment/EquipmentCard'
 import FeaturedEquipmentsMotion from './FeaturedEquipmentsMotion'
 import Link from 'next/link'
+import { ArrowUpRight } from 'lucide-react'
 
 const FeaturedEquipments = async () => {
   const featuredEquipments = await getFeaturedEquipments()
@@ -9,7 +10,6 @@ const FeaturedEquipments = async () => {
   return (
     <FeaturedEquipmentsMotion>
       <div className='mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8'>
-
         <div className='mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between'>
           <div>
             <p className='text-sm font-semibold uppercase tracking-[0.18em] text-primary'>
@@ -26,9 +26,10 @@ const FeaturedEquipments = async () => {
 
           <Link
             href='/all-equipments'
-            className='inline-flex h-10 items-center justify-center rounded-lg border border-foreground/15 px-4 text-sm font-semibold text-foreground transition-colors hover:border-primary/40 hover:bg-primary/5'
+            className='inline-flex h-10 w-fit items-center gap-2 rounded-lg border border-border bg-background px-4 text-sm font-semibold text-foreground transition-colors hover:border-primary/30 hover:bg-primary/5'
           >
             View All Equipment
+            <ArrowUpRight className='size-4' aria-hidden='true' />
           </Link>
         </div>
 
@@ -45,7 +46,9 @@ const FeaturedEquipments = async () => {
           <div className='grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3'>
             {featuredEquipments.slice(0, 6).map((equipment, index) => (
               <EquipmentCard
-                key={equipment._id ?? equipment.id ?? `${equipment.name}-${index}`}
+                key={
+                  equipment._id ?? equipment.id ?? `${equipment.name}-${index}`
+                }
                 equipment={equipment}
                 priority={index < 3}
               />
