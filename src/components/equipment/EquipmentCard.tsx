@@ -60,18 +60,19 @@ const EquipmentCard = async ({
         )}
 
         <Badge
-          className={`absolute bottom-3 left-3 gap-1.5 shadow-sm ${
+          className={`absolute bottom-3 left-3 gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold shadow-lg backdrop-blur-md ${
             isAvailable
-              ? 'border-success/25 bg-success/10 text-success dark:border-success/25 dark:bg-success/10 dark:text-success'
-              : 'border-warning/25 bg-warning/10 text-warning dark:border-warning/25 dark:bg-warning/10 dark:text-warning'
+              ? 'border-emerald-400/30 bg-emerald-950/85 text-emerald-400'
+              : 'border-red-400/30 bg-red-950/85 text-red-400'
           }`}
         >
           <span
-            className={`size-1.5 rounded-full ${
-              isAvailable ? 'bg-success/10' : 'bg-warning/10'
+            className={`size-2 rounded-full ${
+              isAvailable ? 'bg-emerald-400' : 'bg-red-400'
             }`}
             aria-hidden='true'
           />
+
           {isAvailable ? 'Available' : 'Unavailable'}
         </Badge>
       </div>
@@ -97,7 +98,7 @@ const EquipmentCard = async ({
             ৳{equipment.rentalPrice.toLocaleString()}
           </p>
 
-          <Badge className='border-accent/50 bg-accent/15 text-accent-foreground'>
+          <Badge className='rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-xs font-semibold text-accent shadow-sm backdrop-blur-md'>
             {equipment.rentalType}
           </Badge>
         </div>

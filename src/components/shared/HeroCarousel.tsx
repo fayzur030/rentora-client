@@ -3,7 +3,12 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { AnimatePresence, motion, MotionConfig, useReducedMotion } from 'framer-motion'
+import {
+  AnimatePresence,
+  motion,
+  MotionConfig,
+  useReducedMotion,
+} from 'framer-motion'
 
 import type { Category } from '@/types/category'
 
