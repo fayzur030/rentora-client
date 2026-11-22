@@ -84,12 +84,29 @@ export const getAllAdminEquipments = async (): Promise<Equipment[]> => {
   return result.data
 }
 
-//todo: popular equipments
+//todo: category equipments
 
 export const getPopularEquipments = async (): Promise<PopularEquipments[]> => {
   const res = await fetch(`${baseUrl}/api/equipment/popular-equipments`, {
     cache: 'no-store',
   })
+  const result = await res.json()
+  if (!res.ok) {
+    throw new Error(result.message || 'Failed to fetch equipments')
+  }
+
+  return result.data
+}
+
+// get recently added equipment
+
+export const getRecentlyAddedEquipments = async (): Promise<Equipment[]> => {
+  const res = await fetch(
+    `${baseUrl}/api/equipment/recently-added-equipments`,
+    {
+      cache: 'no-store',
+    }
+  )
   const result = await res.json()
   if (!res.ok) {
     throw new Error(result.message || 'Failed to fetch equipments')
