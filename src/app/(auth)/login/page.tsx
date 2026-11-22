@@ -93,12 +93,12 @@ export default function LoginPage() {
   }
 
   return (
-    <main className='flex min-h-screen flex-col items-center justify-center bg-[#F5F1EB] px-5 py-10'>
+    <main className='flex min-h-screen flex-col items-center justify-center bg-[var(--background)] px-5 py-10'>
       {/* Back to Home */}
       <div className='mb-6 w-full max-w-185'>
         <Link
           href='/'
-          className='inline-flex items-center gap-2 text-sm font-medium text-[#57534E] transition-colors hover:text-[#B45309]'
+          className='inline-flex items-center gap-2 text-sm font-medium text-[var(--muted-foreground)] transition-colors hover:text-[var(--warning)]'
         >
           <ArrowLeft size={17} />
           Back to Home
@@ -106,25 +106,25 @@ export default function LoginPage() {
       </div>
 
       {/* Login Card */}
-      <div className='w-full max-w-185 rounded-2xl border border-[#EAE4DA] bg-white p-7 shadow-[0_20px_60px_rgba(70,50,30,0.07)] sm:p-10'>
+      <div className='w-full max-w-185 rounded-2xl border border-[var(--border)] bg-card p-7 shadow-card sm:p-10'>
         {/* Logo */}
         <Link href='/' className='mb-4 inline-flex items-center gap-2.5'>
-          <div className='flex h-10 w-10 items-center justify-center rounded-xl bg-[#F5A623] text-[#241A10]'>
+          <div className='flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent)] text-[var(--brand-ink)]'>
             <Sparkles size={21} />
           </div>
 
-          <span className='text-2xl font-bold tracking-tight text-[#292524]'>
-            Rentora<span className='text-[#F5A623]'>.</span>
+          <span className='text-2xl font-bold tracking-tight text-[var(--foreground)]'>
+            Rentora<span className='text-[var(--accent)]'>.</span>
           </span>
         </Link>
 
         {/* Heading */}
         <div className='mb-8'>
-          <h1 className='text-3xl font-bold tracking-tight text-[#292524]'>
+          <h1 className='text-3xl font-bold tracking-tight text-[var(--foreground)]'>
             Welcome back!
           </h1>
 
-          <p className='mt-2 text-sm leading-6 text-[#78716C]'>
+          <p className='mt-2 text-sm leading-6 text-[var(--muted-foreground)]'>
             Sign in to your account and continue exploring the best rental
             equipment.
           </p>
@@ -136,7 +136,7 @@ export default function LoginPage() {
           <div className='space-y-2'>
             <label
               htmlFor='email'
-              className='text-sm font-semibold text-[#44403C]'
+              className='text-sm font-semibold text-[var(--foreground)]'
             >
               Email Address
             </label>
@@ -148,10 +148,10 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder='Enter your email'
-              className='h-12 w-full rounded-xl border border-[#E7E1D8] px-4 text-sm text-[#292524] outline-none transition-all placeholder:text-[#A8A29E] focus:border-[#F5A623] focus:ring-2 focus:ring-[#F5A623]/20'
+              className='h-12 w-full rounded-xl border border-[var(--border)] px-4 text-sm text-[var(--foreground)] outline-none transition-all placeholder:text-[var(--muted-foreground)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20'
             />
 
-            {emailError && <p className='text-xs text-red-500'>{emailError}</p>}
+            {emailError && <p className='text-xs text-destructive'>{emailError}</p>}
           </div>
 
           {/* Password Input */}
@@ -168,7 +168,7 @@ export default function LoginPage() {
           <button
             type='submit'
             disabled={loading}
-            className='flex h-12 w-full items-center justify-center rounded-xl bg-[#F5A623] text-sm font-bold text-[#241A10] transition-all hover:bg-[#E99A16] disabled:cursor-not-allowed disabled:opacity-60'
+            className='flex h-12 w-full items-center justify-center rounded-xl bg-[var(--accent)] text-sm font-bold text-[var(--brand-ink)] transition-all hover:bg-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-60'
           >
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
@@ -176,20 +176,20 @@ export default function LoginPage() {
 
         {/* Divider */}
         <div className='my-7 flex items-center gap-4'>
-          <div className='h-px flex-1 bg-[#EAE4DA]' />
+          <div className='h-px flex-1 bg-[var(--border)]' />
 
-          <span className='text-xs font-medium text-[#A8A29E]'>
+          <span className='text-xs font-medium text-[var(--muted-foreground)]'>
             OR CONTINUE WITH
           </span>
 
-          <div className='h-px flex-1 bg-[#EAE4DA]' />
+          <div className='h-px flex-1 bg-[var(--border)]' />
         </div>
 
         {/* Google Login */}
         <button
           type='button'
           onClick={handleGoogleLogin}
-          className='flex h-12 w-full items-center justify-center gap-3 rounded-xl border border-[#E7E1D8] bg-white text-sm font-semibold text-[#44403C] transition-all hover:border-[#D6CFC3] hover:bg-[#FAF8F4]'
+          className='flex h-12 w-full items-center justify-center gap-3 rounded-xl border border-[var(--border)] bg-card text-sm font-semibold text-[var(--foreground)] transition-all hover:border-[var(--border)] hover:bg-[var(--background)]'
         >
           <svg viewBox='0 0 48 48' className='h-5 w-5'>
             <path
@@ -213,11 +213,11 @@ export default function LoginPage() {
         </button>
 
         {/* Register Link */}
-        <p className='mt-8 text-center text-sm text-[#78716C]'>
+        <p className='mt-8 text-center text-sm text-[var(--muted-foreground)]'>
           Don&apos;t have an account?{' '}
           <Link
             href='/register'
-            className='font-bold text-[#B7791F] transition-colors hover:text-[#925F12]'
+            className='font-bold text-[var(--warning)] transition-colors hover:text-[var(--warning)]'
           >
             Create account
           </Link>
@@ -225,7 +225,7 @@ export default function LoginPage() {
       </div>
 
       {/* Footer */}
-      <p className='mt-7 text-center text-xs text-[#A8A29E]'>
+      <p className='mt-7 text-center text-xs text-[var(--muted-foreground)]'>
         © {new Date().getFullYear()} Rentora. All rights reserved.
       </p>
     </main>

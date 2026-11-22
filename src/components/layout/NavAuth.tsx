@@ -19,7 +19,7 @@ const NavAuth = ({ variant = 'desktop', onNavigate }: NavAuthProps) => {
   if (isPending) {
     return (
       <div className='flex h-10 items-center justify-center'>
-        <Loader2 className='size-5 animate-spin text-white/70' />
+        <Loader2 className='size-5 animate-spin text-nav-foreground/70' />
       </div>
     )
   }
@@ -30,7 +30,7 @@ const NavAuth = ({ variant = 'desktop', onNavigate }: NavAuthProps) => {
         <Link
           href='/login'
           onClick={onNavigate}
-          className='flex h-11 items-center justify-center gap-2 rounded-lg border border-white/20 bg-white/5 px-5 text-sm font-semibold text-white transition-colors hover:bg-white/10'
+          className='flex h-11 items-center justify-center gap-2 rounded-lg border border-nav-border bg-nav-foreground/5 px-5 text-sm font-semibold text-nav-foreground transition-colors hover:bg-nav-foreground/10'
         >
           <LogIn size={16} />
           Login
@@ -39,7 +39,7 @@ const NavAuth = ({ variant = 'desktop', onNavigate }: NavAuthProps) => {
         <Link
           href='/register'
           onClick={onNavigate}
-          className='flex h-11 items-center justify-center rounded-lg bg-[#F5A623] px-5 text-sm font-semibold text-[#2b1a12] transition-colors hover:bg-[#d99a1f]'
+          className='flex h-11 items-center justify-center rounded-lg bg-[var(--accent)] px-5 text-sm font-semibold text-[var(--brand-ink)] transition-colors hover:bg-[var(--accent)]'
         >
           Register
         </Link>

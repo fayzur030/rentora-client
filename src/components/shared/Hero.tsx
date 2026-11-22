@@ -1,7 +1,6 @@
 'use client'
 
 import { motion, MotionConfig } from 'framer-motion'
-import Image from 'next/image'
 import Link from 'next/link'
 
 const containerVariants = {
@@ -36,28 +35,20 @@ const Hero = () => {
   return (
     <MotionConfig reducedMotion='user'>
       <section className='relative w-full overflow-hidden'>
-        {/* Background Image */}
+        {/* Brand gradient background */}
         <motion.div
           initial={{ opacity: 0, scale: 1.03 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.2, ease: 'easeOut' }}
-          className='absolute inset-0'
+          className='absolute inset-0 bg-linear-to-br from-hero-start via-hero-mid to-hero-end'
         >
-          <Image
-            src='/images/banner_bg.png'
-            alt=''
-            fill
-            preload
-            sizes='100vw'
-            className='object-cover object-center'
-          />
-
-          {/* Dark Overlay */}
+          <div className='absolute -right-24 -top-32 size-[28rem] rounded-full bg-hero-accent/10 blur-3xl' />
+          <div className='absolute -bottom-48 left-[12%] size-[32rem] rounded-full bg-secondary/20 blur-3xl' />
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1.4, delay: 0.2 }}
-            className='absolute inset-0 bg-linear-to-r from-[#140c10]/90 via-[#140c10]/75 to-[#140c10]/50'
+            className='absolute inset-0 bg-linear-to-r from-hero-start/25 via-transparent to-transparent'
           />
         </motion.div>
 
@@ -71,7 +62,7 @@ const Hero = () => {
           >
             {/* Badge */}
             <motion.div variants={fadeDownVariants}>
-              <span className='inline-flex items-center rounded-full border border-white/30 bg-white/10 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-white/90 backdrop-blur-sm sm:px-4 sm:text-xs md:text-sm'>
+              <span className='inline-flex items-center rounded-full border border-hero-foreground/25 bg-hero-foreground/5 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-hero-foreground/90 backdrop-blur-sm sm:px-4 sm:text-xs md:text-sm'>
                 Your Trusted Rental Marketplace
               </span>
             </motion.div>
@@ -79,10 +70,10 @@ const Hero = () => {
             {/* Heading */}
             <motion.h1
               variants={fadeUpVariants}
-              className='mt-6 max-w-4xl text-balance font-heading text-3xl font-extrabold leading-[1.12] tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl'
+              className='mt-6 max-w-4xl text-balance font-heading text-3xl font-extrabold leading-[1.12] tracking-tight text-hero-foreground sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl'
             >
               Quality Equipment,
-              <span className='mt-1 block text-[#F5A623]'>
+              <span className='mt-1 block text-hero-accent'>
                 Easy Rentals, Anytime!
               </span>
             </motion.h1>
@@ -90,7 +81,7 @@ const Hero = () => {
             {/* Description */}
             <motion.p
               variants={fadeUpVariants}
-              className='mt-5 max-w-xl text-pretty text-sm leading-relaxed text-[#CABCAF] sm:mt-6 sm:text-base md:text-lg'
+              className='mt-5 max-w-xl text-pretty text-sm leading-relaxed text-hero-muted sm:mt-6 sm:text-base md:text-lg'
             >
               Rent quality equipment and everyday essentials with ease. Save
               time, spend less, and get what you need when you need it.
@@ -108,8 +99,8 @@ const Hero = () => {
                 className='w-full sm:w-auto'
               >
                 <Link
-                  href='/equipment'
-                  className='inline-flex h-12 w-full items-center justify-center rounded-lg bg-[#F5A623] px-7 text-sm font-semibold text-[#2b1a12] transition-colors hover:bg-[#d99a1f] sm:w-auto'
+                  href='/all-equipments'
+                  className='inline-flex h-12 w-full items-center justify-center rounded-lg bg-[var(--accent)] px-7 text-sm font-semibold text-[var(--brand-ink)] transition-colors hover:bg-[var(--accent)] sm:w-auto'
                 >
                   Explore Rentals
                 </Link>
@@ -123,7 +114,7 @@ const Hero = () => {
               >
                 <Link
                   href='/add-equipment'
-                  className='inline-flex h-12 w-full items-center justify-center rounded-lg border border-white/50 bg-white/10 px-7 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/20 sm:w-auto'
+                  className='inline-flex h-12 w-full items-center justify-center rounded-lg border border-hero-foreground/40 bg-hero-foreground/5 px-7 text-sm font-semibold text-hero-foreground backdrop-blur-sm transition-colors hover:bg-hero-foreground/10 sm:w-auto'
                 >
                   List Your Equipment
                 </Link>

@@ -20,6 +20,7 @@ import { SheetTrigger } from '@/components/ui/sheet'
 import { dashboardRoleLabels, findActiveNavItem } from '@/lib/dashboard-links'
 import type { DashboardNavbarProps } from '@/types/dashboard'
 import { authClient } from '@/lib/auth-client'
+import ThemeToggle from '@/components/shared/ThemeToggle'
 
 const DashboardNavbar = ({
   isCollapsed,
@@ -37,7 +38,7 @@ const DashboardNavbar = ({
   const title = activeNavItem ? activeNavItem.item.label : 'Overview'
 
   return (
-    <header className='sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur-xl'>
+    <header className='sticky top-0 z-30 border-b border-nav-border bg-nav-background text-nav-foreground shadow-sm backdrop-blur-xl'>
       <div className='flex h-16 items-center justify-between gap-4 px-4 sm:px-6'>
         {/* Left side: menu buttons + page title */}
         <div className='flex min-w-0 items-center gap-2 sm:gap-3'>
@@ -72,7 +73,7 @@ const DashboardNavbar = ({
 
           {/* Section + page title */}
           <div className='min-w-0'>
-            <p className='truncate text-xs font-medium text-muted-foreground'>
+            <p className='truncate text-xs font-medium text-nav-foreground/65'>
               {section}
             </p>
             <h1 className='truncate font-heading text-lg font-bold sm:text-xl'>
@@ -82,59 +83,62 @@ const DashboardNavbar = ({
         </div>
 
         {/* Right side: profile avatar */}
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            aria-label='Open profile menu'
-            className='flex shrink-0 items-center rounded-full outline-none transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-ring/50'
-          >
-            <Avatar className='size-10'>
-              <AvatarImage
-                className={`border-2 border-amber-500 size-10`}
-                src={user?.image || undefined}
-                alt={user?.name || 'User'}
-              />
-              <AvatarFallback className='bg-[#F5A623] font-bold text-[#2b1a12]'>
-                {user?.name.charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent align='end' sideOffset={8} className='w-60 p-2'>
-            <DropdownMenuGroup>
-              <DropdownMenuLabel className='px-2 py-2'>
-                <div className='space-y-0.5'>
-                  <p className='truncate text-sm font-semibold text-foreground'>
-                    {user?.name}
-                  </p>
-                  <p className='truncate text-xs font-normal text-muted-foreground'>
-                    {user?.email}
-                  </p>
-                  <p className='text-xs font-medium capitalize text-[#F5A623]'>
-                    {role}
-                  </p>
-                </div>
-              </DropdownMenuLabel>
-            </DropdownMenuGroup>
-
-            <DropdownMenuSeparator />
-
-            <DropdownMenuItem
-              render={<Link href={`/dashboard/${role}/profile`} />}
-              className='cursor-pointer gap-2 py-2 font-medium'
+        <div className='flex shrink-0 items-center gap-2'>
+          <ThemeToggle className='text-nav-foreground hover:bg-nav-foreground/10 hover:text-nav-foreground' />
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              aria-label='Open profile menu'
+              className='flex shrink-0 items-center rounded-full outline-none transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-ring/50'
             >
-              <User />
-              My Profile
-            </DropdownMenuItem>
+              <Avatar className='size-10'>
+                <AvatarImage
+                  className='size-10 border-2 border-warning/25'
+                  src={user?.image || undefined}
+                  alt={user?.name || 'User'}
+                />
+                <AvatarFallback className='bg-[var(--accent)] font-bold text-[var(--brand-ink)]'>
+                  {user?.name.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+            </DropdownMenuTrigger>
 
-            <DropdownMenuItem
-              render={<Link href='/' />}
-              className='cursor-pointer gap-2 py-2 font-medium'
-            >
-              <Home />
-              Back to Home
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+            <DropdownMenuContent align='end' sideOffset={8} className='w-60 p-2'>
+              <DropdownMenuGroup>
+                <DropdownMenuLabel className='px-2 py-2'>
+                  <div className='space-y-0.5'>
+                    <p className='truncate text-sm font-semibold text-foreground'>
+                      {user?.name}
+                    </p>
+                    <p className='truncate text-xs font-normal text-muted-foreground'>
+                      {user?.email}
+                    </p>
+                    <p className='text-xs font-medium capitalize text-[var(--accent)]'>
+                      {role}
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
+              </DropdownMenuGroup>
+
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem
+                render={<Link href={`/dashboard/${role}/profile`} />}
+                className='cursor-pointer gap-2 py-2 font-medium'
+              >
+                <User />
+                My Profile
+              </DropdownMenuItem>
+
+              <DropdownMenuItem
+                render={<Link href='/' />}
+                className='cursor-pointer gap-2 py-2 font-medium'
+              >
+                <Home />
+                Back to Home
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
     </header>
   )

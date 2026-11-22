@@ -7,6 +7,7 @@ import Logo from '@/components/shared/Logo'
 import NavLink from './NavLink'
 import NavAuth from './NavAuth'
 import MobileMenu from './MobileMenu'
+import ThemeToggle from '@/components/shared/ThemeToggle'
 
 // Main navigation links - used by the top bar and the mobile menu
 const navLinks = [
@@ -25,7 +26,7 @@ const Navbar = () => {
       initial={{ opacity: 0, y: -16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
-      className='sticky top-0 z-50 w-full border-b border-white/10 bg-[#2b1a12] backdrop-blur-xl'
+      className='sticky top-0 z-50 w-full border-b border-nav-border bg-nav-background text-nav-foreground shadow-sm backdrop-blur-xl'
     >
       <nav className='mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:h-19 lg:px-8'>
         {/* Logo */}
@@ -42,6 +43,7 @@ const Navbar = () => {
 
         {/* Desktop Auth: Login / Register or profile avatar */}
         <div className='hidden items-center gap-3 lg:flex'>
+          <ThemeToggle className='text-nav-foreground hover:bg-nav-foreground/10 hover:text-nav-foreground' />
           <NavAuth variant='desktop' />
         </div>
 
@@ -49,7 +51,7 @@ const Navbar = () => {
         <button
           type='button'
           onClick={() => setMenuOpen(true)}
-          className='inline-flex size-10 items-center justify-center rounded-lg border border-white/15 bg-white/5 text-white transition-colors hover:bg-white/10 lg:hidden'
+          className='inline-flex size-10 items-center justify-center rounded-lg border border-nav-border bg-nav-foreground/5 text-nav-foreground transition-colors hover:bg-nav-foreground/10 lg:hidden'
           aria-label='Open navigation menu'
           aria-expanded={menuOpen}
         >

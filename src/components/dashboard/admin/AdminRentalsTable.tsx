@@ -89,8 +89,8 @@ const StatusBadge = ({ status = '' }: StatusBadgeProps) => {
   // Success / Active states: Green dot & background
   if (normalized === 'paid' || normalized === 'confirmed' || normalized === 'completed') {
     return (
-      <Badge className='inline-flex items-center gap-1.5 rounded-full border-emerald-500/25 bg-emerald-500/10 px-2.5 py-0.5 text-xs font-medium text-emerald-700 shadow-2xs dark:text-emerald-400'>
-        <span className='size-1.5 rounded-full bg-emerald-500' />
+      <Badge className='inline-flex items-center gap-1.5 rounded-full border-success/25 bg-success/10 px-2.5 py-0.5 text-xs font-medium text-success shadow-2xs dark:text-success'>
+        <span className='size-1.5 rounded-full bg-success/10' />
         {normalized.charAt(0).toUpperCase() + normalized.slice(1)}
       </Badge>
     )
@@ -99,8 +99,8 @@ const StatusBadge = ({ status = '' }: StatusBadgeProps) => {
   // Cancelled / Failed states: Red dot & background
   if (normalized === 'failed' || normalized === 'cancelled' || normalized === 'rejected') {
     return (
-      <Badge className='inline-flex items-center gap-1.5 rounded-full border-rose-500/25 bg-rose-500/10 px-2.5 py-0.5 text-xs font-medium text-rose-700 shadow-2xs dark:text-rose-400'>
-        <span className='size-1.5 rounded-full bg-rose-500' />
+      <Badge className='inline-flex items-center gap-1.5 rounded-full border-destructive/25 bg-destructive/10 px-2.5 py-0.5 text-xs font-medium text-destructive shadow-2xs dark:text-destructive'>
+        <span className='size-1.5 rounded-full bg-destructive/10' />
         {normalized.charAt(0).toUpperCase() + normalized.slice(1)}
       </Badge>
     )
@@ -109,8 +109,8 @@ const StatusBadge = ({ status = '' }: StatusBadgeProps) => {
   // Pending / Unpaid states: Amber pulsing dot & background
   const label = normalized ? normalized.charAt(0).toUpperCase() + normalized.slice(1) : 'Pending'
   return (
-    <Badge className='inline-flex items-center gap-1.5 rounded-full border-amber-500/25 bg-amber-500/10 px-2.5 py-0.5 text-xs font-medium text-amber-700 shadow-2xs dark:text-amber-400'>
-      <span className='size-1.5 animate-pulse rounded-full bg-amber-500' />
+    <Badge className='inline-flex items-center gap-1.5 rounded-full border-warning/25 bg-warning/10 px-2.5 py-0.5 text-xs font-medium text-warning shadow-2xs dark:text-warning'>
+      <span className='size-1.5 animate-pulse rounded-full bg-warning/10' />
       {label}
     </Badge>
   )

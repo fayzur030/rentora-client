@@ -11,7 +11,7 @@ const steps = [
       'Explore a wide range of quality equipment and find exactly what you need for your next project.',
     icon: Search,
     cardStyle:
-      'border-primary/10 from-white via-white to-primary/[0.04] hover:border-primary/30',
+      'border-primary/10 from-card via-card to-primary/[0.04] hover:border-primary/30',
     iconStyle: 'bg-primary/10 text-primary',
   },
   {
@@ -21,8 +21,8 @@ const steps = [
       'Choose your rental dates, provide your details, and complete your booking with secure online payment.',
     icon: CreditCard,
     cardStyle:
-      'border-accent/20 from-white via-white to-accent/[0.11] hover:border-accent/50',
-    iconStyle: 'bg-accent/20 text-[#8A5A10]',
+      'border-accent/20 from-card via-card to-accent/[0.11] hover:border-accent/50',
+    iconStyle: 'bg-accent/20 text-[var(--warning)]',
   },
   {
     number: '03',
@@ -31,7 +31,7 @@ const steps = [
       'Receive your equipment, get your work done, and return it when your rental period ends.',
     icon: PackageCheck,
     cardStyle:
-      'border-secondary/10 from-white via-white to-secondary/[0.04] hover:border-secondary/30',
+      'border-secondary/10 from-card via-card to-secondary/[0.04] hover:border-secondary/30',
     iconStyle: 'bg-secondary/10 text-secondary',
   },
 ]
@@ -124,7 +124,7 @@ const HowItWorks = () => {
                       {step.number}
                     </span>
 
-                    <div className='absolute -top-9 left-1/2 z-10 flex size-[4.5rem] -translate-x-1/2 items-center justify-center rounded-2xl border border-white/80 bg-white shadow-lg shadow-primary/10 ring-1 ring-border/70'>
+                    <div className='absolute -top-9 left-1/2 z-10 flex size-[4.5rem] -translate-x-1/2 items-center justify-center rounded-2xl border border-primary-foreground/80 bg-card shadow-lg shadow-primary/10 ring-1 ring-border/70'>
                       <div
                         className={`flex size-12 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-3 ${step.iconStyle}`}
                       >

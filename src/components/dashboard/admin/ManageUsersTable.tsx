@@ -51,8 +51,8 @@ const roleLabels: Record<UserRole, string> = {
 }
 
 const roleBadgeStyles: Record<UserRole, string> = {
-  customer: 'border-emerald-200 bg-emerald-50 text-emerald-700',
-  owner: 'border-amber-200 bg-amber-50 text-amber-800',
+  customer: 'border-success/25 bg-success/10 text-success',
+  owner: 'border-warning/25 bg-warning/10 text-warning',
   admin: 'border-primary/20 bg-primary/10 text-primary',
 }
 

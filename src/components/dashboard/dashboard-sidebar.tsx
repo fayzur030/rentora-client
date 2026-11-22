@@ -42,8 +42,8 @@ const SidebarAction = ({
     'group flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200',
     collapsed && 'justify-center px-0',
     variant === 'danger'
-      ? 'text-white/70 hover:bg-red-500/10 hover:text-red-400'
-      : 'text-white/70 hover:bg-white/5 hover:text-white'
+      ? 'text-sidebar-foreground/70 hover:bg-destructive/10 hover:text-destructive'
+      : 'text-sidebar-foreground/70 hover:bg-card/5 hover:text-sidebar-foreground'
   )
 
   const iconElement = (
@@ -52,8 +52,8 @@ const SidebarAction = ({
       className={cn(
         'size-5 shrink-0 transition-colors',
         variant === 'danger'
-          ? 'text-white/50 group-hover:text-red-400'
-          : 'text-white/50 group-hover:text-white'
+          ? 'text-sidebar-foreground/50 group-hover:text-destructive'
+          : 'text-sidebar-foreground/50 group-hover:text-sidebar-foreground'
       )}
     />
   )
@@ -116,7 +116,7 @@ const DashboardSidebar = ({
   }
 
   return (
-    <div className='flex h-full w-full flex-col overflow-hidden bg-linear-to-b from-[#2b1a12] to-[#171411] text-white'>
+    <div className='flex h-full w-full flex-col overflow-hidden bg-linear-to-b from-nav-background to-sidebar text-sidebar-foreground'>
       {/* Brand */}
       <div
         className={cn(
@@ -140,17 +140,17 @@ const DashboardSidebar = ({
 
           {!collapsed && (
             <span className='text-xl font-extrabold tracking-tight'>
-              Rent<span className='text-[#F5A623]'>ora</span>
+              Rent<span className='text-[var(--accent)]'>ora</span>
             </span>
           )}
         </Link>
       </div>
 
-      <Separator className='bg-white/10' />
+      <Separator className='bg-card/10' />
 
       {/* Small caption above the links (hidden while collapsed) */}
       {!collapsed && (
-        <p className='px-5 pt-5 pb-2 text-[11px] font-semibold tracking-widest text-white/40 uppercase'>
+        <p className='px-5 pt-5 pb-2 text-[11px] font-semibold tracking-widest text-sidebar-foreground/40 uppercase'>
           {dashboardRoleLabels[role]}
         </p>
       )}
@@ -173,7 +173,7 @@ const DashboardSidebar = ({
       </ScrollArea>
 
       {/* Bottom actions: settings + logout */}
-      <div className='flex flex-col gap-1 border-t border-white/10 p-3'>
+      <div className='flex flex-col gap-1 border-t border-sidebar-foreground/10 p-3'>
         <SidebarAction
           label='Settings'
           icon={Settings}

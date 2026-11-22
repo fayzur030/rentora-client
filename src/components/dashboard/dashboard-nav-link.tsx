@@ -28,8 +28,8 @@ const DashboardNavLink = ({
     'group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200',
     collapsed && 'justify-center px-0',
     isActive
-      ? 'bg-[#F5A623]/15 text-[#F5A623]'
-      : 'text-white/70 hover:bg-white/5 hover:text-white'
+      ? 'bg-[var(--accent)]/15 text-[var(--accent)]'
+      : 'text-sidebar-foreground/70 hover:bg-card/5 hover:text-sidebar-foreground'
   )
 
   // Navigation icon
@@ -38,7 +38,7 @@ const DashboardNavLink = ({
       aria-hidden='true'
       className={cn(
         'size-5 shrink-0 transition-colors',
-        isActive ? 'text-[#F5A623]' : 'text-white/50 group-hover:text-white'
+        isActive ? 'text-[var(--accent)]' : 'text-sidebar-foreground/50 group-hover:text-sidebar-foreground'
       )}
     />
   )

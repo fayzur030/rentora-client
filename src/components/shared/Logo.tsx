@@ -17,10 +17,10 @@ const Logo = ({ darkText = false }: LogoProps) => {
 
       <span
         className={`text-2xl font-extrabold tracking-tight ${
-          darkText ? 'text-[#171411]' : 'text-white'
+          darkText ? 'text-foreground' : 'text-brand-foreground'
         }`}
       >
-        Rent<span className="text-[#F5A623]">ora</span>
+        Rent<span className="text-[var(--accent)]">ora</span>
       </span>
     </Link>
   )

@@ -17,7 +17,13 @@ import EquipmentFilters from './EquipmentFilters'
 import type { Category } from '@/types/category'
 
 // On mobile and small tablets the filters open inside a slide-over sheet.
-const EquipmentFilterSheet = ({ categories }: { categories: Category[] }) => {
+const EquipmentFilterSheet = ({
+  categories,
+  queryString,
+}: {
+  categories: Category[]
+  queryString: string
+}) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -39,7 +45,7 @@ const EquipmentFilterSheet = ({ categories }: { categories: Category[] }) => {
         </SheetHeader>
 
         <div className='px-4 pb-6'>
-          <EquipmentFilters categories={categories} />
+          <EquipmentFilters categories={categories} queryString={queryString} />
         </div>
       </SheetContent>
     </Sheet>

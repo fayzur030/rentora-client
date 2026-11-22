@@ -11,7 +11,7 @@ const reviews = [
     comment:
       'Finding the right tools for my renovation was easy. The equipment arrived in great condition, right when I needed it.',
     initials: 'AR',
-    color: 'bg-[#F5E7CF] text-[#7A4A16]',
+    color: 'bg-[var(--accent)] text-[var(--warning)]',
   },
   {
     name: 'Tanvir Hasan',
@@ -20,7 +20,7 @@ const reviews = [
     comment:
       'We rented event equipment for a weekend setup and the whole process felt smooth. It saved us time and a lot of hassle.',
     initials: 'TH',
-    color: 'bg-[#E7E1F2] text-[#554477]',
+    color: 'bg-[var(--secondary)] text-[var(--secondary)]',
   },
   {
     name: 'Nusrat Jahan',
@@ -29,7 +29,7 @@ const reviews = [
     comment:
       'A practical way to get quality equipment without buying it outright. Booking was straightforward and the owner was helpful.',
     initials: 'NJ',
-    color: 'bg-[#DCECE5] text-[#315D4A]',
+    color: 'bg-[var(--success)] text-[var(--success)]',
   },
   {
     name: 'Sakib Ahmed',
@@ -38,7 +38,7 @@ const reviews = [
     comment:
       'I found exactly what I needed for my project nearby. Clear details, flexible rental options, and a great experience overall.',
     initials: 'SA',
-    color: 'bg-[#F2DFE1] text-[#773F49]',
+    color: 'bg-[var(--secondary)] text-[var(--secondary)]',
   },
 ]
 
@@ -76,7 +76,7 @@ const CustomerReviews = () => {
             className='mb-9 text-center sm:mb-12'
           >
             <motion.div variants={reviewVariants}>
-              <span className='inline-flex items-center gap-2 rounded-full border border-primary/10 bg-white/80 px-3 py-1.5 text-xs font-semibold tracking-wide text-primary shadow-sm'>
+              <span className='inline-flex items-center gap-2 rounded-full border border-primary/10 bg-card/80 px-3 py-1.5 text-xs font-semibold tracking-wide text-primary shadow-sm'>
                 <Sparkles className='size-3.5 text-accent' aria-hidden='true' />
                 CUSTOMER STORIES
               </span>

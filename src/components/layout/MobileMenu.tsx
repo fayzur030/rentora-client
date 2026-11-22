@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/sheet'
 import NavLink from './NavLink'
 import NavAuth from './NavAuth'
+import ThemeToggle from '@/components/shared/ThemeToggle'
 
 interface NavItem {
   label: string
@@ -27,10 +28,10 @@ const MobileMenu = ({ isOpen, onClose, navLinks }: MobileMenuProps) => {
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent
         side='right'
-        className='flex w-[85%] flex-col border-l border-white/10 bg-[#171411] p-0 text-white sm:max-w-sm'
+        className='flex w-[85%] flex-col border-l border-sidebar-foreground/10 bg-[var(--sidebar)] p-0 text-sidebar-foreground sm:max-w-sm'
       >
-        <SheetHeader className='border-b border-white/10 px-6 py-5 text-left'>
-          <SheetTitle className='text-lg font-bold text-white'>
+        <SheetHeader className='border-b border-sidebar-foreground/10 px-6 py-5 text-left'>
+          <SheetTitle className='text-lg font-bold text-sidebar-foreground'>
             Navigation Menu
           </SheetTitle>
         </SheetHeader>
@@ -50,7 +51,10 @@ const MobileMenu = ({ isOpen, onClose, navLinks }: MobileMenuProps) => {
         </ul>
 
         {/* Login / Register for guests, profile avatar for users */}
-        <SheetFooter className='border-t border-white/10 p-6'>
+        <SheetFooter className='border-t border-sidebar-foreground/10 p-6'>
+          <div className='flex justify-center'>
+            <ThemeToggle className='text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground' />
+          </div>
           <NavAuth variant='mobile' onNavigate={onClose} />
         </SheetFooter>
       </SheetContent>

@@ -339,7 +339,7 @@ const EquipmentStatus = () => (
       <CardDescription>Listings are reviewed by an admin.</CardDescription>
     </CardHeader>
     <CardContent>
-      <Badge className='gap-1.5 border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-200'>
+      <Badge className='gap-1.5 border-warning/25 bg-warning/10 text-warning dark:border-warning/25 dark:bg-warning/10 dark:text-warning'>
         <Clock3 className='size-3.5' aria-hidden='true' />
         Pending
       </Badge>

@@ -1,21 +1,21 @@
 'use client'
 
 import { Search } from 'lucide-react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 import { Input } from '@/components/ui/input'
 
-const EquipmentSearch = () => {
+const EquipmentSearch = ({ queryString }: { queryString: string }) => {
   const router = useRouter()
-  const searchParams = useSearchParams()
+  const searchParams = new URLSearchParams(queryString)
 
   const [search, setSearch] = useState(searchParams.get('search') || '')
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const params = new URLSearchParams(searchParams.toString())
+    const params = new URLSearchParams(queryString)
 
     if (search.trim()) {
       params.set('search', search.trim())

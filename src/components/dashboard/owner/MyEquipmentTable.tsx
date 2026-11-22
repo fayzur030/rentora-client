@@ -20,9 +20,9 @@ interface MyEquipmentTableProps {
 }
 
 const statusStyles: Record<EquipmentStatus, string> = {
-  pending: 'border-amber-300 bg-amber-50 text-amber-800',
-  approved: 'border-emerald-200 bg-emerald-50 text-emerald-700',
-  rejected: 'border-rose-200 bg-rose-50 text-rose-700',
+  pending: 'border-warning/25 bg-warning/10 text-warning',
+  approved: 'border-success/25 bg-success/10 text-success',
+  rejected: 'border-destructive/25 bg-destructive/10 text-destructive',
 }
 
 const normalizeStatus = (status: EquipmentStatus | string): EquipmentStatus => {

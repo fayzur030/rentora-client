@@ -39,9 +39,10 @@ const AllEquipmentsPage = async ({ searchParams }: AllEquipmentsPageProps) => {
       query.set(key, value)
     }
   })
+  const queryString = query.toString()
 
   const [allEquipments, session, categories] = await Promise.all([
-    getAllEquipments(query.toString()),
+    getAllEquipments(queryString),
     getSessionFromServer(),
     getCategories(),
   ])
@@ -53,13 +54,16 @@ const AllEquipmentsPage = async ({ searchParams }: AllEquipmentsPageProps) => {
   return (
     <div className='mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8'>
       {/* Top section: search bar */}
-      <EquipmentSearch />
+      <EquipmentSearch queryString={queryString} />
 
       {/* Main section: filters + equipment listing */}
       <div className='mt-6 flex flex-col gap-6 lg:flex-row'>
         {/* Left side: filter sidebar (desktop and tablet) */}
         <aside className='hidden w-full shrink-0 md:block md:w-64 lg:w-72'>
-          <EquipmentFilters categories={categories} />
+          <EquipmentFilters
+            categories={categories}
+            queryString={queryString}
+          />
         </aside>
 
         {/* Right side: equipment listing */}
@@ -81,10 +85,13 @@ const AllEquipmentsPage = async ({ searchParams }: AllEquipmentsPageProps) => {
             <div className='flex flex-wrap items-center gap-3'>
               {/* Filters button only on small screens */}
               <div className='md:hidden'>
-                <EquipmentFilterSheet categories={categories} />
+                <EquipmentFilterSheet
+                  categories={categories}
+                  queryString={queryString}
+                />
               </div>
 
-              <EquipmentSort />
+              <EquipmentSort queryString={queryString} />
             </div>
           </div>
 

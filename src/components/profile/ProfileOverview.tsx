@@ -32,13 +32,13 @@ const roleConfigs: Record<UserRole, RoleConfig> = {
     label: 'Customer',
     icon: UserRound,
     badgeClassName:
-      'border-emerald-500/25 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
+      'border-success/25 bg-success/10 text-success dark:text-success',
   },
   owner: {
     label: 'Owner',
     icon: Store,
     badgeClassName:
-      'border-amber-500/25 bg-amber-500/10 text-amber-700 dark:text-amber-400',
+      'border-warning/25 bg-warning/10 text-warning dark:text-warning',
   },
   admin: {
     label: 'Admin',

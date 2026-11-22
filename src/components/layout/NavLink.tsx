@@ -25,7 +25,7 @@ const NavLink = ({ href, label, variant, onClick }: NavLinkProps) => {
       <Link
         href={href}
         className={`relative py-2 text-sm font-medium transition-colors duration-200 ${
-          isActive ? 'text-[#F5A623]' : 'text-white/85 hover:text-[#F5A623]'
+          isActive ? 'text-accent' : 'text-nav-foreground/85 hover:text-accent'
         }`}
       >
         {label}
@@ -33,7 +33,7 @@ const NavLink = ({ href, label, variant, onClick }: NavLinkProps) => {
         {isActive && (
           <motion.span
             layoutId='navbar-active-indicator'
-            className='absolute -bottom-1 left-0 h-0.5 w-full rounded-full bg-[#F5A623]'
+            className='absolute -bottom-1 left-0 h-0.5 w-full rounded-full bg-accent'
             transition={{
               type: 'spring',
               stiffness: 380,
@@ -52,8 +52,8 @@ const NavLink = ({ href, label, variant, onClick }: NavLinkProps) => {
       onClick={onClick}
       className={`block rounded-lg px-4 py-3 text-sm font-medium transition-colors ${
         isActive
-          ? 'bg-[#F5A623]/10 text-[#F5A623]'
-          : 'text-white/80 hover:bg-white/5 hover:text-white'
+          ? 'bg-[var(--accent)]/10 text-[var(--accent)]'
+          : 'text-sidebar-foreground/80 hover:bg-card/5 hover:text-sidebar-foreground'
       }`}
     >
       {label}

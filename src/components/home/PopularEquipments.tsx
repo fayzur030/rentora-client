@@ -26,7 +26,7 @@ const PopularEquipments = async () => {
           </p>
           <Link
             href='/all-equipments'
-            className='mt-7 inline-flex h-11 items-center gap-2 rounded-full bg-[#F5A623] px-5 text-sm font-bold text-[#2b1a12] transition-colors hover:bg-[#ffc04f]'
+            className='mt-7 inline-flex h-11 items-center gap-2 rounded-full bg-[var(--accent)] px-5 text-sm font-bold text-[var(--brand-ink)] transition-colors hover:bg-[var(--accent)]'
           >
             Explore all equipment
             <ArrowUpRight className='size-4' aria-hidden='true' />

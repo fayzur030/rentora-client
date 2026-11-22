@@ -72,7 +72,7 @@ const ProfileDropdown = ({
       {/* Profile Avatar */}
       <DropdownMenuTrigger
         aria-label='Open profile menu'
-        className='rounded-full border-2 border-[#F5A623] p-0.5 transition-all duration-200 hover:border-[#E89412] hover:ring-2 hover:ring-[#F5A623]/20'
+        className='rounded-full border-2 border-[var(--accent)] p-0.5 transition-all duration-200 hover:border-[var(--accent)] hover:ring-2 hover:ring-[var(--accent)]/20'
       >
         <Avatar className='size-9'>
           <AvatarImage
@@ -80,7 +80,7 @@ const ProfileDropdown = ({
             alt={user?.name || 'User'}
           />
 
-          <AvatarFallback className='bg-[#F5A623] text-base font-bold text-[#2b1a12]'>
+          <AvatarFallback className='bg-[var(--accent)] text-base font-bold text-[var(--brand-ink)]'>
             {firstLetter}
           </AvatarFallback>
         </Avatar>
@@ -91,7 +91,7 @@ const ProfileDropdown = ({
         align='end'
         side={opensUp ? 'top' : 'bottom'}
         sideOffset={8}
-        className='w-64 border border-white/10 bg-[#171411] p-2 shadow-2xl'
+        className='w-64 border border-sidebar-foreground/10 bg-[var(--sidebar)] p-2 shadow-2xl'
       >
         {/* User Information */}
         <DropdownMenuGroup>
@@ -103,17 +103,17 @@ const ProfileDropdown = ({
                   alt={user?.name || 'User'}
                 />
 
-                <AvatarFallback className='bg-[#F5A623] text-base font-bold text-[#2b1a12]'>
+                <AvatarFallback className='bg-[var(--accent)] text-base font-bold text-[var(--brand-ink)]'>
                   {firstLetter}
                 </AvatarFallback>
               </Avatar>
 
               <div className='min-w-0 space-y-1'>
-                <p className='truncate text-sm font-semibold text-white'>
+                <p className='truncate text-sm font-semibold text-sidebar-foreground'>
                   {user?.name || 'User'}
                 </p>
 
-                <p className='truncate text-xs font-normal text-white/60'>
+                <p className='truncate text-xs font-normal text-sidebar-foreground/60'>
                   {user?.email || ''}
                 </p>
               </div>
@@ -121,39 +121,39 @@ const ProfileDropdown = ({
           </DropdownMenuLabel>
         </DropdownMenuGroup>
 
-        <DropdownMenuSeparator className='bg-white/15' />
+        <DropdownMenuSeparator className='bg-card/15' />
         {/* dashboard */}
         <DropdownMenuItem
           render={
             <Link href={`/dashboard/${user.role}`} onClick={closeMenus} />
           }
-          className='group gap-2 rounded-lg py-2.5 text-sm font-medium text-white/80 transition-colors cursor-pointer hover:bg-[#F5A623]/10 hover:text-[#F5A623] focus:bg-[#F5A623]/10 focus:text-[#F5A623]'
+          className='group gap-2 rounded-lg py-2.5 text-sm font-medium text-sidebar-foreground/80 transition-colors cursor-pointer hover:bg-[var(--accent)]/10 hover:text-[var(--accent)] focus:bg-[var(--accent)]/10 focus:text-[var(--accent)]'
         >
           <User
-            color='#F5A623'
-            className='size-4 shrink-0 text-white/80 transition-colors group-hover:text-[#F5A623] group-focus:text-[#F5A623]'
+            color='var(--accent)'
+            className='size-4 shrink-0 text-sidebar-foreground/80 transition-colors group-hover:text-[var(--accent)] group-focus:text-[var(--accent)]'
           />
           Dashboard
         </DropdownMenuItem>
         {/* My Profile */}
         <DropdownMenuItem
           render={<Link href='/profile' onClick={closeMenus} />}
-          className='group gap-2 rounded-lg py-2.5 text-sm font-medium text-white/80 transition-colors cursor-pointer hover:bg-[#F5A623]/10 hover:text-[#F5A623] focus:bg-[#F5A623]/10 focus:text-[#F5A623]'
+          className='group gap-2 rounded-lg py-2.5 text-sm font-medium text-sidebar-foreground/80 transition-colors cursor-pointer hover:bg-[var(--accent)]/10 hover:text-[var(--accent)] focus:bg-[var(--accent)]/10 focus:text-[var(--accent)]'
         >
           <User
-            color='#F5A623'
-            className='size-4 shrink-0 text-white/80 transition-colors group-hover:text-[#F5A623] group-focus:text-[#F5A623]'
+            color='var(--accent)'
+            className='size-4 shrink-0 text-sidebar-foreground/80 transition-colors group-hover:text-[var(--accent)] group-focus:text-[var(--accent)]'
           />
           My Profile
         </DropdownMenuItem>
 
-        <DropdownMenuSeparator className='bg-white/15' />
+        <DropdownMenuSeparator className='bg-card/15' />
 
         {/* Sign Out */}
         <DropdownMenuItem
           variant='destructive'
           onClick={handleSignOut}
-          className='gap-2 rounded-lg py-2.5 text-sm font-medium text-red-400 focus:bg-red-500/10 focus:text-red-400 cursor-pointer'
+          className='gap-2 rounded-lg py-2.5 text-sm font-medium text-destructive focus:bg-destructive/10 focus:text-destructive cursor-pointer'
         >
           <LogOut className='size-4' />
           Sign Out

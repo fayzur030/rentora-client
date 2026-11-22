@@ -22,25 +22,25 @@ const Unauthorized = () => {
         <div className='relative flex min-h-64 flex-col justify-between overflow-hidden bg-primary p-7 text-primary-foreground sm:p-10 md:min-h-[34rem]'>
           <div
             aria-hidden='true'
-            className='absolute -right-20 -top-20 size-64 rounded-full border border-white/10'
+            className='absolute -right-20 -top-20 size-64 rounded-full border border-primary-foreground/10'
           />
           <div
             aria-hidden='true'
-            className='absolute -bottom-24 -left-24 size-72 rounded-full border border-white/10'
+            className='absolute -bottom-24 -left-24 size-72 rounded-full border border-primary-foreground/10'
           />
 
-          <div className='relative flex size-14 items-center justify-center rounded-2xl border border-white/15 bg-white/10'>
+          <div className='relative flex size-14 items-center justify-center rounded-2xl border border-primary-foreground/15 bg-card/10'>
             <LockKeyhole className='size-6' aria-hidden='true' />
           </div>
 
           <div className='relative mt-10 md:mt-0'>
-            <p className='text-xs font-semibold tracking-[0.2em] text-white/65 uppercase'>
+            <p className='text-xs font-semibold tracking-[0.2em] text-primary-foreground/65 uppercase'>
               Restricted area
             </p>
             <p className='mt-3 font-heading text-7xl font-extrabold leading-none tracking-tight sm:text-8xl'>
               403
             </p>
-            <p className='mt-4 max-w-xs text-sm leading-6 text-white/75'>
+            <p className='mt-4 max-w-xs text-sm leading-6 text-primary-foreground/75'>
               This part of Rentora is reserved for authorized accounts.
             </p>
           </div>
@@ -50,7 +50,7 @@ const Unauthorized = () => {
           <Logo darkText />
 
           <div className='mt-10 sm:mt-14'>
-            <div className='inline-flex items-center gap-2 rounded-full border border-rose-200 bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-800'>
+            <div className='inline-flex items-center gap-2 rounded-full border border-destructive/25 bg-destructive/10 px-3 py-1.5 text-xs font-semibold text-destructive'>
               <ShieldAlert className='size-4' aria-hidden='true' />
               Access denied
             </div>

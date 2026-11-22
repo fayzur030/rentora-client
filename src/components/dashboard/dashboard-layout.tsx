@@ -21,7 +21,7 @@ const DashboardLayout = ({ role, children }: DashboardLayoutProps) => {
           {/* Desktop sidebar (hidden on mobile and tablet) */}
           <aside
             className={cn(
-              'fixed inset-y-0 left-0 z-40 hidden overflow-hidden border-r border-white/10 transition-[width] duration-300 ease-in-out lg:block',
+              'fixed inset-y-0 left-0 z-40 hidden overflow-hidden border-r border-sidebar-foreground/10 transition-[width] duration-300 ease-in-out lg:block',
               isCollapsed ? 'w-20' : 'w-64'
             )}
           >
@@ -48,7 +48,7 @@ const DashboardLayout = ({ role, children }: DashboardLayoutProps) => {
         {/* Mobile sidebar drawer (opens from the left) */}
         <SheetContent
           side='left'
-          className='w-[85%] gap-0 border-r border-white/10 bg-[#171411] p-0 text-white sm:max-w-sm'
+          className='w-[85%] gap-0 border-r border-sidebar-foreground/10 bg-[var(--sidebar)] p-0 text-sidebar-foreground sm:max-w-sm'
         >
           <SheetTitle className='sr-only'>Dashboard Menu</SheetTitle>
 

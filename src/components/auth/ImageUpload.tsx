@@ -62,12 +62,12 @@ const ImageUpload = ({ value, onChange }: ImageUploadProps) => {
 
   return (
     <div className='space-y-3'>
-      <label className='block text-sm font-semibold text-[#2B1A12]'>
+      <label className='block text-sm font-semibold text-[var(--brand-ink)]'>
         Profile Photo
       </label>
 
-      <div className='flex items-center gap-4 rounded-xl border border-dashed border-[#D8CCBE] bg-[#FCFAF7] p-3'>
-        <div className='flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#F2EADF]'>
+      <div className='flex items-center gap-4 rounded-xl border border-dashed border-[var(--border)] bg-[var(--background)] p-3'>
+        <div className='flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[var(--muted)]'>
           {value ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -76,11 +76,11 @@ const ImageUpload = ({ value, onChange }: ImageUploadProps) => {
               className='size-full object-cover'
             />
           ) : (
-            <ImagePlus className='size-6 text-[#A79A90]' />
+            <ImagePlus className='size-6 text-[var(--muted-foreground)]' />
           )}
         </div>
 
-        <label className='inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg border border-[#E8DDD2] bg-white px-3 text-xs font-semibold text-[#2B1A12] transition hover:border-[#F5A623] hover:bg-[#FFF8EA]'>
+        <label className='inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg border border-[var(--border)] bg-card px-3 text-xs font-semibold text-[var(--brand-ink)] transition hover:border-[var(--accent)] hover:bg-[var(--warning-foreground)]'>
           {isUploading ? (
             <LoaderCircle className='size-4 animate-spin' />
           ) : (
@@ -102,7 +102,7 @@ const ImageUpload = ({ value, onChange }: ImageUploadProps) => {
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder='Or paste a direct image URL'
-        className='h-11 w-full rounded-xl border border-[#E8DDD2] bg-[#FCFAF7] px-4 text-sm text-[#171411] outline-none transition placeholder:text-[#A79A90] focus:border-[#F5A623] focus:ring-4 focus:ring-[#F5A623]/10'
+        className='h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 text-sm text-[var(--sidebar)] outline-none transition placeholder:text-[var(--muted-foreground)] focus:border-[var(--accent)] focus:ring-4 focus:ring-[var(--accent)]/10'
       />
     </div>
   )

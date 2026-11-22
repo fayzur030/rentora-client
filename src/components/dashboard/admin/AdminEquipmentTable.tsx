@@ -63,8 +63,8 @@ const getStatusBadge = (status?: string) => {
     return {
       label: 'Approved',
       badgeClass:
-        'border-emerald-500/25 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 dark:border-emerald-500/30',
-      dotClass: 'bg-emerald-500',
+        'border-success/25 bg-success/10 text-success dark:text-success dark:border-success/25',
+      dotClass: 'bg-success/10',
       pulse: false,
     }
   }
@@ -73,8 +73,8 @@ const getStatusBadge = (status?: string) => {
     return {
       label: 'Rejected',
       badgeClass:
-        'border-rose-500/25 bg-rose-500/10 text-rose-700 dark:text-rose-400 dark:border-rose-500/30',
-      dotClass: 'bg-rose-500',
+        'border-destructive/25 bg-destructive/10 text-destructive dark:text-destructive dark:border-destructive/25',
+      dotClass: 'bg-destructive/10',
       pulse: false,
     }
   }
@@ -82,8 +82,8 @@ const getStatusBadge = (status?: string) => {
   return {
     label: 'Pending',
     badgeClass:
-      'border-amber-500/25 bg-amber-500/10 text-amber-700 dark:text-amber-400 dark:border-amber-500/30',
-    dotClass: 'bg-amber-500',
+      'border-warning/25 bg-warning/10 text-warning dark:text-warning dark:border-warning/25',
+    dotClass: 'bg-warning/10',
     pulse: true,
   }
 }
@@ -290,7 +290,7 @@ const AdminEquipmentTable = ({
                           className={cn(
                             'size-1.5 rounded-full',
                             equipment.availableQuantity > 0
-                              ? 'bg-emerald-500'
+                              ? 'bg-success/10'
                               : 'bg-destructive'
                           )}
                         />
@@ -330,7 +330,7 @@ const AdminEquipmentTable = ({
                             onClick={() =>
                               handleStatusUpdate(equipment, 'approved')
                             }
-                            className='h-8 gap-1 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-2.5 text-xs font-medium text-emerald-700 shadow-2xs transition-colors hover:bg-emerald-500/20 hover:text-emerald-800 dark:text-emerald-400 dark:hover:text-emerald-300'
+                            className='h-8 gap-1 rounded-lg border border-success/25 bg-success/10 px-2.5 text-xs font-medium text-success shadow-2xs transition-colors hover:bg-success/10 hover:text-success dark:text-success dark:hover:text-success'
                           >
                             {isItemUpdating &&
                             updatingAction === 'approved' ? (
@@ -352,7 +352,7 @@ const AdminEquipmentTable = ({
                             onClick={() =>
                               handleStatusUpdate(equipment, 'rejected')
                             }
-                            className='h-8 gap-1 rounded-lg border border-rose-500/30 bg-rose-500/10 px-2.5 text-xs font-medium text-rose-700 shadow-2xs transition-colors hover:bg-rose-500/20 hover:text-rose-800 dark:text-rose-400 dark:hover:text-rose-300'
+                            className='h-8 gap-1 rounded-lg border border-destructive/25 bg-destructive/10 px-2.5 text-xs font-medium text-destructive shadow-2xs transition-colors hover:bg-destructive/10 hover:text-destructive dark:text-destructive dark:hover:text-destructive'
                           >
                             {isItemUpdating &&
                             updatingAction === 'rejected' ? (

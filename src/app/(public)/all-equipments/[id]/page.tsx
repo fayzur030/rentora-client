@@ -38,9 +38,9 @@ const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
       (favorite._id ?? favorite.id) === (equipment._id ?? equipment.id)
   )
   const statusStyles = {
-    approved: 'border-emerald-200 bg-emerald-50 text-emerald-700',
-    pending: 'border-amber-300 bg-amber-50 text-amber-800',
-    rejected: 'border-rose-200 bg-rose-50 text-rose-700',
+    approved: 'border-success/25 bg-success/10 text-success',
+    pending: 'border-warning/25 bg-warning/10 text-warning',
+    rejected: 'border-destructive/25 bg-destructive/10 text-destructive',
   }
 
   const equipmentDetails = [
@@ -171,15 +171,15 @@ const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
             <div className='mt-5 flex items-center gap-2 text-sm'>
               <span
                 className={`size-2 rounded-full ${
-                  isAvailable ? 'bg-emerald-500' : 'bg-rose-500'
+                  isAvailable ? 'bg-success/10' : 'bg-destructive/10'
                 }`}
                 aria-hidden='true'
               />
               <span
                 className={
                   isAvailable
-                    ? 'font-medium text-emerald-700'
-                    : 'font-medium text-rose-700'
+                    ? 'font-medium text-success'
+                    : 'font-medium text-destructive'
                 }
               >
                 {isAvailable ? 'Currently available' : 'Currently unavailable'}

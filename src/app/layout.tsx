@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Manrope, Inter } from 'next/font/google'
-import { Toaster } from 'sonner'
+import ThemeProvider from '@/components/theme-provider'
+import ThemeToaster from '@/components/shared/ThemeToaster'
 import './globals.css'
 
 const manrope = Manrope({
@@ -23,10 +24,13 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
     <html
       lang='en'
       className={`${inter.variable} ${manrope.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className='min-h-full flex flex-col font-sans antialiased'>
-        {children}
-        <Toaster position='top-right' richColors />
+        <ThemeProvider>
+          {children}
+          <ThemeToaster />
+        </ThemeProvider>
       </body>
     </html>
   )

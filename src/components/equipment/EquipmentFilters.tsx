@@ -1,7 +1,7 @@
 'use client'
 
 import { RotateCcw } from 'lucide-react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useRef, useState } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -62,18 +62,22 @@ const FilterRadio = ({
 // Left sidebar with all filters.
 interface EquipmentFiltersProps {
   categories: Category[]
+  queryString: string
 }
 
-const EquipmentFilters = ({ categories }: EquipmentFiltersProps) => {
+const EquipmentFilters = ({
+  categories,
+  queryString,
+}: EquipmentFiltersProps) => {
   const router = useRouter()
-  const searchParams = useSearchParams()
+  const searchParams = new URLSearchParams(queryString)
   const minPriceParam = searchParams.get('minPrice') || ''
   const maxPriceParam = searchParams.get('maxPrice') || ''
   const priceFormRef = useRef<HTMLFormElement>(null)
   const [priceError, setPriceError] = useState('')
 
   const updateFilter = (key: string, value: string) => {
-    const params = new URLSearchParams(searchParams.toString())
+    const params = new URLSearchParams(queryString)
 
     if (searchParams.get(key) === value) {
       params.delete(key)
@@ -102,7 +106,7 @@ const EquipmentFilters = ({ categories }: EquipmentFiltersProps) => {
       return
     }
 
-    const params = new URLSearchParams(searchParams.toString())
+    const params = new URLSearchParams(queryString)
     if (min) {
       params.set('minPrice', min)
     } else {
@@ -119,7 +123,7 @@ const EquipmentFilters = ({ categories }: EquipmentFiltersProps) => {
   }
 
   const clearFilters = () => {
-    const params = new URLSearchParams(searchParams.toString())
+    const params = new URLSearchParams(queryString)
     params.delete('category')
     params.delete('rentalType')
     params.delete('availability')

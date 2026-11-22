@@ -77,7 +77,7 @@ const FavoriteButton = ({
       onClick={handleFavorite}
     >
       <Heart
-        className={`size-5 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`}
+        className={`size-5 ${isFavorite ? 'fill-destructive text-destructive' : ''}`}
       />
 
       {showLabel && (

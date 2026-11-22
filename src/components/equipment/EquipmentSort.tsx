@@ -1,7 +1,7 @@
 'use client'
 
 import { ArrowUpDown } from 'lucide-react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 import {
   Select,
@@ -17,14 +17,13 @@ const sortOptions = [
   { value: 'recently-added', label: 'Recently Added' },
 ]
 
-const EquipmentSort = () => {
+const EquipmentSort = ({ queryString }: { queryString: string }) => {
   const router = useRouter()
-  const searchParams = useSearchParams()
 
   const handleSortChange = (value: string | null) => {
     if (!value) return
 
-    const params = new URLSearchParams(searchParams.toString())
+    const params = new URLSearchParams(queryString)
     params.set('sort', value)
 
     router.push(`/all-equipments?${params.toString()}`)
@@ -38,7 +37,7 @@ const EquipmentSort = () => {
       />
 
       <Select
-        value={searchParams.get('sort') || ''}
+        value={new URLSearchParams(queryString).get('sort') || ''}
         onValueChange={handleSortChange}
       >
         <SelectTrigger

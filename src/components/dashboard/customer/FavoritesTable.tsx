@@ -95,8 +95,8 @@ const FavoritesTable = ({ equipments, userId }: FavoritesTableProps) => {
                     <Badge
                       className={
                         isAvailable
-                          ? 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/60 dark:text-emerald-300'
-                          : 'border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-900 dark:bg-amber-950/60 dark:text-amber-300'
+                          ? 'border-success/25 bg-success/10 text-success dark:border-success/25 dark:bg-success/10 dark:text-success'
+                          : 'border-warning/25 bg-warning/10 text-warning dark:border-warning/25 dark:bg-warning/10 dark:text-warning'
                       }
                     >
                       {isAvailable ? 'Available' : 'Unavailable'}

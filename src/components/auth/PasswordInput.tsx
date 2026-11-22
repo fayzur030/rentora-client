@@ -31,7 +31,7 @@ const PasswordInput = ({
     <div className='space-y-3'>
       <label
         htmlFor='password'
-        className='block text-sm font-semibold text-[#2B1A12]'
+        className='block text-sm font-semibold text-[var(--brand-ink)]'
       >
         Password
       </label>
@@ -45,17 +45,17 @@ const PasswordInput = ({
           onChange={(event) => onChange(event.target.value)}
           placeholder='Enter your password'
           aria-invalid={error ? true : undefined}
-          className={`h-12 w-full rounded-xl border bg-[#FCFAF7] px-4 pr-12 text-sm text-[#171411] outline-none transition placeholder:text-[#A79A90] focus:ring-4 ${
+          className={`h-12 w-full rounded-xl border bg-[var(--background)] px-4 pr-12 text-sm text-[var(--sidebar)] outline-none transition placeholder:text-[var(--muted-foreground)] focus:ring-4 ${
             error
-              ? 'border-red-400 focus:border-red-400 focus:ring-red-100'
-              : 'border-[#E8DDD2] focus:border-[#F5A623] focus:ring-[#F5A623]/10'
+              ? 'border-destructive/25 focus:border-destructive/25 focus:ring-destructive/15'
+              : 'border-[var(--border)] focus:border-[var(--accent)] focus:ring-[var(--accent)]/10'
           }`}
         />
 
         <button
           type='button'
           onClick={() => setShowPassword(!showPassword)}
-          className='absolute right-3 top-1/2 inline-flex size-8 -translate-y-1/2 items-center justify-center rounded-lg text-[#8B8180] transition hover:bg-[#F5A623]/10 hover:text-[#2B1A12]'
+          className='absolute right-3 top-1/2 inline-flex size-8 -translate-y-1/2 items-center justify-center rounded-lg text-[var(--muted-foreground)] transition hover:bg-[var(--accent)]/10 hover:text-[var(--brand-ink)]'
           aria-label={showPassword ? 'Hide password' : 'Show password'}
         >
           {showPassword ? (
@@ -73,7 +73,7 @@ const PasswordInput = ({
             <div
               key={requirement.text}
               className={`flex items-center gap-2 ${
-                requirement.valid ? 'text-[#16803C]' : 'text-[#8B8180]'
+                requirement.valid ? 'text-[var(--success)]' : 'text-[var(--muted-foreground)]'
               }`}
             >
               {requirement.valid ? (
@@ -88,7 +88,7 @@ const PasswordInput = ({
         </div>
       )}
 
-      {error && <p className='text-xs font-medium text-red-600'>{error}</p>}
+      {error && <p className='text-xs font-medium text-destructive'>{error}</p>}
     </div>
   )
 }
