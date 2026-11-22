@@ -1,135 +1,113 @@
 'use client'
 
-import { useState, type FormEvent } from 'react'
-import { Tags } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
-import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { createCategory } from '@/lib/actions/category'
+import AddCategoryDialog from '@/components/dashboard/admin/AddCategoryDialog'
+import CategoryTable from '@/components/dashboard/admin/CategoryTable'
+import DeleteCategoryDialog from '@/components/dashboard/admin/DeleteCategoryDialog'
+import UpdateCategoryDialog from '@/components/dashboard/admin/UpdateCategoryDialog'
+import { getCategories } from '@/lib/api/category'
+import type { Category } from '@/types/category'
 
-const createSlug = (value: string) =>
-  value
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
+const AddCategoryPage = () => {
+  const [isAddOpen, setIsAddOpen] = useState(false)
+  const [isEditOpen, setIsEditOpen] = useState(false)
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+  const [categories, setCategories] = useState<Category[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [editingCategory, setEditingCategory] = useState<Category | null>(null)
+  const [deletingCategory, setDeletingCategory] = useState<Category | null>(null)
 
-const AddCategory = () => {
-  const [name, setName] = useState('')
-  const [slug, setSlug] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
-  const handleNameChange = (value: string) => {
-    setName(value)
-    setSlug(createSlug(value))
-  }
-
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-
-    if (!name.trim() || !slug.trim()) {
-      toast.error('Category name and slug are required')
-      return
-    }
-
-    setIsSubmitting(true)
-
+  const loadCategories = async () => {
     try {
-      const result = await createCategory({ name, slug })
-      toast.success(result.message || 'Category added successfully')
-      setName('')
-      setSlug('')
+      setIsLoading(true)
+      const data = await getCategories()
+      setCategories(data)
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : 'Failed to add category'
+        error instanceof Error ? error.message : 'Failed to fetch categories'
       )
     } finally {
-      setIsSubmitting(false)
+      setIsLoading(false)
     }
+  }
+
+  useEffect(() => {
+    getCategories()
+      .then((data) => setCategories(data))
+      .catch((error) => {
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : 'Failed to fetch categories'
+        )
+      })
+      .finally(() => setIsLoading(false))
+  }, [])
+
+  const handleEdit = (category: Category) => {
+    setEditingCategory(category)
+    setIsEditOpen(true)
+  }
+
+  const handleDelete = (category: Category) => {
+    setDeletingCategory(category)
+    setIsDeleteOpen(true)
   }
 
   return (
     <div className='space-y-6'>
-      <div className='mx-auto w-full max-w-7xl space-y-1'>
-        <h1 className='font-heading text-2xl font-bold text-foreground sm:text-3xl'>
-          Add category
-        </h1>
-        <p className='text-sm text-muted-foreground'>
-          Create a category for organizing rental equipment.
-        </p>
+      <div className='mx-auto flex w-full max-w-7xl items-center justify-between gap-4'>
+        <div className='space-y-1'>
+          <h1 className='font-heading text-2xl font-bold text-foreground sm:text-3xl'>
+            Categories
+          </h1>
+          <p className='text-sm text-muted-foreground'>
+            Manage categories for rental equipment.
+          </p>
+        </div>
+
+        <AddCategoryDialog
+          open={isAddOpen}
+          onOpenChange={setIsAddOpen}
+          onAdded={loadCategories}
+        />
       </div>
 
-      <Card className='mx-auto w-full max-w-7xl'>
-        <CardHeader>
-          <div className='flex items-center gap-3'>
-            <div className='flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary'>
-              <Tags className='size-5' aria-hidden='true' />
-            </div>
-            <div>
-              <CardTitle>Category details</CardTitle>
-              <CardDescription>
-                Enter the category name and its URL-friendly slug.
-              </CardDescription>
-            </div>
-          </div>
-        </CardHeader>
+      <CategoryTable
+        categories={categories}
+        isLoading={isLoading}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
 
-        <CardContent>
-          <form className='space-y-5' onSubmit={handleSubmit}>
-            <div className='space-y-2'>
-              <Label htmlFor='category-name'>Category name</Label>
-              <Input
-                id='category-name'
-                name='name'
-                value={name}
-                onChange={(event) => handleNameChange(event.target.value)}
-                placeholder='e.g. Construction Equipment'
-                required
-              />
-            </div>
+      {editingCategory && (
+        <UpdateCategoryDialog
+          key={editingCategory._id}
+          category={editingCategory}
+          open={isEditOpen}
+          onOpenChange={(open) => {
+            setIsEditOpen(open)
+            if (!open) setEditingCategory(null)
+          }}
+          onUpdated={loadCategories}
+        />
+      )}
 
-            <div className='space-y-2'>
-              <Label htmlFor='category-slug'>Slug</Label>
-              <Input
-                id='category-slug'
-                name='slug'
-                value={slug}
-                onChange={(event) => setSlug(createSlug(event.target.value))}
-                placeholder='e.g. construction-equipment'
-                required
-              />
-            </div>
-
-            <div className='flex flex-col-reverse gap-3 border-t pt-5 sm:flex-row sm:justify-end'>
-              <Button
-                type='button'
-                variant='outline'
-                onClick={() => {
-                  setName('')
-                  setSlug('')
-                }}
-                disabled={isSubmitting}
-              >
-                Cancel
-              </Button>
-              <Button type='submit' disabled={isSubmitting}>
-                {isSubmitting ? 'Adding...' : 'Add category'}
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+      {deletingCategory && (
+        <DeleteCategoryDialog
+          category={deletingCategory}
+          open={isDeleteOpen}
+          onOpenChange={(open) => {
+            setIsDeleteOpen(open)
+            if (!open) setDeletingCategory(null)
+          }}
+          onDeleted={loadCategories}
+        />
+      )}
     </div>
   )
 }
 
-export default AddCategory
+export default AddCategoryPage
