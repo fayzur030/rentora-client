@@ -61,42 +61,49 @@ export const getAdminDashboardStats = (
     {
       icon: Users,
       title: 'Total Users',
+      color: 'blue',
       value: users.length,
       description: 'Registered platform users',
     },
     {
       icon: ShieldCheck,
       title: 'Total Owners',
+      color: 'indigo',
       value: users.filter((user) => user.role === 'owner').length,
       description: 'Registered equipment owners',
     },
     {
       icon: Package,
       title: 'Total Equipment',
+      color: 'violet',
       value: equipments.length,
       description: 'Equipment listings',
     },
     {
       icon: Clock3,
       title: 'Pending Approvals',
+      color: 'orange',
       value: pendingApprovals,
       description: 'Listings awaiting review',
     },
     {
       icon: CalendarDays,
       title: 'Total Bookings',
+      color: 'cyan',
       value: rentals.length,
       description: 'Rental booking records',
     },
     {
       icon: CheckCircle2,
       title: 'Completed Rentals',
+      color: 'emerald',
       value: rentals.filter(isCompletedRental).length,
       description: 'Bookings marked as completed',
     },
     {
       icon: Wallet,
       title: 'Total Revenue',
+      color: 'amber',
       value: `৳${getAdminPaidRevenue(rentals).toLocaleString('en-BD')}`,
       description: 'From paid rentals',
     },
@@ -258,12 +265,14 @@ export const getOwnerDashboardStats = (
     {
       icon: Package,
       title: 'Total Listed Equipment',
+      color: 'violet',
       value: equipments.length,
       description: 'Your equipment listings',
     },
     {
       icon: BadgeCheck,
       title: 'Active Equipment',
+      color: 'teal',
       value: equipments.filter((equipment) => equipment.status === 'approved')
         .length,
       description: 'Approved listings',
@@ -271,6 +280,7 @@ export const getOwnerDashboardStats = (
     {
       icon: Clock3,
       title: 'Pending Equipment',
+      color: 'orange',
       value: equipments.filter((equipment) => equipment.status === 'pending')
         .length,
       description: 'Listings awaiting review',
@@ -278,30 +288,35 @@ export const getOwnerDashboardStats = (
     {
       icon: CalendarDays,
       title: 'Total Bookings',
+      color: 'cyan',
       value: rentals.length,
       description: 'Bookings for your equipment',
     },
     {
       icon: Wrench,
       title: 'Active Rentals',
+      color: 'sky',
       value: rentals.filter((rental) => isActiveRental(rental, today)).length,
       description: 'Confirmed rentals in progress',
     },
     {
       icon: Wallet,
       title: 'Total Earnings',
+      color: 'amber',
       value: formatMoney(totalEarnings),
       description: 'From paid rentals',
     },
     {
       icon: Wallet,
       title: 'Monthly Earnings',
+      color: 'indigo',
       value: formatMoney(monthlyEarnings),
       description: 'Paid this month',
     },
     {
       icon: CheckCircle2,
       title: 'Completed Rentals',
+      color: 'emerald',
       value: rentals.filter((rental) => rental.bookingStatus === 'completed')
         .length,
       description: 'Bookings marked as completed',
@@ -319,6 +334,7 @@ export const getCustomerDashboardStats = (
     {
       icon: CalendarDays,
       title: 'Total Bookings',
+      color: 'cyan',
       value: rentals.length,
       description: 'Your rental booking records',
     },
@@ -332,6 +348,7 @@ export const getCustomerDashboardStats = (
     {
       icon: Wrench,
       title: 'Active Rentals',
+      color: 'sky',
       value: rentals.filter((rental) => isActiveRental(rental, today)).length,
       description: 'Confirmed rentals in progress',
     },
@@ -345,12 +362,14 @@ export const getCustomerDashboardStats = (
     {
       icon: Heart,
       title: 'Favorite Equipment',
+      color: 'pink',
       value: favoriteEquipmentCount,
       description: 'Equipment saved to your favorites',
     },
     {
       icon: Wallet,
       title: 'Total Spent',
+      color: 'amber',
       value: formatMoney(countPaidAmount(rentals)),
       description: 'From paid rentals',
     },

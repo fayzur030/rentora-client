@@ -62,7 +62,7 @@ const ImageUpload = ({ value, onChange }: ImageUploadProps) => {
 
   return (
     <div className='space-y-3'>
-      <label className='block text-sm font-semibold text-[var(--brand-ink)]'>
+      <label className='block text-sm font-semibold text-[var(--foreground)]'>
         Profile Photo
       </label>
 
@@ -80,7 +80,7 @@ const ImageUpload = ({ value, onChange }: ImageUploadProps) => {
           )}
         </div>
 
-        <label className='inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg border border-[var(--border)] bg-card px-3 text-xs font-semibold text-[var(--brand-ink)] transition hover:border-[var(--accent)] hover:bg-[var(--warning-foreground)]'>
+        <label className='inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-lg border border-[var(--border)] bg-card px-3 text-xs font-semibold text-[var(--foreground)] transition hover:border-[var(--accent)] hover:bg-[var(--warning-foreground)]'>
           {isUploading ? (
             <LoaderCircle className='size-4 animate-spin' />
           ) : (
@@ -102,7 +102,7 @@ const ImageUpload = ({ value, onChange }: ImageUploadProps) => {
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder='Or paste a direct image URL'
-        className='h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 text-sm text-[var(--sidebar)] outline-none transition placeholder:text-[var(--muted-foreground)] focus:border-[var(--accent)] focus:ring-4 focus:ring-[var(--accent)]/10'
+        className='h-11 w-full rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 text-sm text-[var(--foreground)] outline-none transition placeholder:text-[var(--muted-foreground)] focus:border-[var(--accent)] focus:ring-4 focus:ring-[var(--accent)]/10'
       />
     </div>
   )

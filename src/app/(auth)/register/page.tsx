@@ -198,7 +198,7 @@ const RegisterPage = () => {
           <button
             type='submit'
             disabled={Loading}
-            className='group flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[var(--accent)] text-sm font-bold text-[var(--foreground)] shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:bg-[var(--accent)] hover:shadow-lg active:translate-y-0'
+            className='group flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[var(--accent)] text-sm font-bold text-[var(--brand-ink)] shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:bg-[var(--accent)] hover:shadow-lg active:translate-y-0'
           >
             {Loading ? 'Creating Account...' : 'Create Account'}
             <ArrowRight className='size-4 transition-transform duration-200 group-hover:translate-x-1' />
