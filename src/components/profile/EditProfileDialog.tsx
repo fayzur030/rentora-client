@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Save } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -33,6 +33,28 @@ const EditProfileDialog = ({
   open,
   onOpenChange,
   onSave,
+}: EditProfileDialogProps) => (
+  <EditProfileDialogForm
+    key={JSON.stringify([
+      open,
+      profile.name,
+      profile.email,
+      profile.image,
+      profile.phone,
+      profile.address,
+    ])}
+    profile={profile}
+    open={open}
+    onOpenChange={onOpenChange}
+    onSave={onSave}
+  />
+)
+
+const EditProfileDialogForm = ({
+  profile,
+  open,
+  onOpenChange,
+  onSave,
 }: EditProfileDialogProps) => {
   const [formData, setFormData] = useState<ProfileFormValues>({
     name: profile.name || '',
@@ -43,19 +65,6 @@ const EditProfileDialog = ({
   })
 
   const [isSaving, setIsSaving] = useState(false)
-
-  // Synchronize form values whenever the dialog opens or profile changes
-  useEffect(() => {
-    if (open) {
-      setFormData({
-        name: profile.name || '',
-        email: profile.email || '',
-        image: profile.image || '',
-        phone: profile.phone || '',
-        address: profile.address || '',
-      })
-    }
-  }, [open, profile])
 
   // Handle input changes
   const handleChange = (
