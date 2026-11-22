@@ -56,15 +56,18 @@ export const updateCategory = async (
     throw new Error('Category name and slug are required')
   }
 
-  const res = await fetch(`${baseUrl}/api/categories/${categoryId}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    cache: 'no-store',
-    body: JSON.stringify({ name, slug }),
-  })
+  const res = await fetch(
+    `${baseUrl}/api/categories/update-category/${categoryId}`,
+    {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      cache: 'no-store',
+      body: JSON.stringify({ name, slug }),
+    }
+  )
 
   const result = await res.json()
 
@@ -82,13 +85,16 @@ export const deleteCategory = async (categoryId: string) => {
     throw new Error('Please log in to delete a category')
   }
 
-  const res = await fetch(`${baseUrl}/api/categories/${categoryId}`, {
-    method: 'DELETE',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    cache: 'no-store',
-  })
+  const res = await fetch(
+    `${baseUrl}/api/categories/delete-category/${categoryId}`,
+    {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      cache: 'no-store',
+    }
+  )
 
   const result = await res.json()
 

@@ -1,12 +1,6 @@
 'use client'
 
-import {
-  Loader2,
-  MoreHorizontal,
-  Pencil,
-  Tags,
-  Trash2,
-} from 'lucide-react'
+import { MoreHorizontal, Pencil, Tags, Trash2 } from 'lucide-react'
 
 import {
   DropdownMenu,
@@ -26,7 +20,7 @@ import type { Category } from '@/types/category'
 
 interface CategoryTableProps {
   categories: Category[]
-  isLoading: boolean
+  errorMessage: string | null
   onEdit: (category: Category) => void
   onDelete: (category: Category) => void
 }
@@ -45,7 +39,7 @@ const formatDate = (value: string) => {
 
 const CategoryTable = ({
   categories,
-  isLoading,
+  errorMessage,
   onEdit,
   onDelete,
 }: CategoryTableProps) => {
@@ -61,16 +55,7 @@ const CategoryTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {isLoading ? (
-            <TableRow>
-              <TableCell colSpan={4} className='h-32 text-center'>
-                <Loader2
-                  className='mx-auto size-5 animate-spin text-muted-foreground'
-                  aria-hidden='true'
-                />
-              </TableCell>
-            </TableRow>
-          ) : categories.length === 0 ? (
+          {categories.length === 0 ? (
             <TableRow>
               <TableCell colSpan={4} className='h-32 text-center'>
                 <div className='flex flex-col items-center gap-2 text-muted-foreground'>
@@ -102,10 +87,7 @@ const CategoryTable = ({
                       aria-label={`Actions for ${category.name}`}
                       className='inline-flex size-8 items-center justify-center rounded-lg border border-border/80 bg-background text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50'
                     >
-                      <MoreHorizontal
-                        className='size-4'
-                        aria-hidden='true'
-                      />
+                      <MoreHorizontal className='size-4' aria-hidden='true' />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align='end' className='w-40'>
                       <DropdownMenuItem
