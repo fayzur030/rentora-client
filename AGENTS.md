@@ -538,6 +538,9 @@ Admin Dashboard should contain:
 3. All Rentals.
 4. My Profile.
 
+#### Admin Dashboard Stats Cards
+Show a stats card for **Completed Rentals** on the Admin Dashboard. Calculate its value from actual booking records whose rental status is completed; do not use a hardcoded number. Keep booking status separate from payment status when determining whether a rental is completed.
+
 #### All Users
 Display all registered users in a table.
 

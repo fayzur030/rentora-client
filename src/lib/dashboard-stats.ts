@@ -38,16 +38,8 @@ const isActiveRental = (rental: Rental | BookingRental, today: Date) => {
   )
 }
 
-const isCompletedRental = (rental: Rental | BookingRental, today: Date) => {
-  if (rental.bookingStatus === 'completed') return true
-
-  const endDate = startOfDay(new Date(rental.endDate))
-  return (
-    rental.bookingStatus === 'confirmed' &&
-    !Number.isNaN(endDate.getTime()) &&
-    endDate < today
-  )
-}
+const isCompletedRental = (rental: Rental | BookingRental) =>
+  rental.bookingStatus === 'confirmed'
 
 const countPaidAmount = (rentals: Array<Rental | BookingRental>) =>
   rentals.reduce(
@@ -95,6 +87,12 @@ export const getAdminDashboardStats = (
       title: 'Total Bookings',
       value: rentals.length,
       description: 'Rental booking records',
+    },
+    {
+      icon: CheckCircle2,
+      title: 'Completed Rentals',
+      value: rentals.filter(isCompletedRental).length,
+      description: 'Bookings marked as completed',
     },
     {
       icon: Wallet,
