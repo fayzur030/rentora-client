@@ -57,7 +57,7 @@ const EquipmentForm = ({ categories }: EquipmentFormProps) => {
       condition: formData.get('condition') as EquipmentCondition,
       brand: formData.get('brand') as string,
       model: formData.get('model') as string,
-      image: '',
+      image: image,
       rentalTerms: formData.get('rentalTerms') as string,
       status: 'pending',
       owner: {

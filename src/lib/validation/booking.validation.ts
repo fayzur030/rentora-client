@@ -22,9 +22,10 @@ export const validateBookingForm = (
     errors.rentalEndDate = 'End date is required'
   } else if (
     data.rentalStartDate &&
-    data.rentalEndDate < data.rentalStartDate
+    data.rentalEndDate &&
+    data.rentalEndDate <= data.rentalStartDate
   ) {
-    errors.rentalEndDate = 'End date must be after or equal to start date'
+    errors.rentalEndDate = 'End date must be after start date'
   }
   // Quantity Validation
   if (!Number.isInteger(data.quantity) || data.quantity < 1) {

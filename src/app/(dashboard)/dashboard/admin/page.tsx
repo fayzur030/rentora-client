@@ -1,19 +1,16 @@
 import StatsGrid from '@/components/dashboard/StatsGrid'
 import { getAllAdminEquipments } from '@/lib/api/equipments'
-import { getFavorites } from '@/lib/api/favorite'
+
 import { getAllRentals } from '@/lib/api/rental'
 import { getAllUsers } from '@/lib/api/users'
-import { getSessionFromServer } from '@/lib/auth/getSessionFromServer'
+
 import { getAdminDashboardStats } from '@/lib/dashboard-stats'
 
 const AdminDashboard = async () => {
-  const session = await getSessionFromServer()
-  const user = session?.user
   const [users, equipments, rentals] = await Promise.all([
     getAllUsers(),
     getAllAdminEquipments(),
     getAllRentals(),
-    getFavorites(user?.id || ''),
   ])
 
   const stats = getAdminDashboardStats(users, equipments, rentals)
