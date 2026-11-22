@@ -38,7 +38,7 @@ const DashboardNavbar = ({
   const title = activeNavItem ? activeNavItem.item.label : 'Overview'
 
   return (
-    <header className='sticky top-0 z-30 border-b border-nav-border bg-nav-background text-nav-foreground shadow-sm backdrop-blur-xl'>
+    <header className='sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur-xl'>
       <div className='flex h-16 items-center justify-between gap-4 px-4 sm:px-6'>
         {/* Left side: menu buttons + page title */}
         <div className='flex min-w-0 items-center gap-2 sm:gap-3'>
@@ -73,7 +73,7 @@ const DashboardNavbar = ({
 
           {/* Section + page title */}
           <div className='min-w-0'>
-            <p className='truncate text-xs font-medium text-nav-foreground/65'>
+            <p className='truncate text-xs font-medium text-muted-foreground'>
               {section}
             </p>
             <h1 className='truncate font-heading text-lg font-bold sm:text-xl'>
@@ -84,7 +84,7 @@ const DashboardNavbar = ({
 
         {/* Right side: profile avatar */}
         <div className='flex shrink-0 items-center gap-2'>
-          <ThemeToggle className='text-nav-foreground hover:bg-nav-foreground/10 hover:text-nav-foreground' />
+          <ThemeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger
               aria-label='Open profile menu'
@@ -92,7 +92,7 @@ const DashboardNavbar = ({
             >
               <Avatar className='size-10'>
                 <AvatarImage
-                  className='size-10 border-2 border-warning/25'
+                  className='size-10 border-2 border-accent'
                   src={user?.image || undefined}
                   alt={user?.name || 'User'}
                 />

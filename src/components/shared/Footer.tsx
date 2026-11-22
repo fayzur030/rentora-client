@@ -22,7 +22,7 @@ const Footer = () => {
         <div className='grid gap-10 sm:grid-cols-2 lg:grid-cols-4'>
           <div className='sm:col-span-2 lg:col-span-1'>
             <Logo />
-            <p className='mt-5 max-w-xs text-sm leading-7 text-[var(--muted-foreground)]'>
+            <p className='mt-5 max-w-xs text-sm leading-7 text-brand-foreground/75'>
               Rent quality equipment with confidence. Simple booking,
               transparent pricing, and trusted owners in one place.
             </p>
@@ -35,7 +35,7 @@ const Footer = () => {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className='text-sm text-[var(--muted-foreground)] transition-colors hover:text-[var(--accent)]'
+                    className='text-sm text-brand-foreground/75 transition-colors hover:text-[var(--accent)]'
                   >
                     {link.label}
                   </Link>
@@ -51,7 +51,7 @@ const Footer = () => {
                 <li key={link.label}>
                   <Link
                     href={link.href}
-                    className='text-sm text-[var(--muted-foreground)] transition-colors hover:text-[var(--accent)]'
+                    className='text-sm text-brand-foreground/75 transition-colors hover:text-[var(--accent)]'
                   >
                     {link.label}
                   </Link>
@@ -63,14 +63,14 @@ const Footer = () => {
           <div>
             <h2 className='font-heading text-base font-bold'>Contact</h2>
             <ul className='mt-5 space-y-4'>
-              <li className='flex items-start gap-3 text-sm text-[var(--muted-foreground)]'>
+              <li className='flex items-start gap-3 text-sm text-brand-foreground/75'>
                 <MapPin className='mt-0.5 size-4 shrink-0 text-[var(--accent)]' />
                 <span>Dhaka, Bangladesh</span>
               </li>
               <li>
                 <a
                   href='tel:+8801700000000'
-                  className='flex items-center gap-3 text-sm text-[var(--muted-foreground)] transition-colors hover:text-[var(--accent)]'
+                  className='flex items-center gap-3 text-sm text-brand-foreground/75 transition-colors hover:text-[var(--accent)]'
                 >
                   <Phone className='size-4 shrink-0 text-[var(--accent)]' />
                   <span>+880 17*********</span>
@@ -79,7 +79,7 @@ const Footer = () => {
               <li>
                 <a
                   href='mailto:support@rentora.com'
-                  className='flex items-center gap-3 text-sm text-[var(--muted-foreground)] transition-colors hover:text-[var(--accent)]'
+                  className='flex items-center gap-3 text-sm text-brand-foreground/75 transition-colors hover:text-[var(--accent)]'
                 >
                   <Mail className='size-4 shrink-0 text-[var(--accent)]' />
                   <span>support@rentora.com</span>
@@ -89,7 +89,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className='mt-10 flex flex-col gap-3 border-t border-brand-foreground/10 pt-6 text-xs text-[var(--muted-foreground)] sm:flex-row sm:items-center sm:justify-between'>
+        <div className='mt-10 flex flex-col gap-3 border-t border-brand-foreground/10 pt-6 text-xs text-brand-foreground/75 sm:flex-row sm:items-center sm:justify-between'>
           <p>© {new Date().getFullYear()} Rentora. All rights reserved.</p>
           <p>Built for reliable equipment rentals.</p>
         </div>
