@@ -62,3 +62,24 @@ export const getMyEquipments = async (): Promise<MyEquipment> => {
 
   return result.data
 }
+
+// admin dashboard all equipment
+
+export const getAllAdminEquipments = async (): Promise<Equipment[]> => {
+  const token = await getTokenFromServer()
+
+  const res = await fetch(`${baseUrl}/api/equipment/admin/equipments`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    cache: 'no-store',
+  })
+
+  const result = await res.json()
+
+  if (!res.ok) {
+    throw new Error(result.message || 'Failed to fetch equipments')
+  }
+
+  return result.data
+}

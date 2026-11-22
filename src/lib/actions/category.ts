@@ -12,9 +12,10 @@ export const createCategory = async (payload: CreateCategoryInput) => {
 
   const name = payload.name.trim()
   const slug = payload.slug.trim()
+  const image = payload.image.trim()
 
-  if (!name || !slug) {
-    throw new Error('Category name and slug are required')
+  if (!name || !slug || !image) {
+    throw new Error('Category name, slug, and image are required')
   }
 
   const res = await fetch(`${baseUrl}/api/categories`, {
@@ -24,7 +25,7 @@ export const createCategory = async (payload: CreateCategoryInput) => {
       Authorization: `Bearer ${token}`,
     },
     cache: 'no-store',
-    body: JSON.stringify({ name, slug }),
+    body: JSON.stringify({ name, slug, image }),
   })
 
   const result = await res.json()
@@ -51,9 +52,10 @@ export const updateCategory = async (
 
   const name = payload.name.trim()
   const slug = payload.slug.trim()
+  const image = payload.image.trim()
 
-  if (!name || !slug) {
-    throw new Error('Category name and slug are required')
+  if (!name || !slug || !image) {
+    throw new Error('Category name, slug, and image are required')
   }
 
   const res = await fetch(
@@ -65,7 +67,7 @@ export const updateCategory = async (
         Authorization: `Bearer ${token}`,
       },
       cache: 'no-store',
-      body: JSON.stringify({ name, slug }),
+      body: JSON.stringify({ name, slug, image }),
     }
   )
 

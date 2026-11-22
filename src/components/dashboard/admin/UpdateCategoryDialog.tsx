@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import CategoryImageUpload from '@/components/dashboard/admin/CategoryImageUpload'
 import { updateCategory } from '@/lib/actions/category'
 import type { Category } from '@/types/category'
 
@@ -40,6 +41,7 @@ const UpdateCategoryDialog = ({
 }: UpdateCategoryDialogProps) => {
   const [name, setName] = useState(category?.name ?? '')
   const [slug, setSlug] = useState(category?.slug ?? '')
+  const [image, setImage] = useState(category?.image ?? '')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -49,7 +51,7 @@ const UpdateCategoryDialog = ({
 
     try {
       setIsSubmitting(true)
-      const result = await updateCategory(category._id, { name, slug })
+      const result = await updateCategory(category._id, { name, slug, image })
       toast.success(result.message || 'Category updated successfully')
       onOpenChange(false)
       onUpdated()
@@ -104,6 +106,12 @@ const UpdateCategoryDialog = ({
                 className='h-11'
               />
             </div>
+
+            <CategoryImageUpload
+              id='update-category-image'
+              value={image}
+              onChange={setImage}
+            />
           </div>
 
           <DialogFooter className='border-t border-border bg-muted/20 px-5 py-4 sm:px-6'>

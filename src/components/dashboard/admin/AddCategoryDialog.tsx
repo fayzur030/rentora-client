@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import CategoryImageUpload from '@/components/dashboard/admin/CategoryImageUpload'
 import { createCategory } from '@/lib/actions/category'
 
 const createSlug = (value: string) =>
@@ -38,6 +39,7 @@ const AddCategoryDialog = ({
 }: AddCategoryDialogProps) => {
   const [name, setName] = useState('')
   const [slug, setSlug] = useState('')
+  const [image, setImage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleNameChange = (value: string) => {
@@ -55,10 +57,11 @@ const AddCategoryDialog = ({
 
     try {
       setIsSubmitting(true)
-      const result = await createCategory({ name, slug })
+      const result = await createCategory({ name, slug, image })
       toast.success(result.message || 'Category added successfully')
       setName('')
       setSlug('')
+      setImage('')
       onOpenChange(false)
       onAdded()
     } catch (error) {
@@ -122,6 +125,12 @@ const AddCategoryDialog = ({
                 className='h-11'
               />
             </div>
+
+            <CategoryImageUpload
+              id='category-image'
+              value={image}
+              onChange={setImage}
+            />
           </div>
 
           <DialogFooter className='border-t border-border bg-muted/20 px-5 py-4 sm:px-6'>
