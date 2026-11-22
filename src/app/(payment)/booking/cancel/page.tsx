@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import {
   ArrowLeft,
@@ -11,11 +11,9 @@ import {
   ShieldCheck,
 } from 'lucide-react'
 import { baseUrl } from '@/lib/config'
-import { getSessionFromClient } from '@/lib/auth/getSessionFromClient'
 import { getTokenFromClient } from '@/lib/auth/getTokenFromClient'
 
-export default function BookingCancelPage() {
-  const token = getTokenFromClient()
+function BookingCancelContent() {
   const searchParams = useSearchParams()
   const intentId = searchParams.get('intent_id')
 
@@ -179,5 +177,19 @@ export default function BookingCancelPage() {
         </div>
       </div>
     </section>
+  )
+}
+
+export default function BookingCancelPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className='flex min-h-screen items-center justify-center'>
+          <p className='text-sm text-muted-foreground'>Loading...</p>
+        </div>
+      }
+    >
+      <BookingCancelContent />
+    </Suspense>
   )
 }
