@@ -4,6 +4,7 @@ import {
   LayoutDashboard,
   Package,
   Plus,
+  Tags,
   User,
   Users,
   Warehouse,
@@ -74,6 +75,7 @@ export const adminNavItems: DashboardNavItem[] = [
     icon: ClipboardList,
   },
   { label: 'My Profile', href: '/dashboard/admin/profile', icon: User },
+  { label: 'Add Category', href: '/dashboard/admin/add-category', icon: Tags },
 ]
 
 // All three lists in one object, selected by role
