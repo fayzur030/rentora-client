@@ -1,5 +1,5 @@
 import AdminEquipmentTable from '@/components/dashboard/admin/AdminEquipmentTable'
-import { getAllAdminEquipments, getAllEquipments } from '@/lib/api/equipments'
+import { getAllAdminEquipments } from '@/lib/api/equipments'
 import type { Equipment } from '@/types/equipment'
 import { getCategories } from '@/lib/api/category'
 import type { Category } from '@/types/category'

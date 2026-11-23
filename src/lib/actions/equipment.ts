@@ -58,7 +58,6 @@ export const deleteEquipment = async (equipmentId: string) => {
 }
 
 // update equipment
-// update equipment
 export const updateEquipment = async (equipmentId: string, data: Equipment) => {
   const token = await getTokenFromClient()
 
@@ -88,4 +87,30 @@ export const updateEquipment = async (equipmentId: string, data: Equipment) => {
   return result
 }
 
-// unauthorize
+// update equipment only admin
+
+export const updateFeatureEquipment = async ({
+  id,
+  isFeatured,
+}: {
+  id: string
+  isFeatured: boolean
+}) => {
+  const token = await getTokenFromClient()
+  const res = await fetch(`${baseUrl}/api/equipment/featured-equipment/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+
+    body: JSON.stringify({ isFeatured }),
+  })
+  const data = await res.json()
+
+  if (!res.ok) {
+    throw new Error(data.message || 'Failed to update featured equipment')
+  }
+
+  return data
+}

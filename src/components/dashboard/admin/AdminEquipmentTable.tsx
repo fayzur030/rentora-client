@@ -13,6 +13,8 @@ import {
   MoreHorizontal,
   PackageOpen,
   Pencil,
+  Star,
+  StarOff,
   Trash2,
   X,
 } from 'lucide-react'
@@ -41,6 +43,7 @@ import { cn } from '@/lib/utils'
 import { updateEquipmentStatus } from '@/lib/actions/status'
 import type { Equipment, EquipmentStatus } from '@/types/equipment'
 import type { Category } from '@/types/category'
+import { updateFeatureEquipment } from '@/lib/actions/equipment'
 
 interface AdminEquipmentTableProps {
   equipments: Equipment[]
@@ -94,10 +97,12 @@ const AdminEquipmentTable = ({
   errorMessage,
 }: AdminEquipmentTableProps) => {
   const router = useRouter()
-  const [selectedEquipment, setSelectedEquipment] =
-    useState<Equipment | null>(null)
-  const [editingEquipment, setEditingEquipment] =
-    useState<Equipment | null>(null)
+  const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(
+    null
+  )
+  const [editingEquipment, setEditingEquipment] = useState<Equipment | null>(
+    null
+  )
   const [updatingId, setUpdatingId] = useState<string | null>(null)
   const [updatingAction, setUpdatingAction] = useState<EquipmentStatus | null>(
     null
@@ -129,6 +134,24 @@ const AdminEquipmentTable = ({
     } finally {
       setUpdatingId(null)
       setUpdatingAction(null)
+    }
+  }
+  const handleFeaturedToggle = async (id: string, isFeatured: boolean) => {
+    console.log(id)
+    try {
+      const result = await updateFeatureEquipment({
+        id,
+        isFeatured: !isFeatured,
+      })
+
+      if (result.success) {
+        toast.success(result.message)
+        router.refresh()
+      }
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : 'Something went wrong'
+      )
     }
   }
 
@@ -223,10 +246,7 @@ const AdminEquipmentTable = ({
                             />
                           ) : (
                             <div className='flex size-full items-center justify-center text-muted-foreground'>
-                              <ImageOff
-                                className='size-5'
-                                aria-hidden='true'
-                              />
+                              <ImageOff className='size-5' aria-hidden='true' />
                             </div>
                           )}
                         </div>
@@ -332,8 +352,7 @@ const AdminEquipmentTable = ({
                             }
                             className='h-8 gap-1 rounded-lg border border-success/25 bg-success/10 px-2.5 text-xs font-medium text-success shadow-2xs transition-colors hover:bg-success/10 hover:text-success dark:text-success dark:hover:text-success'
                           >
-                            {isItemUpdating &&
-                            updatingAction === 'approved' ? (
+                            {isItemUpdating && updatingAction === 'approved' ? (
                               <Loader2 className='size-3.5 animate-spin' />
                             ) : (
                               <Check className='size-3.5' />
@@ -354,8 +373,7 @@ const AdminEquipmentTable = ({
                             }
                             className='h-8 gap-1 rounded-lg border border-destructive/25 bg-destructive/10 px-2.5 text-xs font-medium text-destructive shadow-2xs transition-colors hover:bg-destructive/10 hover:text-destructive dark:text-destructive dark:hover:text-destructive'
                           >
-                            {isItemUpdating &&
-                            updatingAction === 'rejected' ? (
+                            {isItemUpdating && updatingAction === 'rejected' ? (
                               <Loader2 className='size-3.5 animate-spin' />
                             ) : (
                               <X className='size-3.5' />
@@ -398,6 +416,28 @@ const AdminEquipmentTable = ({
                             >
                               <Pencil className='size-4' aria-hidden='true' />
                               Update
+                            </DropdownMenuItem>
+
+                            <DropdownMenuItem
+                              onClick={() =>
+                                handleFeaturedToggle(
+                                  equipment._id || '',
+                                  equipment.isFeatured
+                                )
+                              }
+                              className='cursor-pointer gap-2'
+                            >
+                              {equipment.isFeatured ? (
+                                <>
+                                  <StarOff className='h-4 w-4' />
+                                  Remove Featured
+                                </>
+                              ) : (
+                                <>
+                                  <Star className='h-4 w-4' />
+                                  Make Featured
+                                </>
+                              )}
                             </DropdownMenuItem>
 
                             <DropdownMenuSeparator />

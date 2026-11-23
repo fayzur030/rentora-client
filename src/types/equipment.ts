@@ -30,6 +30,7 @@ export interface Equipment {
   rentalTerms: string
   status: EquipmentStatus
   owner: EquipmentOwner
+  isFeatured: boolean
 }
 
 export interface ApiSuccessResponse<T> {
