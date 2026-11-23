@@ -147,7 +147,7 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
         render={
           <Button
             type='button'
-            className='h-12 w-full cursor-pointer rounded-xl px-6 text-base font-semibold shadow-md shadow-primary/15 transition-all hover:shadow-lg'
+            className='h-12 w-full cursor-pointer rounded-xl px-6 text-base font-semibold shadow-md shadow-primary/15 transition-all hover:shadow-lg mt-4'
           >
             Book Now
           </Button>
@@ -332,7 +332,7 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
                 <Button
                   type='button'
                   variant='outline'
-                  className='w-full sm:w-auto'
+                  className='w-full sm:w-auto py-6'
                 >
                   Cancel
                 </Button>
@@ -342,7 +342,7 @@ const BookingModal = ({ equipment }: BookingModalProps) => {
             <Button
               type='submit'
               form='booking-form'
-              className='w-full gap-2 font-semibold shadow-2xs sm:w-auto'
+              className='w-full gap-2 py-6 font-semibold shadow-2xs sm:w-auto'
               disabled={isLoading}
             >
               {isLoading ? 'Redirecting to checkout...' : 'Confirm Booking'}

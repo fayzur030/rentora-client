@@ -118,8 +118,9 @@ Required animation sections:
 1. Home page Banner.
 2. Featured Equipment.
 3. Categories Section.
+4. Recently Added Equipment section (when it is displayed on the Home page), using the same Framer Motion animation style and behavior as the other animated Home page sections.
 
-- Review and extra-section animations are optional.
+- Review and other extra-section animations are optional.
 
 ## 3. Most Important Coding Philosophy
 
@@ -313,7 +314,7 @@ Examples:
 - How It Works.
 - Trusted Equipment Owners.
 
-Use Framer Motion animation in the required sections.
+Use Framer Motion animation in the required sections. When Recently Added Equipment is displayed, give it the same animation style and behavior used by the other animated Home page sections.
 
 ### D. Equipment Details Page — Private Route
 Display:
