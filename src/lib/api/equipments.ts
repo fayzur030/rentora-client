@@ -16,9 +16,12 @@ export const getAllEquipments = async (
   const params = new URLSearchParams(query)
   params.set('page', String(page))
   params.set('limit', String(limit))
-  const res = await fetch(`${baseUrl}/api/equipment/equipments?${query}`, {
-    cache: 'no-store',
-  })
+  const res = await fetch(
+    `${baseUrl}/api/equipment/equipments?${params.toString()}`,
+    {
+      cache: 'no-store',
+    }
+  )
 
   const result = await res.json()
 
