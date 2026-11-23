@@ -53,19 +53,23 @@ const itemVariants = {
 const WhyChooseUs = () => {
   return (
     <MotionConfig reducedMotion='user'>
-      <section className='px-4 py-14 sm:px-6 sm:py-20 lg:px-8'>
-        <div className='relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-hero-start text-hero-foreground shadow-2xl shadow-primary/10'>
+      <section className='px-4 py-16 sm:px-6 sm:py-24 lg:px-8'>
+        <div className='relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-primary/10 bg-gradient-to-br from-hero-start via-hero-mid to-hero-end text-hero-foreground shadow-[0_35px_90px_-45px_rgba(17,25,35,0.55)] sm:rounded-[2.5rem]'>
           <div
             aria-hidden='true'
-            className='pointer-events-none absolute -right-28 -top-36 size-96 rounded-full bg-hero-accent/10 blur-3xl'
+            className='pointer-events-none absolute inset-x-12 top-0 h-px bg-gradient-to-r from-transparent via-hero-accent/80 to-transparent'
           />
           <div
             aria-hidden='true'
-            className='pointer-events-none absolute -bottom-48 -left-24 size-96 rounded-full bg-secondary/25 blur-3xl'
+            className='pointer-events-none absolute -right-28 -top-36 size-[28rem] rounded-full bg-hero-accent/12 blur-3xl'
+          />
+          <div
+            aria-hidden='true'
+            className='pointer-events-none absolute -bottom-48 -left-24 size-[28rem] rounded-full bg-secondary/20 blur-3xl'
           />
 
-          <div className='relative p-6 sm:p-10 lg:p-14'>
-            <div className='grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14'>
+          <div className='relative p-6 sm:p-10 lg:p-16'>
+            <div className='grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16'>
               <motion.div
                 initial='hidden'
                 whileInView='show'
@@ -85,7 +89,7 @@ const WhyChooseUs = () => {
                 </motion.span>
                 <motion.h2
                   variants={itemVariants}
-                  className='mt-6 max-w-lg font-heading text-3xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl'
+                  className='mt-6 max-w-lg font-heading text-3xl font-extrabold leading-[1.08] tracking-tight sm:text-4xl lg:text-[3.4rem]'
                 >
                   Why Choose{' '}
                   <span className='text-hero-accent'>Rentora?</span>
@@ -116,7 +120,7 @@ const WhyChooseUs = () => {
                   hidden: {},
                   show: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
                 }}
-                className='grid gap-3 sm:grid-cols-2 sm:gap-4'
+                className='grid gap-3.5 sm:grid-cols-2 sm:gap-4'
               >
                 {benefits.map((benefit) => {
                   const Icon = benefit.icon
@@ -127,18 +131,18 @@ const WhyChooseUs = () => {
                       variants={itemVariants}
                       whileHover={{ y: -4 }}
                       transition={{ duration: 0.2, ease: 'easeOut' }}
-                      className='group relative overflow-hidden rounded-2xl border border-hero-foreground/10 bg-hero-foreground/[0.06] p-5 backdrop-blur-sm transition-colors duration-300 hover:border-hero-accent/40 hover:bg-hero-foreground/[0.09] sm:p-6'
+                      className='group relative overflow-hidden rounded-2xl border border-hero-foreground/10 bg-gradient-to-br from-hero-foreground/[0.09] to-hero-foreground/[0.035] p-5 shadow-lg shadow-black/5 backdrop-blur-sm transition-[border-color,background-color,box-shadow,transform] duration-300 hover:-translate-y-1 hover:border-hero-accent/45 hover:shadow-xl hover:shadow-black/15 sm:rounded-3xl sm:p-6'
                     >
                       <span className='absolute inset-x-0 top-0 h-0.5 origin-left scale-x-0 bg-hero-accent transition-transform duration-300 group-hover:scale-x-100' />
                       <div className='flex items-center justify-between'>
-                        <span className='flex size-11 items-center justify-center rounded-xl bg-hero-accent text-primary shadow-lg shadow-black/10 transition-transform duration-300 group-hover:rotate-[-5deg] group-hover:scale-105'>
+                        <span className='flex size-12 items-center justify-center rounded-2xl bg-hero-accent text-primary shadow-lg shadow-hero-accent/15 transition-transform duration-300 group-hover:rotate-[-5deg] group-hover:scale-105'>
                           <Icon className='size-5' aria-hidden='true' />
                         </span>
                         <span className='font-heading text-xs font-bold tracking-[0.14em] text-hero-muted/60'>
                           {benefit.number}
                         </span>
                       </div>
-                      <h3 className='mt-6 font-heading text-lg font-bold text-hero-foreground'>
+                      <h3 className='mt-6 font-heading text-lg font-bold tracking-tight text-hero-foreground sm:text-xl'>
                         {benefit.title}
                       </h3>
                       <p className='mt-2 text-sm leading-6 text-hero-muted'>

@@ -801,9 +801,9 @@ Do not claim that something works unless it has actually been checked.
 
 ## 6. How the Agent Should Communicate With the User
 
-The user prefers Bangla explanations.
+The user prefers English explanations and conversation.
 
-- Use simple, beginner-friendly Bangla when explaining concepts, implementation steps, architecture, or errors.
+- Use clear, beginner-friendly English when explaining concepts, implementation steps, architecture, or errors.
 - Technical terms, function names, variable names, and code should remain in English.
 
 Important communication preferences:

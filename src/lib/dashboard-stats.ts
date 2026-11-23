@@ -9,6 +9,7 @@ import {
   Users,
   Wallet,
   Wrench,
+  XCircle,
 } from 'lucide-react'
 
 import type { StatsCardProps } from '@/components/dashboard/StatsCard'
@@ -468,7 +469,9 @@ export const getCustomerDashboardStats = (
     return isPaid ? sum + rental.totalAmount : sum
   }, 0)
 
-
+  const cancelledBooking = rentals.filter(
+    (ren) => ren.bookingStatus === 'cancelled'
+  )
 
   return [
     {
@@ -479,11 +482,11 @@ export const getCustomerDashboardStats = (
       description: 'Your rental booking records',
     },
     {
-      icon: Wrench,
-      title: 'Active Rentals',
+      icon: XCircle,
+      title: 'Cancelled Rentals',
       color: 'sky',
-      value: activeRentals,
-      description: 'Confirmed rentals in progress',
+      value: cancelledBooking.length,
+      description: 'Your cancelled rental bookings',
     },
     {
       icon: Heart,

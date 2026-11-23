@@ -11,7 +11,7 @@ const reviews = [
     comment:
       'Finding the right tools for my renovation was easy. The equipment arrived in great condition, right when I needed it.',
     initials: 'AR',
-    color: 'bg-[var(--accent)] text-[var(--warning)]',
+    color: 'bg-[var(--accent)]/20 text-[var(--warning)]',
   },
   {
     name: 'Tanvir Hasan',
@@ -20,7 +20,7 @@ const reviews = [
     comment:
       'We rented event equipment for a weekend setup and the whole process felt smooth. It saved us time and a lot of hassle.',
     initials: 'TH',
-    color: 'bg-[var(--secondary)] text-[var(--secondary)]',
+    color: 'bg-[var(--secondary)]/15 text-[var(--secondary)]',
   },
   {
     name: 'Nusrat Jahan',
@@ -29,7 +29,7 @@ const reviews = [
     comment:
       'A practical way to get quality equipment without buying it outright. Booking was straightforward and the owner was helpful.',
     initials: 'NJ',
-    color: 'bg-[var(--success)] text-[var(--success)]',
+    color: 'bg-[var(--success)]/15 text-[var(--success)]',
   },
   {
     name: 'Sakib Ahmed',
@@ -38,7 +38,7 @@ const reviews = [
     comment:
       'I found exactly what I needed for my project nearby. Clear details, flexible rental options, and a great experience overall.',
     initials: 'SA',
-    color: 'bg-[var(--secondary)] text-[var(--secondary)]',
+    color: 'bg-[var(--primary)]/10 text-[var(--primary)]',
   },
 ]
 

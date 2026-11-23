@@ -11,6 +11,7 @@ import {
 } from 'framer-motion'
 
 import type { Category } from '@/types/category'
+import { ArrowRight } from 'lucide-react'
 
 interface HeroCarouselProps {
   categories: Category[]
@@ -147,21 +148,8 @@ const HeroCarousel = ({ categories }: HeroCarouselProps) => {
                   href='/all-equipments'
                   className='inline-flex h-12 w-full items-center justify-center rounded-lg bg-[var(--accent)] px-7 text-sm font-semibold text-[var(--brand-ink)] transition-colors hover:bg-[var(--accent)] sm:w-auto'
                 >
-                  Explore Rentals
-                </Link>
-              </motion.div>
-
-              <motion.div
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                transition={{ duration: 0.2 }}
-                className='w-full sm:w-auto'
-              >
-                <Link
-                  href='/add-equipment'
-                  className='inline-flex h-12 w-full items-center justify-center rounded-lg border border-hero-foreground/40 bg-hero-foreground/5 px-7 text-sm font-semibold text-hero-foreground backdrop-blur-sm transition-colors hover:bg-hero-foreground/10 sm:w-auto'
-                >
-                  List Your Equipment
+                  Browse All Equipment
+                  <ArrowRight className='ml-2 size-4' aria-hidden='true' />
                 </Link>
               </motion.div>
             </motion.div>
