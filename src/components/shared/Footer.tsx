@@ -12,12 +12,18 @@ const quickLinks = [
 const accountLinks = [
   { label: 'Login', href: '/login' },
   { label: 'Register', href: '/register' },
-  { label: 'Dashboard', href: '/dashboard' },
+  // { label: 'Dashboard', href: '/dashboard' },
+]
+
+const socialLinks = [
+  { label: 'X (Twitter)', shortLabel: 'X', href: 'https://x.com' },
+  { label: 'Google', shortLabel: 'G', href: 'https://www.google.com' },
+  { label: 'LinkedIn', shortLabel: 'in', href: 'https://www.linkedin.com' },
 ]
 
 const Footer = () => {
   return (
-    <footer className='border-t border-brand-foreground/10 bg-[var(--brand-ink)] text-brand-foreground mt-'>
+    <footer className='border-t mt-14 border-brand-foreground/10 bg-[var(--brand-ink)] text-brand-foreground mt-'>
       <div className='mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16'>
         <div className='grid gap-10 sm:grid-cols-2 lg:grid-cols-4'>
           <div className='sm:col-span-2 lg:col-span-1'>
@@ -26,6 +32,20 @@ const Footer = () => {
               Rent quality equipment with confidence. Simple booking,
               transparent pricing, and trusted owners in one place.
             </p>
+            <div className='mt-6 flex items-center gap-3' aria-label='Social links'>
+              {socialLinks.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target='_blank'
+                  rel='noreferrer'
+                  aria-label={`Visit Rentora on ${social.label}`}
+                  className='flex size-10 items-center justify-center rounded-full border border-brand-foreground/15 bg-brand-foreground/5 text-sm font-bold text-brand-foreground/80 transition hover:-translate-y-0.5 hover:border-[var(--accent)] hover:bg-[var(--accent)] hover:text-[var(--brand-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]'
+                >
+                  {social.shortLabel}
+                </a>
+              ))}
+            </div>
           </div>
 
           <div>
@@ -91,7 +111,7 @@ const Footer = () => {
 
         <div className='mt-10 flex flex-col gap-3 border-t border-brand-foreground/10 pt-6 text-xs text-brand-foreground/75 sm:flex-row sm:items-center sm:justify-between'>
           <p>© {new Date().getFullYear()} Rentora. All rights reserved.</p>
-          <p>Built for reliable equipment rentals.</p>
+          <p>Created by Md. Fayzur Rahman</p>
         </div>
       </div>
     </footer>

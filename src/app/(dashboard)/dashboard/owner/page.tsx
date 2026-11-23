@@ -1,3 +1,4 @@
+import MonthlyEarningsChart from '@/components/dashboard/owner/MonthlyEarningsChart'
 import StatsGrid from '@/components/dashboard/StatsGrid'
 import { getMyEquipmentRentals } from '@/lib/api/bookings'
 import { getMyEquipments } from '@/lib/api/equipments'
@@ -30,6 +31,7 @@ const OwnerDashboard = async () => {
         </p>
       </div>
       <StatsGrid stats={stats} />
+      <MonthlyEarningsChart />
     </section>
   )
 }

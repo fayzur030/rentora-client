@@ -230,6 +230,17 @@ export const getAdminDashboardAnalytics = (
     })),
   }
 }
+// export const getOwnerMonthlyEarnings = (
+//   rentals: BookingRental[],
+//   now = new Date()
+// ) => {
+//   const timeZone = 'Asia/Dhaka'
+//   const monthParts = new Intl.DateTimeFormat('en-US', {
+//     timeZone,
+//     year: 'numeric',
+//     month
+//   })
+// }
 
 export const getOwnerDashboardStats = (
   equipments: Equipment[],
@@ -317,7 +328,7 @@ export const getOwnerDashboardStats = (
       icon: CheckCircle2,
       title: 'Completed Rentals',
       color: 'emerald',
-      value: rentals.filter((rental) => rental.bookingStatus === 'completed')
+      value: rentals.filter((rental) => rental.bookingStatus === 'confirmed')
         .length,
       description: 'Bookings marked as completed',
     },
