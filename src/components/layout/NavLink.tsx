@@ -52,7 +52,7 @@ const NavLink = ({ href, label, variant, onClick }: NavLinkProps) => {
       onClick={onClick}
       className={`block rounded-lg px-4 py-3 text-sm font-medium transition-colors ${
         isActive
-          ? 'bg-[var(--accent)]/10 text-[var(--accent)]'
+          ? 'bg-(--accent)/10 text-accent'
           : 'text-sidebar-foreground/80 hover:bg-card/5 hover:text-sidebar-foreground'
       }`}
     >

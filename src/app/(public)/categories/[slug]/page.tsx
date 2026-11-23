@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowLeft, ImageOff } from 'lucide-react'
@@ -11,6 +12,21 @@ import { getSessionFromServer } from '@/lib/auth/getSessionFromServer'
 
 interface CategoryPageProps {
   params: Promise<{ slug: string }>
+}
+
+export async function generateMetadata({
+  params,
+}: CategoryPageProps): Promise<Metadata> {
+  const { slug } = await params
+  const categoryName = slug
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+
+  return {
+    title: `${categoryName} Equipment`,
+    description: `Browse ${categoryName.toLowerCase()} equipment available to rent on Rentora.`,
+  }
 }
 
 const CategoryPage = async ({ params }: CategoryPageProps) => {

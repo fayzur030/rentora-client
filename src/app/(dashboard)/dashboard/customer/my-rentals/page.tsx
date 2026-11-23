@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { getMyRentals } from '@/lib/api/bookings'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -8,6 +9,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+
+export const metadata: Metadata = {
+  title: 'My Rentals',
+  description: 'View your equipment bookings, rental dates, and payment status.',
+}
 
 import { getTokenFromServer } from '@/lib/auth/getTokenFromServer'
 import { redirect } from 'next/navigation'

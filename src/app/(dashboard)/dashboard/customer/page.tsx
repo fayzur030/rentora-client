@@ -1,7 +1,13 @@
+import type { Metadata } from 'next'
 import StatsGrid from '@/components/dashboard/StatsGrid'
 import { getMyRentals } from '@/lib/api/bookings'
 import { getFavorites } from '@/lib/api/favorite'
 import { getSessionFromServer } from '@/lib/auth/getSessionFromServer'
+
+export const metadata: Metadata = {
+  title: 'Customer Dashboard',
+  description: 'See your rentals, saved equipment, and account activity.',
+}
 import { getTokenFromServer } from '@/lib/auth/getTokenFromServer'
 import { getCustomerDashboardStats } from '@/lib/dashboard-stats'
 import { redirect } from 'next/navigation'

@@ -1,7 +1,14 @@
+import type { Metadata } from 'next'
 import EquipmentFilterSheet from '@/components/equipment/EquipmentFilterSheet'
 import EquipmentFilters from '@/components/equipment/EquipmentFilters'
 import EquipmentGrid from '@/components/equipment/EquipmentGrid'
 import EquipmentSearch from '@/components/equipment/EquipmentSearch'
+
+export const metadata: Metadata = {
+  title: 'Browse All Equipment',
+  description:
+    'Search equipment rentals by category, location, rental type, price, and availability.',
+}
 import EquipmentSort from '@/components/equipment/EquipmentSort'
 import { getAllEquipments } from '@/lib/api/equipments'
 import { getCategories } from '@/lib/api/category'

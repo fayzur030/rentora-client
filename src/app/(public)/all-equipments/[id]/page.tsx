@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { getEquipmentById } from '@/lib/api/equipments'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
@@ -18,6 +19,12 @@ import {
 import FavoriteButton from '@/components/shared/FavoriteButton'
 import { getSessionFromServer } from '@/lib/auth/getSessionFromServer'
 import { getFavorites } from '@/lib/api/favorite'
+
+export const metadata: Metadata = {
+  title: 'Equipment Details',
+  description:
+    'View equipment details, rental rates, availability, and owner information on Rentora.',
+}
 
 interface EquipmentDetailsPageProps {
   params: Promise<{

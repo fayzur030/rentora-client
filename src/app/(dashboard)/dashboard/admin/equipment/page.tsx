@@ -1,7 +1,13 @@
+import type { Metadata } from 'next'
 import AdminEquipmentTable from '@/components/dashboard/admin/AdminEquipmentTable'
 import { getAllAdminEquipments } from '@/lib/api/equipments'
 import type { Equipment } from '@/types/equipment'
 import { getCategories } from '@/lib/api/category'
+
+export const metadata: Metadata = {
+  title: 'Manage Equipment',
+  description: 'Review, approve, and manage equipment listings on Rentora.',
+}
 import type { Category } from '@/types/category'
 import { unstable_rethrow } from 'next/navigation'
 

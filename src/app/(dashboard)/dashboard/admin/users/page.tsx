@@ -1,7 +1,13 @@
+import type { Metadata } from 'next'
 import { getAllUsers } from '@/lib/api/users'
 import ManageUsersTable from '@/components/dashboard/admin/ManageUsersTable'
 import type { Users } from '@/types/users'
 import { unstable_rethrow } from 'next/navigation'
+
+export const metadata: Metadata = {
+  title: 'Manage Users',
+  description: 'View and manage user accounts and roles on Rentora.',
+}
 
 const AllUsersPage = async () => {
   let users: Users[] = []

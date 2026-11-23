@@ -1,7 +1,13 @@
+import type { Metadata } from 'next'
 import CategoryManagement from '@/components/dashboard/admin/CategoryManagement'
 import { getCategories } from '@/lib/api/category'
 import type { Category } from '@/types/category'
 import { unstable_rethrow } from 'next/navigation'
+
+export const metadata: Metadata = {
+  title: 'Manage Categories',
+  description: 'Create and manage equipment categories on Rentora.',
+}
 
 const AddCategoryPage = async () => {
   let categories: Category[] = []

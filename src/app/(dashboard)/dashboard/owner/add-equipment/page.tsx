@@ -1,5 +1,11 @@
+import type { Metadata } from 'next'
 import EquipmentForm from '@/components/dashboard/add-equipment/equipment-form'
 import { getCategories } from '@/lib/api/category'
+
+export const metadata: Metadata = {
+  title: 'Add Equipment',
+  description: 'Create an equipment listing to offer for rent on Rentora.',
+}
 
 const AddEquipmentPage = async () => {
   const categories = await getCategories()

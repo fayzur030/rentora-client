@@ -1,7 +1,13 @@
+import type { Metadata } from 'next'
 import AdminRentalsTable from '@/components/dashboard/admin/AdminRentalsTable'
 import { getAllRentals } from '@/lib/api/rental'
 import type { Rental } from '@/types/rental'
 import { unstable_rethrow } from 'next/navigation'
+
+export const metadata: Metadata = {
+  title: 'Manage Rentals',
+  description: 'Monitor rental bookings and payment statuses across Rentora.',
+}
 
 const AllRentalsPage = async () => {
   let rentals: Rental[] = []

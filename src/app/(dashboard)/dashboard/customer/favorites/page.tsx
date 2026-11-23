@@ -1,6 +1,12 @@
+import type { Metadata } from 'next'
 import { getFavorites } from '@/lib/api/favorite'
 import { getSessionFromServer } from '@/lib/auth/getSessionFromServer'
 import FavoritesTable from '@/components/dashboard/customer/FavoritesTable'
+
+export const metadata: Metadata = {
+  title: 'Favorite Equipment',
+  description: 'Browse the equipment listings you have saved on Rentora.',
+}
 
 const FavoritesPage = async () => {
   const session = await getSessionFromServer()

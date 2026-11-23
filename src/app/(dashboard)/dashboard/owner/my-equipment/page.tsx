@@ -1,7 +1,13 @@
+import type { Metadata } from 'next'
 import { getMyEquipments } from '@/lib/api/equipments'
 import MyEquipmentTable from '@/components/dashboard/owner/MyEquipmentTable'
 import { PackageOpen } from 'lucide-react'
 import { getCategories } from '@/lib/api/category'
+
+export const metadata: Metadata = {
+  title: 'My Equipment',
+  description: 'Manage the equipment you have listed on Rentora.',
+}
 import { unstable_rethrow } from 'next/navigation'
 
 const MyEquipmentPage = async () => {

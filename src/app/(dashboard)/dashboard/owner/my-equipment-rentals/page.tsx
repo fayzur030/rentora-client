@@ -1,7 +1,13 @@
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import { ImageOff } from 'lucide-react'
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+
+export const metadata: Metadata = {
+  title: 'Equipment Rentals',
+  description: 'Review rental bookings for your listed equipment.',
+}
 import { Badge } from '@/components/ui/badge'
 import { getInitials } from '@/components/profile/profile-utils'
 import {

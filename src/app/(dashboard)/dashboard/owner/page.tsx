@@ -1,7 +1,13 @@
+import type { Metadata } from 'next'
 import MonthlyEarningsChart from '@/components/dashboard/owner/MonthlyEarningsChart'
 import StatsGrid from '@/components/dashboard/StatsGrid'
 import { getMyEquipmentRentals } from '@/lib/api/bookings'
 import { getMyEquipments } from '@/lib/api/equipments'
+
+export const metadata: Metadata = {
+  title: 'Owner Dashboard',
+  description: 'View your equipment rental activity and owner analytics.',
+}
 import { getTokenFromServer } from '@/lib/auth/getTokenFromServer'
 import {
   getOwnerDashboardStats,

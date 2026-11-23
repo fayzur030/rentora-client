@@ -1,6 +1,12 @@
+import type { Metadata } from 'next'
 import StatsGrid from '@/components/dashboard/StatsGrid'
 import AdminAnalyticsCharts from '@/components/dashboard/admin/AdminAnalyticsCharts'
 import { getAllAdminEquipments } from '@/lib/api/equipments'
+
+export const metadata: Metadata = {
+  title: 'Admin Dashboard',
+  description: 'Review Rentora platform activity and administrative analytics.',
+}
 
 import { getAllRentals } from '@/lib/api/rental'
 import { getAllUsers } from '@/lib/api/users'

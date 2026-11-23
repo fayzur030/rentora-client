@@ -1,7 +1,13 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { House, LockKeyhole, LogIn, ShieldAlert } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
+
+export const metadata: Metadata = {
+  title: 'Access Restricted',
+  description: 'This page is not available for your account on Rentora.',
+}
 import Logo from '@/components/shared/Logo'
 
 const Unauthorized = () => {

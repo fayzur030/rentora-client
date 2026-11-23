@@ -1,5 +1,11 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, Check, CircleCheck, PackageCheck, ReceiptText } from 'lucide-react'
+
+export const metadata: Metadata = {
+  title: 'Payment Successful',
+  description: 'Your Rentora payment was successful and your booking was received.',
+}
 
 const SuccessPage = () => {
   return (

@@ -15,8 +15,12 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'Rentora',
-  description: 'Equipment Rental Platform',
+  title: {
+    default: 'Rentora | Equipment Rentals',
+    template: '%s | Rentora',
+  },
+  description:
+    'Find and rent quality equipment for projects, events, and everyday needs with Rentora.',
 }
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
