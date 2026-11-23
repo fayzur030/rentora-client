@@ -91,7 +91,7 @@ const HeroCarousel = ({ categories }: HeroCarouselProps) => {
           <div className='absolute inset-0 bg-linear-to-r from-hero-start/55 via-transparent to-hero-end/20' />
         </div>
 
-        <div className='relative z-10 mx-auto flex min-h-[calc(100svh-4rem)] w-full max-w-7xl items-center justify-center px-4 py-20 text-center sm:px-6 sm:py-24 lg:justify-start lg:px-8 lg:text-left'>
+        <div className='relative z-10 mx-auto flex min-h-svh w-full max-w-7xl items-center justify-center px-4 py-20 text-center sm:px-6 sm:py-24 lg:justify-start lg:px-8 lg:text-left'>
           <motion.div
             variants={containerVariants}
             initial='hidden'

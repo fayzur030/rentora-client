@@ -9,11 +9,12 @@ interface NavLinkProps {
   label: string
   // "desktop" = top bar, "mobile" = inside the slide-in menu
   variant: 'desktop' | 'mobile'
+  isOnHero?: boolean
   // Used by the mobile menu so it can close itself after a click
   onClick?: () => void
 }
 
-const NavLink = ({ href, label, variant, onClick }: NavLinkProps) => {
+const NavLink = ({ href, label, variant, onClick, isOnHero = false }: NavLinkProps) => {
   const pathname = usePathname()
 
   // The Home link only counts as active on the exact same path
@@ -25,7 +26,11 @@ const NavLink = ({ href, label, variant, onClick }: NavLinkProps) => {
       <Link
         href={href}
         className={`relative py-2 text-sm font-medium transition-colors duration-200 ${
-          isActive ? 'text-accent' : 'text-nav-foreground/85 hover:text-accent'
+          isActive
+            ? 'text-accent'
+            : isOnHero
+              ? 'text-nav-overlay-foreground/90 hover:text-nav-overlay-foreground'
+              : 'text-nav-scrolled-foreground hover:text-accent'
         }`}
       >
         {label}
