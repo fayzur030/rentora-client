@@ -78,7 +78,7 @@
 
 :root {
   color-scheme: light;
-  --background: #fbf7ef;
+  --background: #f4f6f8;
   --foreground: #1b2838;
   --card: #ffffff;
   --card-foreground: #1b2838;
@@ -119,7 +119,7 @@
   --nav-background: #1d2b3a;
   --nav-foreground: #f8fafc;
   --nav-border: #ffffff20;
-  --nav-overlay: rgb(29 43 58 / 62%);
+  --nav-overlay: #111923;
   --nav-overlay-foreground: #ffffff;
   --nav-overlay-control: rgb(255 255 255 / 5%);
   --nav-overlay-border: rgb(255 255 255 / 25%);

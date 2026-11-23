@@ -39,7 +39,7 @@ const Navbar = () => {
       initial={{ opacity: 0, y: -16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
-      className={`${isHomePage ? 'fixed top-0' : 'sticky top-0'} z-50 w-full border-b backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-300 ${isHeroOverlay ? 'border-transparent bg-nav-overlay text-nav-overlay-foreground shadow-none' : 'border-nav-scrolled-border bg-nav-scrolled text-nav-scrolled-foreground shadow-sm'}`}
+      className={`${isHomePage ? 'fixed top-0' : 'sticky top-0'} z-50 w-full border-b backdrop-blur-xl transition-[background-color,border-color,box-shadow] duration-300 ${isHeroOverlay ? 'border-transparent bg-nav-background text-nav-overlay-foreground shadow-none' : 'border-nav-scrolled-border bg-nav-scrolled text-nav-scrolled-foreground shadow-sm'}`}
     >
       <nav className='mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:h-19 lg:px-8'>
         {/* Logo */}
@@ -49,14 +49,25 @@ const Navbar = () => {
         <ul className='hidden items-center gap-6 lg:flex xl:gap-8'>
           {navLinks.map((link) => (
             <li key={link.href}>
-              <NavLink href={link.href} label={link.label} variant='desktop' isOnHero={isHeroOverlay} />
+              <NavLink
+                href={link.href}
+                label={link.label}
+                variant='desktop'
+                isOnHero={isHeroOverlay}
+              />
             </li>
           ))}
         </ul>
 
         {/* Desktop Auth: Login / Register or profile avatar */}
         <div className='hidden items-center gap-3 lg:flex'>
-          <ThemeToggle className={isHeroOverlay ? 'text-nav-overlay-foreground hover:bg-nav-overlay-control-hover hover:text-nav-overlay-foreground' : 'text-nav-scrolled-foreground hover:bg-nav-scrolled-hover hover:text-nav-scrolled-foreground'} />
+          <ThemeToggle
+            className={
+              isHeroOverlay
+                ? 'text-nav-overlay-foreground hover:bg-nav-overlay-control-hover hover:text-nav-overlay-foreground'
+                : 'text-nav-scrolled-foreground hover:bg-nav-scrolled-hover hover:text-nav-scrolled-foreground'
+            }
+          />
           <NavAuth variant='desktop' darkBackground={isHeroOverlay} />
         </div>
 
