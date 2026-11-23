@@ -27,9 +27,7 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
     getAllEquipments(categoryQuery.toString()),
     getSessionFromServer(),
   ])
-  const favorites = session?.user?.id
-    ? await getFavorites(session.user.id)
-    : []
+  const favorites = session?.user?.id ? await getFavorites(session.user.id) : []
   const favoriteEquipmentIds = favorites
     .map((equipment) => equipment._id ?? equipment.id)
     .filter((id): id is string => Boolean(id))
@@ -74,9 +72,9 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
           </p>
           <p className='mt-5 text-sm text-muted-foreground'>
             <span className='font-semibold text-foreground'>
-              {equipments.length}
+              {equipments.pagination.totalEquipments}
             </span>{' '}
-            {equipments.length === 1 ? 'listing' : 'listings'}
+            {equipments.pagination.totalEquipments === 1 ? 'listing' : 'listings'}
           </p>
         </div>
       </section>
@@ -86,7 +84,9 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
           Available {category.name}
         </h2>
         <EquipmentGrid
-          equipments={equipments}
+          equipments={equipments.equipments}
+          currentPage={equipments.pagination.currentPage}
+          totalPages={equipments.pagination.totalPages}
           favoriteEquipmentIds={favoriteEquipmentIds}
         />
       </section>

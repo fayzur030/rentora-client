@@ -30,7 +30,7 @@ export interface Equipment {
   rentalTerms: string
   status: EquipmentStatus
   owner: EquipmentOwner
-  isFeatured: boolean
+  isFeatured?: boolean
 }
 
 export interface PaginationResponse<T> {

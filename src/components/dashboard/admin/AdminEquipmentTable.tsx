@@ -422,7 +422,7 @@ const AdminEquipmentTable = ({
                               onClick={() =>
                                 handleFeaturedToggle(
                                   equipment._id || '',
-                                  equipment.isFeatured
+                                  equipment.isFeatured ?? false
                                 )
                               }
                               className='cursor-pointer gap-2'
