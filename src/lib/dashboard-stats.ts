@@ -461,7 +461,12 @@ export const getCustomerDashboardStats = (
   const activeRentals = rentals.filter((rental) =>
     isActiveRental(rental, today)
   ).length
-  const totalSpent = getPaidRentalTotal(rentals)
+
+  const totalSpent = rentals.reduce((sum, rental) => {
+    const isPaid = rental.paymentStatus === 'paid'
+
+    return isPaid ? sum + rental.totalAmount : sum
+  }, 0)
 
   return [
     {
