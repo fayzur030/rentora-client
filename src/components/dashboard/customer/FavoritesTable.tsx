@@ -20,12 +20,8 @@ interface FavoritesTableProps {
 
 const FavoritesTable = ({ equipments, userId }: FavoritesTableProps) => {
   return (
-    <div className='space-y-2'>
-      <p className='text-xs text-muted-foreground sm:hidden'>
-        Swipe sideways to see all table columns.
-      </p>
-
-      <div className='overflow-hidden rounded-xl border border-border bg-card shadow-sm'>
+    <div className='space-y-3'>
+      <div className='hidden overflow-hidden rounded-xl border border-border bg-card shadow-sm md:block'>
         <Table className='min-w-[1100px]'>
           <TableHeader className='bg-muted/40'>
             <TableRow className='hover:bg-transparent'>
@@ -121,6 +117,46 @@ const FavoritesTable = ({ equipments, userId }: FavoritesTableProps) => {
             })}
           </TableBody>
         </Table>
+      </div>
+
+      <div className='space-y-3 md:hidden'>
+        {equipments.length ? (
+          equipments.map((equipment, index) => {
+            const equipmentId = equipment._id ?? equipment.id
+            const rowKey = equipmentId ?? `${equipment.name}-${index}`
+            const isAvailable = equipment.availableQuantity > 0
+
+            return (
+              <article key={rowKey} className='rounded-2xl border border-border bg-card p-4 shadow-sm'>
+                <div className='flex items-start gap-3'>
+                  <div className='relative size-16 shrink-0 overflow-hidden rounded-xl bg-muted'>
+                    {equipment.image?.trim() ? (
+                      <Image src={equipment.image} alt={equipment.name} fill sizes='64px' className='object-cover' />
+                    ) : (
+                      <div className='flex size-full items-center justify-center text-muted-foreground'><ImageOff className='size-5' aria-hidden='true' /></div>
+                    )}
+                  </div>
+                  <div className='min-w-0 flex-1'>
+                    <h3 className='font-semibold text-foreground'>{equipment.name}</h3>
+                    <Badge className='mt-2 border-primary/20 bg-primary/10 text-primary'>{equipment.category}</Badge>
+                  </div>
+                  <Badge className={isAvailable ? 'border-success/25 bg-success/10 text-success' : 'border-warning/25 bg-warning/10 text-warning'}>{isAvailable ? 'Available' : 'Unavailable'}</Badge>
+                </div>
+                <dl className='mt-4 grid grid-cols-2 gap-3 border-t border-border/70 pt-3 text-sm'>
+                  <div><dt className='text-xs text-muted-foreground'>Rental price</dt><dd className='mt-1 font-semibold'>৳{equipment.rentalPrice.toLocaleString()} <span className='font-normal text-muted-foreground'>/ {equipment.rentalType.toLowerCase()}</span></dd></div>
+                  <div><dt className='text-xs text-muted-foreground'>Location</dt><dd className='mt-1 truncate font-medium'>{equipment.location}</dd></div>
+                  <div><dt className='text-xs text-muted-foreground'>Owner</dt><dd className='mt-1 truncate font-medium'>{equipment.owner.name}</dd></div>
+                  <div><dt className='text-xs text-muted-foreground'>Availability</dt><dd className='mt-1 font-medium'>{equipment.availableQuantity} {equipment.availableQuantity === 1 ? 'unit' : 'units'}</dd></div>
+                </dl>
+                <div className='mt-4 border-t border-border/70 pt-3'>
+                  {equipmentId ? <FavoriteActions userId={userId} equipmentId={equipmentId} equipmentName={equipment.name} /> : <span className='text-sm text-muted-foreground'>Actions unavailable</span>}
+                </div>
+              </article>
+            )
+          })
+        ) : (
+          <p className='rounded-xl border border-border bg-card p-6 text-center text-sm text-muted-foreground'>No favorite equipment found.</p>
+        )}
       </div>
     </div>
   )

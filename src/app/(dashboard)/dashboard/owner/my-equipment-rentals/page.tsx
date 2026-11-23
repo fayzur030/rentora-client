@@ -80,11 +80,7 @@ const MyEquipmentRentalsPage = async () => {
       </div>
 
       <div className='space-y-2'>
-        <p className='text-xs text-muted-foreground sm:hidden'>
-          Swipe sideways to see all rental details.
-        </p>
-
-        <div className='overflow-hidden rounded-xl border border-border bg-card shadow-sm'>
+        <div className='hidden overflow-hidden rounded-xl border border-border bg-card shadow-sm md:block'>
           <Table className='min-w-318.5'>
             <TableHeader className='bg-muted/40'>
               <TableRow className='hover:bg-transparent'>
@@ -206,6 +202,40 @@ const MyEquipmentRentalsPage = async () => {
               )}
             </TableBody>
           </Table>
+        </div>
+
+        <div className='space-y-3 md:hidden'>
+          {myRentals.length ? myRentals.map((rental) => {
+            const equipmentId = String(rental.equipmentId)
+            const equipmentImage = equipmentImages[equipmentId]
+
+            return (
+              <article key={rental._id} className='rounded-2xl border border-border bg-card p-4 shadow-sm'>
+                <div className='flex items-start gap-3'>
+                  <div className='relative size-14 shrink-0 overflow-hidden rounded-xl bg-muted'>
+                    {equipmentImage?.trim() ? (
+                      <Image src={equipmentImage} alt={rental.equipmentName || 'Equipment'} fill sizes='56px' className='object-cover' />
+                    ) : (
+                      <div className='flex size-full items-center justify-center text-muted-foreground'><ImageOff className='size-5' aria-hidden='true' /></div>
+                    )}
+                  </div>
+                  <div className='min-w-0 flex-1'>
+                    <h3 className='line-clamp-2 font-semibold text-foreground'>{rental.equipmentName || rental.equipmentId}</h3>
+                    <p className='mt-1 text-xs text-muted-foreground'>{rental.customerName || 'Customer'} · {rental.userEmail}</p>
+                  </div>
+                </div>
+                <dl className='mt-4 grid grid-cols-2 gap-x-3 gap-y-4 border-t border-border/70 pt-3 text-sm'>
+                  <div><dt className='text-xs text-muted-foreground'>Rental period</dt><dd className='mt-1 font-medium'>{formatDate(rental.startDate)} – {formatDate(rental.endDate)}</dd></div>
+                  <div><dt className='text-xs text-muted-foreground'>Quantity</dt><dd className='mt-1 font-medium'>{rental.quantity} {rental.quantity === 1 ? 'unit' : 'units'}</dd></div>
+                  <div><dt className='text-xs text-muted-foreground'>Booking amount</dt><dd className='mt-1 font-semibold'>৳{rental.totalAmount.toLocaleString('en-BD')}</dd></div>
+                  <div><dt className='text-xs text-muted-foreground'>Payment</dt><dd className='mt-1'><Badge className={`${getStatusClassName(rental.paymentStatus)} capitalize`}>{rental.paymentStatus}</Badge></dd></div>
+                  <div className='col-span-2'><dt className='text-xs text-muted-foreground'>Booking status</dt><dd className='mt-1'><Badge className={`${getStatusClassName(rental.bookingStatus)} capitalize`}>{rental.bookingStatus}</Badge></dd></div>
+                </dl>
+              </article>
+            )
+          }) : (
+            <p className='rounded-xl border border-border bg-card p-6 text-center text-sm text-muted-foreground'>Rentals of your equipment will appear here.</p>
+          )}
         </div>
       </div>
     </div>

@@ -13,8 +13,8 @@ const TableSkeleton = ({
   columns = 4,
 }: TableSkeletonProps) => {
   return (
-    <div className='overflow-hidden rounded-xl border border-border bg-card shadow-sm'>
-      <div className='overflow-x-auto'>
+    <>
+      <div className='hidden overflow-hidden rounded-xl border border-border bg-card shadow-sm md:block'>
         <table className='w-full min-w-96 border-collapse'>
           <thead>
             <tr className='border-b border-border bg-muted/40'>
@@ -45,7 +45,26 @@ const TableSkeleton = ({
           </tbody>
         </table>
       </div>
-    </div>
+
+      <div className='space-y-3 md:hidden'>
+        {Array.from({ length: rows }, (_, rowIndex) => (
+          <div key={rowIndex} className='rounded-2xl border border-border bg-card p-4 shadow-sm'>
+            <div className='flex items-center justify-between gap-3'>
+              <Skeleton className='h-5 w-2/3' />
+              <Skeleton className='h-6 w-16 rounded-full' />
+            </div>
+            <div className='mt-4 grid grid-cols-2 gap-3 border-t border-border/70 pt-3'>
+              {Array.from({ length: Math.min(columns, 4) }, (_, fieldIndex) => (
+                <div key={fieldIndex} className='space-y-2'>
+                  <Skeleton className='h-3 w-16' />
+                  <Skeleton className='h-4 w-24 max-w-full' />
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
   )
 }
 

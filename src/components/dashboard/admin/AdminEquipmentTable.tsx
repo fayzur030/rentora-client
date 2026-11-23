@@ -169,11 +169,7 @@ const AdminEquipmentTable = ({
 
   return (
     <div className='space-y-3'>
-      <p className='text-xs text-muted-foreground sm:hidden'>
-        Swipe sideways to view all columns.
-      </p>
-
-      <div className='overflow-hidden rounded-2xl border border-border/80 bg-card shadow-xs'>
+      <div className='hidden overflow-hidden rounded-2xl border border-border/80 bg-card shadow-xs md:block'>
         <Table className='min-w-220'>
           <TableHeader className='border-b border-border/70 bg-muted/50'>
             <TableRow className='hover:bg-transparent'>
@@ -460,6 +456,61 @@ const AdminEquipmentTable = ({
             )}
           </TableBody>
         </Table>
+      </div>
+
+      <div className='space-y-3 md:hidden'>
+        {equipments.length ? equipments.map((equipment, index) => {
+          const equipmentId = equipment._id ?? equipment.id
+          const rowKey = equipmentId ?? `${equipment.name}-${index}`
+          const statusBadge = getStatusBadge(equipment.status)
+          const currentStatus = normalizeStatus(equipment.status)
+          const isItemUpdating = updatingId === equipmentId
+
+          return (
+            <article key={rowKey} className='rounded-2xl border border-border bg-card p-4 shadow-sm'>
+              <div className='flex items-start gap-3'>
+                <div className='relative size-16 shrink-0 overflow-hidden rounded-xl border border-border/70 bg-muted'>
+                  {equipment.image?.trim() ? (
+                    <Image src={equipment.image} alt={equipment.name} fill sizes='64px' className='object-cover' />
+                  ) : (
+                    <div className='flex size-full items-center justify-center text-muted-foreground'><ImageOff className='size-5' aria-hidden='true' /></div>
+                  )}
+                </div>
+                <div className='min-w-0 flex-1'>
+                  <h3 className='font-semibold text-foreground'>{equipment.name}</h3>
+                  <p className='mt-1 truncate text-xs text-muted-foreground'>{equipment.location}{equipment.owner?.name ? ` · By ${equipment.owner.name}` : ''}</p>
+                  <Badge className='mt-2 rounded-md border-primary/20 bg-primary/10 text-primary'>{equipment.category}</Badge>
+                </div>
+                <Badge className={cn('inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium', statusBadge.badgeClass)}>
+                  <span className={cn('size-1.5 rounded-full', statusBadge.dotClass, statusBadge.pulse && 'animate-pulse')} />
+                  {statusBadge.label}
+                </Badge>
+              </div>
+              <dl className='mt-4 grid grid-cols-2 gap-3 border-t border-border/70 pt-3 text-sm'>
+                <div><dt className='text-xs text-muted-foreground'>Rental price</dt><dd className='mt-1 font-semibold'>৳{equipment.rentalPrice.toLocaleString()} <span className='font-normal text-muted-foreground'>/{equipment.rentalType.toLowerCase()}</span></dd></div>
+                <div><dt className='text-xs text-muted-foreground'>Available</dt><dd className='mt-1 font-medium'>{equipment.availableQuantity} {equipment.availableQuantity === 1 ? 'unit' : 'units'}</dd></div>
+              </dl>
+              <div className='mt-4 flex flex-wrap items-center gap-2 border-t border-border/70 pt-3'>
+                {equipmentId && <Link href={`/all-equipments/${equipmentId}`} className='inline-flex h-9 flex-1 items-center justify-center gap-1.5 rounded-lg border border-border bg-background px-3 text-sm font-medium text-foreground transition-colors hover:bg-muted'><Eye className='size-4' aria-hidden='true' /> View</Link>}
+                {currentStatus !== 'approved' && <Button type='button' size='sm' disabled={isItemUpdating} onClick={() => handleStatusUpdate(equipment, 'approved')} className='h-9 flex-1 gap-1.5 bg-success/10 text-success hover:bg-success/15 hover:text-success dark:text-success'><Check className='size-4' /> Approve</Button>}
+                {currentStatus !== 'rejected' && <Button type='button' size='sm' variant='outline' disabled={isItemUpdating} onClick={() => handleStatusUpdate(equipment, 'rejected')} className='h-9 flex-1 gap-1.5 border-destructive/25 bg-destructive/5 text-destructive hover:bg-destructive/10 hover:text-destructive'><X className='size-4' /> Reject</Button>}
+                <DropdownMenu>
+                  <DropdownMenuTrigger type='button' aria-label={`More actions for ${equipment.name}`} className='inline-flex size-9 items-center justify-center rounded-lg border border-border/80 bg-background text-muted-foreground hover:bg-muted hover:text-foreground'>
+                    <MoreHorizontal className='size-4' aria-hidden='true' />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align='end' className='w-44'>
+                    <DropdownMenuItem onClick={() => setEditingEquipment(equipment)} className='cursor-pointer gap-2'><Pencil className='size-4' aria-hidden='true' /> Update</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleFeaturedToggle(equipment._id || '', equipment.isFeatured ?? false)} className='cursor-pointer gap-2'>{equipment.isFeatured ? <><StarOff className='size-4' /> Remove Featured</> : <><Star className='size-4' /> Make Featured</>}</DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem variant='destructive' onClick={() => setSelectedEquipment(equipment)} className='cursor-pointer gap-2'><Trash2 className='size-4' aria-hidden='true' /> Delete</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </article>
+          )
+        }) : (
+          <p className='rounded-xl border border-border bg-card p-6 text-center text-sm text-muted-foreground'>No equipment found.</p>
+        )}
       </div>
 
       {/* Delete Confirmation Dialog */}

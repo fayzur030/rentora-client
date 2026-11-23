@@ -63,11 +63,7 @@ const MyRentalsPage = async () => {
       </div>
 
       <div className='space-y-2'>
-        <p className='text-xs text-muted-foreground sm:hidden'>
-          Swipe sideways to see all rental details.
-        </p>
-
-        <div className='overflow-hidden rounded-xl border border-border bg-card shadow-sm'>
+        <div className='hidden overflow-hidden rounded-xl border border-border bg-card shadow-sm md:block'>
           <Table className='min-w-225'>
             <TableHeader className='bg-muted/40'>
               <TableRow className='hover:bg-transparent'>
@@ -128,6 +124,26 @@ const MyRentalsPage = async () => {
               )}
             </TableBody>
           </Table>
+        </div>
+
+        <div className='space-y-3 md:hidden'>
+          {myRentals.length ? myRentals.map((rental) => (
+            <article key={rental._id} className='rounded-2xl border border-border bg-card p-4 shadow-sm'>
+              <div className='flex items-start justify-between gap-3'>
+                <h3 className='font-semibold text-foreground'>{rental.equipmentName || rental.equipmentId}</h3>
+                <p className='shrink-0 font-bold text-foreground'>৳{rental.totalAmount.toLocaleString('en-BD')}</p>
+              </div>
+              <dl className='mt-4 grid grid-cols-2 gap-x-3 gap-y-4 border-t border-border/70 pt-3 text-sm'>
+                <div><dt className='text-xs text-muted-foreground'>Rental starts</dt><dd className='mt-1 font-medium'>{formatDate(rental.startDate)}</dd></div>
+                <div><dt className='text-xs text-muted-foreground'>Rental ends</dt><dd className='mt-1 font-medium'>{formatDate(rental.endDate)}</dd></div>
+                <div><dt className='text-xs text-muted-foreground'>Booking date</dt><dd className='mt-1 font-medium'>{formatDate(rental.createdAt)}</dd></div>
+                <div><dt className='text-xs text-muted-foreground'>Payment</dt><dd className='mt-1'><Badge className={`${getStatusClassName(rental.paymentStatus)} capitalize`}>{rental.paymentStatus}</Badge></dd></div>
+                <div className='col-span-2'><dt className='text-xs text-muted-foreground'>Booking status</dt><dd className='mt-1'><Badge className={`${getStatusClassName(rental.bookingStatus)} capitalize`}>{rental.bookingStatus}</Badge></dd></div>
+              </dl>
+            </article>
+          )) : (
+            <p className='rounded-xl border border-border bg-card p-6 text-center text-sm text-muted-foreground'>Your rental bookings will appear here.</p>
+          )}
         </div>
       </div>
     </div>

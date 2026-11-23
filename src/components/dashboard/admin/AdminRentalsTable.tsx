@@ -138,13 +138,8 @@ const AdminRentalsTable = ({
 
   return (
     <div className='space-y-3'>
-      {/* Mobile helper notice for horizontal scroll */}
-      <p className='text-xs text-muted-foreground sm:hidden'>
-        Swipe sideways to view all columns.
-      </p>
-
       {/* SaaS Style Table Wrapper */}
-      <div className='overflow-hidden rounded-2xl border border-border/80 bg-card shadow-xs'>
+      <div className='hidden overflow-hidden rounded-2xl border border-border/80 bg-card shadow-xs md:block'>
         <Table className='min-w-280'>
           {/* Table Header */}
           <TableHeader className='border-b border-border/70 bg-muted/50'>
@@ -326,6 +321,43 @@ const AdminRentalsTable = ({
             )}
           </TableBody>
         </Table>
+      </div>
+
+      <div className='space-y-3 md:hidden'>
+        {rentals.length ? rentals.map((rental, index) => {
+          const customerName = rental.customer?.name || rental.userEmail?.split('@')[0] || 'Customer'
+          const customerEmail = rental.customer?.email || rental.userEmail || '—'
+          const ownerName = rental.owner?.name || 'Owner'
+          const ownerEmail = rental.owner?.email || '—'
+          const equipmentTitle = rental.equipment?.name || rental.equipmentName || 'Equipment'
+          const equipmentImage = rental.equipment?.image
+
+          return (
+            <article key={rental._id || `rental-${index}`} className='rounded-2xl border border-border bg-card p-4 shadow-sm'>
+              <div className='flex items-center gap-3'>
+                <div className='relative size-14 shrink-0 overflow-hidden rounded-xl border border-border/70 bg-muted'>
+                  {equipmentImage ? <Image src={equipmentImage} alt={equipmentTitle} fill sizes='56px' className='object-cover' /> : <div className='flex size-full items-center justify-center text-muted-foreground'><ImageOff className='size-5' aria-hidden='true' /></div>}
+                </div>
+                <div className='min-w-0 flex-1'>
+                  <h3 className='truncate font-semibold text-foreground'>{equipmentTitle}</h3>
+                  {rental.equipment?.category && <Badge className='mt-1 rounded-md border-primary/20 bg-primary/10 px-2 py-0 text-[10px] text-primary'>{rental.equipment.category}</Badge>}
+                </div>
+                <p className='shrink-0 font-bold text-foreground'>৳{rental.totalAmount.toLocaleString()}</p>
+              </div>
+              <div className='mt-4 grid grid-cols-2 gap-3 border-t border-border/70 pt-3'>
+                <div className='min-w-0'><p className='text-xs text-muted-foreground'>Customer</p><p className='mt-1 truncate text-sm font-medium'>{customerName}</p><p className='truncate text-xs text-muted-foreground'>{customerEmail}</p></div>
+                <div className='min-w-0'><p className='text-xs text-muted-foreground'>Owner</p><p className='mt-1 truncate text-sm font-medium'>{ownerName}</p><p className='truncate text-xs text-muted-foreground'>{ownerEmail}</p></div>
+                <div className='col-span-2'><p className='text-xs text-muted-foreground'>Rental period</p><p className='mt-1 text-sm font-medium'>{formatDate(rental.startDate)} – {formatDate(rental.endDate)}</p><p className='text-xs text-muted-foreground'>{rental.rentalDuration} {rental.rentalDuration === 1 ? 'day' : 'days'} · {rental.quantity} {rental.quantity === 1 ? 'unit' : 'units'}</p></div>
+              </div>
+              <div className='mt-3 flex flex-wrap gap-2 border-t border-border/70 pt-3'>
+                <div><p className='mb-1 text-[11px] text-muted-foreground'>Payment</p><StatusBadge status={rental.paymentStatus} /></div>
+                <div><p className='mb-1 text-[11px] text-muted-foreground'>Booking</p><StatusBadge status={rental.bookingStatus} /></div>
+              </div>
+            </article>
+          )
+        }) : (
+          <div className='rounded-xl border border-border bg-card p-6 text-center text-sm text-muted-foreground'>No rentals found.</div>
+        )}
       </div>
     </div>
   )

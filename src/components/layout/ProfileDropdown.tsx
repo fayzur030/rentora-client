@@ -72,9 +72,9 @@ const ProfileDropdown = ({
       {/* Profile Avatar */}
       <DropdownMenuTrigger
         aria-label='Open profile menu'
-        className='rounded-full border-2 border-[var(--accent)] p-0.5 transition-all duration-200 hover:border-[var(--accent)] hover:ring-2 hover:ring-[var(--accent)]/20'
+        className='inline-flex size-11 shrink-0 items-center justify-center rounded-full border-2 border-[var(--accent)] p-0.5 transition-all duration-200 hover:border-[var(--accent)] hover:ring-2 hover:ring-[var(--accent)]/20'
       >
-        <Avatar className='size-9'>
+        <Avatar className='size-9 shrink-0'>
           <AvatarImage
             src={user?.image || undefined}
             alt={user?.name || 'User'}
@@ -88,10 +88,10 @@ const ProfileDropdown = ({
 
       {/* Dropdown Content */}
       <DropdownMenuContent
-        align='end'
+        align={opensUp ? 'start' : 'end'}
         side={opensUp ? 'top' : 'bottom'}
         sideOffset={8}
-        className='w-64 border border-sidebar-foreground/10 bg-[var(--sidebar)] p-2 shadow-2xl'
+        className={`${opensUp ? 'w-60' : 'w-64'} border border-sidebar-foreground/10 bg-[var(--sidebar)] p-2 shadow-2xl`}
       >
         {/* User Information */}
         <DropdownMenuGroup>

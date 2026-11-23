@@ -125,12 +125,8 @@ const ManageUsersTable = ({
           {errorMessage}
         </div>
       ) : (
-        <div className='space-y-2'>
-          <p className='text-xs text-muted-foreground sm:hidden'>
-            Swipe sideways to see all table columns.
-          </p>
-
-          <div className='overflow-hidden rounded-xl border border-border bg-card shadow-sm'>
+        <div className='space-y-3'>
+          <div className='hidden overflow-hidden rounded-xl border border-border bg-card shadow-sm md:block'>
             <Table className='min-w-190'>
               <TableHeader className='bg-muted/40'>
                 <TableRow className='hover:bg-transparent'>
@@ -202,6 +198,42 @@ const ManageUsersTable = ({
                 )}
               </TableBody>
             </Table>
+          </div>
+
+          <div className='space-y-3 md:hidden'>
+            {users.length ? users.map((user) => (
+              <article key={user._id} className='rounded-2xl border border-border bg-card p-4 shadow-sm'>
+                <div className='flex items-start justify-between gap-3'>
+                  <div className='min-w-0'>
+                    <h3 className='truncate font-semibold text-foreground'>{user.name}</h3>
+                    <p className='mt-1 break-all text-sm text-muted-foreground'>{user.email}</p>
+                  </div>
+                  <Badge className={roleBadgeStyles[user.role]}>{roleLabels[user.role]}</Badge>
+                </div>
+                <div className='mt-4 flex flex-wrap items-end justify-between gap-3 border-t border-border/70 pt-3'>
+                  <div>
+                    <p className='text-xs text-muted-foreground'>Registration date</p>
+                    <p className='mt-1 text-sm font-medium'>{formatRegistrationDate(user.createdAt)}</p>
+                  </div>
+                  <Select
+                    value={user.role}
+                    onValueChange={(newRole) => handleRoleSelection(user, newRole)}
+                    disabled={isUpdating}
+                  >
+                    <SelectTrigger aria-label={`Change role for ${user.name}`} className='w-36 bg-background'>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent align='end'>
+                      {userRoles.map((role) => (
+                        <SelectItem key={role} value={role}>{roleLabels[role]}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </article>
+            )) : (
+              <p className='rounded-xl border border-border bg-card p-6 text-center text-sm text-muted-foreground'>No registered users found.</p>
+            )}
           </div>
         </div>
       )}

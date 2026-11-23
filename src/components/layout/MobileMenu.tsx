@@ -10,6 +10,7 @@ import {
 import NavLink from './NavLink'
 import NavAuth from './NavAuth'
 import ThemeToggle from '@/components/shared/ThemeToggle'
+import Logo from '../shared/Logo'
 
 interface NavItem {
   label: string
@@ -32,7 +33,7 @@ const MobileMenu = ({ isOpen, onClose, navLinks }: MobileMenuProps) => {
       >
         <SheetHeader className='border-b border-sidebar-foreground/10 px-6 py-5 text-left'>
           <SheetTitle className='text-lg font-bold text-sidebar-foreground'>
-            Navigation Menu
+            <Logo />
           </SheetTitle>
         </SheetHeader>
 

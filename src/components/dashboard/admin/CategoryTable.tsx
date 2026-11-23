@@ -44,7 +44,8 @@ const CategoryTable = ({
   onDelete,
 }: CategoryTableProps) => {
   return (
-    <div className='overflow-hidden rounded-2xl border border-border/80 bg-card shadow-xs'>
+    <>
+      <div className='hidden overflow-hidden rounded-2xl border border-border/80 bg-card shadow-xs md:block'>
       <Table>
         <TableHeader className='border-b border-border/70 bg-muted/50'>
           <TableRow className='hover:bg-transparent'>
@@ -113,7 +114,39 @@ const CategoryTable = ({
           )}
         </TableBody>
       </Table>
-    </div>
+      </div>
+
+      <div className='space-y-3 md:hidden'>
+        {categories.length ? categories.map((category) => (
+          <article key={category._id} className='flex items-start justify-between gap-3 rounded-2xl border border-border bg-card p-4 shadow-sm'>
+            <div className='min-w-0'>
+              <h3 className='font-semibold text-foreground'>{category.name}</h3>
+              <p className='mt-1 inline-flex max-w-full truncate rounded-md bg-muted px-2 py-1 text-xs text-muted-foreground'>{category.slug}</p>
+              <p className='mt-3 text-xs text-muted-foreground'>Created {formatDate(category.createdAt)}</p>
+            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                type='button'
+                aria-label={`Actions for ${category.name}`}
+                className='inline-flex size-9 shrink-0 items-center justify-center rounded-lg border border-border/80 bg-background text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50'
+              >
+                <MoreHorizontal className='size-4' aria-hidden='true' />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align='end' className='w-40'>
+                <DropdownMenuItem onClick={() => onEdit(category)} className='cursor-pointer gap-2'>
+                  <Pencil className='size-4' aria-hidden='true' /> Edit
+                </DropdownMenuItem>
+                <DropdownMenuItem variant='destructive' onClick={() => onDelete(category)} className='cursor-pointer gap-2'>
+                  <Trash2 className='size-4' aria-hidden='true' /> Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </article>
+        )) : (
+          <p className='rounded-xl border border-border bg-card p-6 text-center text-sm text-muted-foreground'>No categories found.</p>
+        )}
+      </div>
+    </>
   )
 }
 
