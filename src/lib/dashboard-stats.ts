@@ -21,10 +21,10 @@ type DashboardRental = Rental | BookingRental
 
 const DASHBOARD_TIME_ZONE = 'Asia/Dhaka'
 
-// Keep money formatting consistent across all dashboard cards.
+//  money formatting consistent across all dashboard cards.
 const formatMoney = (amount: number) => `BDT ${amount.toLocaleString('en-BD')}`
 
-// Return a copy of a date set to midnight, so we can compare calendar days.
+// Return a copy of a date set to midnight,  compare calendar days.
 const getStartOfDay = (date: Date) => {
   const startOfDay = new Date(date)
   startOfDay.setHours(0, 0, 0, 0)
@@ -193,6 +193,7 @@ export interface AdminAnalyticsData {
   userGrowth: Array<{ month: string; users: number }>
 }
 
+// owner dashboard analytics by rechart
 export const getAdminDashboardAnalytics = (
   users: DashboardUser[],
   rentals: Rental[],
@@ -279,6 +280,86 @@ export const getAdminDashboardAnalytics = (
   }
 }
 
+// owner monthly earning
+export const getOwnerMonthlyEarnings = (
+  rentals: BookingRental[],
+  now = new Date()
+) => {
+  const timeZone = 'Asia/Dhaka'
+
+  const monthParts = new Intl.DateTimeFormat('en-US', {
+    timeZone,
+    year: 'numeric',
+    month: 'numeric',
+  }).formatToParts(now)
+
+  const currentYear = Number(
+    monthParts.find((part) => part.type === 'year')?.value
+  )
+
+  const currentMonth = Number(
+    monthParts.find((part) => part.type === 'month')?.value
+  )
+
+  const months = Array.from({ length: 6 }, (_, index) => {
+    const date = new Date(Date.UTC(currentYear, currentMonth - 6 + index, 1))
+
+    return {
+      key: `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(
+        2,
+        '0'
+      )}`,
+      month: date.toLocaleDateString('en-US', {
+        month: 'short',
+        timeZone: 'UTC',
+      }),
+      earnings: 0,
+    }
+  })
+
+  const monthlyEarnings = new Map(months.map(({ key }) => [key, 0]))
+
+  for (const rental of rentals) {
+    if (
+      rental.bookingStatus === 'cancelled' ||
+      rental.paymentStatus !== 'paid' ||
+      rental.payment?.paymentStatus !== 'paid'
+    ) {
+      continue
+    }
+
+    const paidAt = new Date(rental.payment.paidAt)
+
+    if (Number.isNaN(paidAt.getTime())) continue
+
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone,
+      year: 'numeric',
+      month: '2-digit',
+    }).formatToParts(paidAt)
+
+    const year = parts.find((part) => part.type === 'year')?.value
+    const month = parts.find((part) => part.type === 'month')?.value
+
+    if (!year || !month) continue
+
+    const key = `${year}-${month}`
+
+    if (monthlyEarnings.has(key)) {
+      monthlyEarnings.set(
+        key,
+        (monthlyEarnings.get(key) ?? 0) + rental.totalAmount
+      )
+    }
+  }
+
+  return months.map(({ key, month }) => ({
+    month,
+    earnings: monthlyEarnings.get(key) ?? 0,
+  }))
+}
+
+// owner stats card
 export const getOwnerDashboardStats = (
   equipments: Equipment[],
   rentals: BookingRental[]
@@ -370,6 +451,7 @@ export const getOwnerDashboardStats = (
     },
   ]
 }
+// customer stats card
 
 export const getCustomerDashboardStats = (
   rentals: BookingRental[],

@@ -136,7 +136,7 @@ const ProfileDropdown = ({
           Dashboard
         </DropdownMenuItem>
         {/* My Profile */}
-        <DropdownMenuItem
+        {/* <DropdownMenuItem
           render={<Link href='/profile' onClick={closeMenus} />}
           className='group gap-2 rounded-lg py-2.5 text-sm font-medium text-sidebar-foreground/80 transition-colors cursor-pointer hover:bg-[var(--accent)]/10 hover:text-[var(--accent)] focus:bg-[var(--accent)]/10 focus:text-[var(--accent)]'
         >
@@ -145,7 +145,7 @@ const ProfileDropdown = ({
             className='size-4 shrink-0 text-sidebar-foreground/80 transition-colors group-hover:text-[var(--accent)] group-focus:text-[var(--accent)]'
           />
           My Profile
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
 
         <DropdownMenuSeparator className='bg-card/15' />
 

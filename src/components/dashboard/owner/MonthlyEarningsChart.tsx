@@ -1,6 +1,5 @@
 'use client'
 
-import { Rental } from '@/types/rental'
 import {
   Area,
   AreaChart,
@@ -11,21 +10,18 @@ import {
   YAxis,
 } from 'recharts'
 
-// interface MonthlyEarningsChartProps {
-//   rental: Rental[]
-// }
-const data = [
-  { month: 'Jun', earnings: 12000 },
-  { month: 'Jul', earnings: 18000 },
-  { month: 'Aug', earnings: 15000 },
-  { month: 'Sep', earnings: 25000 },
-  { month: 'Oct', earnings: 22000 },
-  { month: 'Nov', earnings: 32000 },
-]
+interface MonthlyEarnings {
+  month: string
+  earnings: number
+}
 
-const MonthlyEarningsChart = () => {
+interface MonthlyEarningsChartProps {
+  data: MonthlyEarnings[]
+}
+
+const MonthlyEarningsChart = ({ data }: MonthlyEarningsChartProps) => {
   return (
-    <div className='h-[350px] w-full'>
+    <div className='h-87.5 w-full mt-10'>
       <ResponsiveContainer width='100%' height='100%'>
         <AreaChart data={data}>
           <defs>
@@ -37,11 +33,17 @@ const MonthlyEarningsChart = () => {
 
           <CartesianGrid strokeDasharray='3 3' vertical={false} />
 
-          <XAxis dataKey='month' axisLine={false} tickLine={false} />
+          <XAxis
+            dataKey='month'
+            axisLine={false}
+            tickLine={false}
+            tick={{ fill: 'var(--muted-foreground)', fontSize: 12 }}
+          />
 
           <YAxis
             axisLine={false}
             tickLine={false}
+            tick={{ fill: 'var(--muted-foreground)', fontSize: 12 }}
             tickFormatter={(value) => `৳${value / 1000}k`}
           />
 

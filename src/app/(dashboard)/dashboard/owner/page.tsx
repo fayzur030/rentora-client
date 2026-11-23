@@ -3,7 +3,10 @@ import StatsGrid from '@/components/dashboard/StatsGrid'
 import { getMyEquipmentRentals } from '@/lib/api/bookings'
 import { getMyEquipments } from '@/lib/api/equipments'
 import { getTokenFromServer } from '@/lib/auth/getTokenFromServer'
-import { getOwnerDashboardStats } from '@/lib/dashboard-stats'
+import {
+  getOwnerDashboardStats,
+  getOwnerMonthlyEarnings,
+} from '@/lib/dashboard-stats'
 import { redirect } from 'next/navigation'
 
 const OwnerDashboard = async () => {
@@ -19,7 +22,7 @@ const OwnerDashboard = async () => {
   ])
 
   const stats = getOwnerDashboardStats(equipments, rentals)
-
+  const monthlyEarnings = getOwnerMonthlyEarnings(rentals)
   return (
     <section className='space-y-6'>
       <div className='space-y-1'>
@@ -31,7 +34,7 @@ const OwnerDashboard = async () => {
         </p>
       </div>
       <StatsGrid stats={stats} />
-      <MonthlyEarningsChart />
+      <MonthlyEarningsChart data={monthlyEarnings} />
     </section>
   )
 }

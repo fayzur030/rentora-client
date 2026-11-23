@@ -50,7 +50,7 @@ export interface BookingRental {
   contactNumber: string
   deliveryAddress: string
   additionalNotes: string
-  bookingStatus: 'pending' | 'confirmed' | 'completed' | 'cancelled'
+  bookingStatus: 'pending' | 'confirmed' | 'cancelled'
   paymentStatus: 'pending' | 'paid' | 'failed'
   transaction: {
     paymentIntentId: string
