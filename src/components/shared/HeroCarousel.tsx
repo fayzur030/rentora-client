@@ -62,7 +62,10 @@ const HeroCarousel = ({ categories }: HeroCarouselProps) => {
 
   return (
     <MotionConfig reducedMotion='user'>
-      <section id='home-hero' className='relative isolate w-full overflow-hidden bg-linear-to-br from-hero-start via-hero-mid to-hero-end'>
+      <section
+        id='home-hero'
+        className='relative isolate w-full overflow-hidden bg-linear-to-br from-hero-start via-hero-mid to-hero-end'
+      >
         <div className='absolute inset-0' aria-hidden='true'>
           <AnimatePresence initial={false}>
             {activeCategory?.image && (
@@ -81,7 +84,7 @@ const HeroCarousel = ({ categories }: HeroCarouselProps) => {
                   quality={100}
                   preload={activeIndex === 0}
                   sizes='100vw'
-                  className='object-cover object-center backdrop-blur-xs'
+                  className='scale-105 object-cover object-center blur-[1px]'
                 />
               </motion.div>
             )}
