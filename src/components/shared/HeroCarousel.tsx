@@ -84,14 +84,14 @@ const HeroCarousel = ({ categories }: HeroCarouselProps) => {
                   quality={100}
                   preload={activeIndex === 0}
                   sizes='100vw'
-                  className='scale-105 object-cover object-center blur-[1px]'
+                  className='scale-105 object-cover object-center '
                 />
               </motion.div>
             )}
           </AnimatePresence>
 
-          <div className='absolute inset-0 z-[1] bg-black/60' />
-          <div className='absolute inset-0 z-[2] bg-linear-to-r from-black/40 via-transparent to-black/15' />
+          <div className='absolute inset-0 z-1 bg-black/60' />
+          <div className='absolute inset-0 z-2 bg-linear-to-r from-black/40 via-transparent to-black/15' />
         </div>
 
         <div className='relative z-10 mx-auto flex min-h-svh w-full max-w-7xl items-center justify-center px-4 py-20 text-center sm:px-6 sm:py-24 lg:justify-start lg:px-8 lg:text-left'>
