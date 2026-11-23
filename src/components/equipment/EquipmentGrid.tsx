@@ -1,14 +1,19 @@
 import EquipmentCard from './EquipmentCard'
+import EquipmentPagination from './EquipmentPagination'
 import type { Equipment } from '@/types/equipment'
 
 interface EquipmentGridProps {
   equipments: Equipment[]
   favoriteEquipmentIds?: string[]
+  currentPage: number
+  totalPages: number
 }
 
 const EquipmentGrid = ({
   equipments,
   favoriteEquipmentIds = [],
+  currentPage,
+  totalPages,
 }: EquipmentGridProps) => {
   if (equipments.length === 0) {
     return (
@@ -24,17 +29,21 @@ const EquipmentGrid = ({
   }
 
   return (
-    <div className='grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3'>
-      {equipments.map((equipment, index) => (
-        <EquipmentCard
-          key={equipment._id ?? equipment.id ?? `${equipment.name}-${index}`}
-          equipment={equipment}
-          isFavorite={favoriteEquipmentIds.includes(
-            equipment._id ?? equipment.id ?? ''
-          )}
-        />
-      ))}
-    </div>
+    <>
+      <div className='grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3'>
+        {equipments.map((equipment, index) => (
+          <EquipmentCard
+            key={equipment._id ?? equipment.id ?? `${equipment.name}-${index}`}
+            equipment={equipment}
+            isFavorite={favoriteEquipmentIds.includes(
+              equipment._id ?? equipment.id ?? ''
+            )}
+          />
+        ))}
+      </div>
+
+      <EquipmentPagination currentPage={currentPage} totalPages={totalPages} />
+    </>
   )
 }
 

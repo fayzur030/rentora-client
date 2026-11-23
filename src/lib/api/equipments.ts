@@ -1,9 +1,21 @@
-import { Equipment, MyEquipment, PopularEquipments } from '@/types/equipment'
+import {
+  AllEquipmentsResponse,
+  Equipment,
+  MyEquipment,
+  PopularEquipments,
+} from '@/types/equipment'
 import { baseUrl } from '../config'
 import { getTokenFromServer } from '../auth/getTokenFromServer'
 import { redirect } from 'next/navigation'
 
-export const getAllEquipments = async (query = ''): Promise<Equipment[]> => {
+export const getAllEquipments = async (
+  query = '',
+  page = 1,
+  limit = 6
+): Promise<AllEquipmentsResponse> => {
+  const params = new URLSearchParams(query)
+  params.set('page', String(page))
+  params.set('limit', String(limit))
   const res = await fetch(`${baseUrl}/api/equipment/equipments?${query}`, {
     cache: 'no-store',
   })

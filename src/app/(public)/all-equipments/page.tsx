@@ -20,6 +20,7 @@ const AllEquipmentsPage = async ({ searchParams }: AllEquipmentsPageProps) => {
     minPrice,
     maxPrice,
     sort,
+    page,
   } = await searchParams
 
   const query = new URLSearchParams()
@@ -40,12 +41,18 @@ const AllEquipmentsPage = async ({ searchParams }: AllEquipmentsPageProps) => {
     }
   })
   const queryString = query.toString()
+  const currentPage = Number(page) || 1
 
-  const [allEquipments, session, categories] = await Promise.all([
-    getAllEquipments(queryString),
+  const [equipmentData, session, categories] = await Promise.all([
+    getAllEquipments(queryString, currentPage),
     getSessionFromServer(),
     getCategories(),
   ])
+
+  const allEquipments = equipmentData.equipments
+  //pagination
+  const pagination = equipmentData.pagination
+
   const favorites = session?.user?.id ? await getFavorites(session.user.id) : []
   const favoriteEquipmentIds = favorites
     .map((equipment) => equipment._id ?? equipment.id)
@@ -60,10 +67,7 @@ const AllEquipmentsPage = async ({ searchParams }: AllEquipmentsPageProps) => {
       <div className='mt-6 flex flex-col gap-6 lg:flex-row'>
         {/* Left side: filter sidebar (desktop and tablet) */}
         <aside className='hidden w-full shrink-0 md:block md:w-64 lg:w-72'>
-          <EquipmentFilters
-            categories={categories}
-            queryString={queryString}
-          />
+          <EquipmentFilters categories={categories} queryString={queryString} />
         </aside>
 
         {/* Right side: equipment listing */}
@@ -96,6 +100,8 @@ const AllEquipmentsPage = async ({ searchParams }: AllEquipmentsPageProps) => {
           </div>
 
           <EquipmentGrid
+            currentPage={pagination.currentPage}
+            totalPages={pagination.totalPages}
             equipments={allEquipments}
             favoriteEquipmentIds={favoriteEquipmentIds}
           />

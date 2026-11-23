@@ -33,10 +33,33 @@ export interface Equipment {
   isFeatured: boolean
 }
 
+export interface PaginationResponse<T> {
+  equipments: T[]
+  pagination: {
+    currentPage: number
+    limit: number
+    totalItems: number
+    totalPages: number
+    hasNextPage: boolean
+    hasPrevPage: boolean
+  }
+}
 export interface ApiSuccessResponse<T> {
   success: true
   message: string
   data: T
+}
+export interface EquipmentPagination {
+  currentPage: number
+  limit: number
+  totalEquipments: number
+  totalPages: number
+  hasNextPage: boolean
+  hasPrevPage: boolean
+}
+export interface AllEquipmentsResponse {
+  equipments: Equipment[]
+  pagination: EquipmentPagination
 }
 
 // Owner dashboard: my equipments
