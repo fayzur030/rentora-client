@@ -12,7 +12,7 @@ import {
 import { Separator } from '@/components/ui/separator'
 
 import BasicInformation from './basic-information'
-import OwnerInformation from './owner-information'
+
 import RentalInformation from './rental-information'
 import { createEquipment } from '@/lib/actions/equipment'
 import {
@@ -26,10 +26,11 @@ import { toast } from 'sonner'
 import { useState } from 'react'
 import { getSessionFromClient } from '@/lib/auth/getSessionFromClient'
 import type { Category } from '@/types/category'
+import { equipmentForm } from '@/lib/validation/equipmentForm.validation'
 
 // Main form for the Add Equipment page.
 // It only puts the sections together.
-// Submit / reset logic will be added later.
+// Submit and reset the equipment form.
 
 interface EquipmentFormProps {
   categories: Category[]
@@ -68,6 +69,12 @@ const EquipmentForm = ({ categories }: EquipmentFormProps) => {
       } as EquipmentOwner,
     }
 
+    const validationMessage = equipmentForm(equipmentData)
+    if (validationMessage) {
+      toast.error(validationMessage)
+      return
+    }
+
     try {
       const result = await createEquipment(equipmentData as Equipment)
       toast.success(result.message || 'Equipment added successfully!')
@@ -81,7 +88,7 @@ const EquipmentForm = ({ categories }: EquipmentFormProps) => {
   }
 
   return (
-    <form onSubmit={handleCreateEquipment}>
+    <form onSubmit={handleCreateEquipment} noValidate>
       <Card className='overflow-hidden'>
         <CardHeader>
           <CardTitle className='text-lg font-bold sm:text-xl'>
@@ -102,7 +109,7 @@ const EquipmentForm = ({ categories }: EquipmentFormProps) => {
             onChange={setImage}
           />
           <RentalInformation />
-          <OwnerInformation />
+          {/* <OwnerInformation /> */}
         </CardContent>
 
         <Separator />
