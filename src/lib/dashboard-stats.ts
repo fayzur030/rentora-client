@@ -17,45 +17,121 @@ import type { Equipment } from '@/types/equipment'
 import type { Rental } from '@/types/rental'
 import type { Users as DashboardUser } from '@/types/users'
 
+type DashboardRental = Rental | BookingRental
+
+const DASHBOARD_TIME_ZONE = 'Asia/Dhaka'
+
+// Keep money formatting consistent across all dashboard cards.
 const formatMoney = (amount: number) => `BDT ${amount.toLocaleString('en-BD')}`
 
-const startOfDay = (date: Date) => {
-  const day = new Date(date)
-  day.setHours(0, 0, 0, 0)
-  return day
+// Return a copy of a date set to midnight, so we can compare calendar days.
+const getStartOfDay = (date: Date) => {
+  const startOfDay = new Date(date)
+  startOfDay.setHours(0, 0, 0, 0)
+  return startOfDay
 }
 
-const isActiveRental = (rental: Rental | BookingRental, today: Date) => {
-  const startDate = startOfDay(new Date(rental.startDate))
-  const endDate = startOfDay(new Date(rental.endDate))
+// Tell whether a confirmed rental includes today's date.
+const isActiveRental = (rental: DashboardRental, today: Date) => {
+  const startDate = new Date(rental.startDate)
+  const endDate = new Date(rental.endDate)
+
+  if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime())) {
+    return false
+  }
+
+  const rentalStart = getStartOfDay(startDate)
+  const rentalEnd = getStartOfDay(endDate)
 
   return (
     rental.bookingStatus === 'confirmed' &&
-    !Number.isNaN(startDate.getTime()) &&
-    !Number.isNaN(endDate.getTime()) &&
-    startDate <= today &&
-    endDate >= today
+    rentalStart <= today &&
+    rentalEnd >= today
   )
 }
 
-const isCompletedRental = (rental: Rental | BookingRental) =>
+// Use booking status to decide if a rental is completed.
+const isCompletedRental = (rental: DashboardRental) =>
   rental.bookingStatus === 'completed'
 
-const countPaidAmount = (rentals: Array<Rental | BookingRental>) =>
-  rentals.reduce(
-    (total, rental) =>
-      rental.paymentStatus === 'paid' ? total + rental.totalAmount : total,
-    0
-  )
+// A rental counts as paid only when both booking and payment records say paid.
+const isPaidRental = (rental: DashboardRental) =>
+  rental.paymentStatus === 'paid' && rental.payment?.paymentStatus === 'paid'
+
+// Add the amounts from paid rentals and return the total.
+const getPaidRentalTotal = (rentals: DashboardRental[]) => {
+  let total = 0
+
+  for (const rental of rentals) {
+    if (isPaidRental(rental)) {
+      total += rental.totalAmount
+    }
+  }
+
+  return total
+}
+
+// Convert a date to a YYYY-MM key using Dhaka time.
+const getMonthKey = (value: string | Date) => {
+  const date = value instanceof Date ? value : new Date(value)
+
+  if (Number.isNaN(date.getTime())) {
+    return null
+  }
+
+  const dateParts = new Intl.DateTimeFormat('en-US', {
+    timeZone: DASHBOARD_TIME_ZONE,
+    year: 'numeric',
+    month: '2-digit',
+  }).formatToParts(date)
+
+  const year = dateParts.find((part) => part.type === 'year')?.value
+  const month = dateParts.find((part) => part.type === 'month')?.value
+
+  if (!year || !month) {
+    return null
+  }
+
+  return `${year}-${month}`
+}
+
+// Create the current month and previous eleven months for the admin charts.
+const getLastTwelveMonths = (now: Date) => {
+  const currentMonthKey = getMonthKey(now)
+
+  if (!currentMonthKey) {
+    return []
+  }
+
+  const [year, month] = currentMonthKey.split('-').map(Number)
+  const months: Array<{ key: string; label: string }> = []
+
+  for (let monthOffset = -11; monthOffset <= 0; monthOffset += 1) {
+    const date = new Date(Date.UTC(year, month - 1 + monthOffset, 1))
+    const key = `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}`
+    const label = date.toLocaleDateString('en-US', {
+      month: 'short',
+      year: '2-digit',
+      timeZone: 'UTC',
+    })
+
+    months.push({ key, label })
+  }
+
+  return months
+}
 
 export const getAdminDashboardStats = (
   users: DashboardUser[],
   equipments: Equipment[],
   rentals: Rental[]
 ): StatsCardProps[] => {
+  const owners = users.filter((user) => user.role === 'owner').length
   const pendingApprovals = equipments.filter(
     (equipment) => equipment.status === 'pending'
   ).length
+  const completedRentals = rentals.filter(isCompletedRental).length
+  const totalRevenue = getPaidRentalTotal(rentals)
 
   return [
     {
@@ -69,7 +145,7 @@ export const getAdminDashboardStats = (
       icon: ShieldCheck,
       title: 'Total Owners',
       color: 'indigo',
-      value: users.filter((user) => user.role === 'owner').length,
+      value: owners,
       description: 'Registered equipment owners',
     },
     {
@@ -97,14 +173,14 @@ export const getAdminDashboardStats = (
       icon: CheckCircle2,
       title: 'Completed Rentals',
       color: 'emerald',
-      value: rentals.filter(isCompletedRental).length,
+      value: completedRentals,
       description: 'Bookings marked as completed',
     },
     {
       icon: Wallet,
       title: 'Total Revenue',
       color: 'amber',
-      value: `৳${getAdminPaidRevenue(rentals).toLocaleString('en-BD')}`,
+      value: formatMoney(totalRevenue),
       description: 'From paid rentals',
     },
   ]
@@ -117,160 +193,123 @@ export interface AdminAnalyticsData {
   userGrowth: Array<{ month: string; users: number }>
 }
 
-const getAdminPaidRevenue = (rentals: Rental[]) =>
-  rentals.reduce((total, rental) => {
-    if (
-      rental.paymentStatus !== 'paid' ||
-      rental.payment?.paymentStatus !== 'paid'
-    ) {
-      return total
-    }
-
-    return total + rental.totalAmount
-  }, 0)
-
 export const getAdminDashboardAnalytics = (
   users: DashboardUser[],
   rentals: Rental[],
   now = new Date()
 ): AdminAnalyticsData => {
-  const dashboardTimeZone = 'Asia/Dhaka'
-  const monthParts = new Intl.DateTimeFormat('en-US', {
-    timeZone: dashboardTimeZone,
-    year: 'numeric',
-    month: 'numeric',
-  }).formatToParts(now)
-  const currentYear = Number(
-    monthParts.find((part) => part.type === 'year')?.value
-  )
-  const currentMonth = Number(
-    monthParts.find((part) => part.type === 'month')?.value
-  )
-  const months = Array.from({ length: 12 }, (_, index) => {
-    const date = new Date(Date.UTC(currentYear, currentMonth - 12 + index, 1))
-    const key = `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}`
-    const label = date.toLocaleDateString('en-US', {
-      month: 'short',
-      year: '2-digit',
-      timeZone: 'UTC',
-    })
+  const months = getLastTwelveMonths(now)
 
-    return { key, label }
-  })
-  const monthlyRevenue = new Map(months.map(({ key }) => [key, 0]))
-  const monthlyBookings = new Map(months.map(({ key }) => [key, 0]))
-  const userGrowth = new Map(months.map(({ key }) => [key, 0]))
-
-  const getMonthKey = (value: string | Date) => {
-    const date = new Date(value)
-    if (Number.isNaN(date.getTime())) return null
-    const parts = new Intl.DateTimeFormat('en-US', {
-      timeZone: dashboardTimeZone,
-      year: 'numeric',
-      month: '2-digit',
-    }).formatToParts(date)
-    const year = parts.find((part) => part.type === 'year')?.value
-    const month = parts.find((part) => part.type === 'month')?.value
-    return year && month ? `${year}-${month}` : null
-  }
+  // Each month starts at zero. We add real database totals below.
+  const monthlyRevenue = months.map((month) => ({
+    ...month,
+    revenue: 0,
+  }))
+  const monthlyBookings = months.map((month) => ({
+    ...month,
+    bookings: 0,
+  }))
+  const userGrowth = months.map((month) => ({
+    ...month,
+    users: 0,
+  }))
 
   for (const rental of rentals) {
-    const createdMonth = getMonthKey(rental.createdAt)
-    if (createdMonth && monthlyBookings.has(createdMonth)) {
-      monthlyBookings.set(
-        createdMonth,
-        (monthlyBookings.get(createdMonth) ?? 0) + 1
-      )
+    const bookingMonth = getMonthKey(rental.createdAt)
+    const bookingMonthData = monthlyBookings.find(
+      (month) => month.key === bookingMonth
+    )
+
+    if (bookingMonthData) {
+      bookingMonthData.bookings += 1
     }
 
-    if (
-      rental.paymentStatus === 'paid' &&
-      rental.payment?.paymentStatus === 'paid'
-    ) {
-      const paidMonth = getMonthKey(rental.payment.paidAt)
-      if (paidMonth && monthlyRevenue.has(paidMonth)) {
-        monthlyRevenue.set(
-          paidMonth,
-          (monthlyRevenue.get(paidMonth) ?? 0) + rental.totalAmount
+    if (isPaidRental(rental)) {
+      const paymentDate = rental.payment?.paidAt
+
+      if (paymentDate) {
+        const paymentMonth = getMonthKey(paymentDate)
+        const revenueMonthData = monthlyRevenue.find(
+          (month) => month.key === paymentMonth
         )
+
+        if (revenueMonthData) {
+          revenueMonthData.revenue += rental.totalAmount
+        }
       }
     }
   }
 
   for (const user of users) {
-    const createdMonth = getMonthKey(user.createdAt)
-    if (createdMonth && userGrowth.has(createdMonth)) {
-      userGrowth.set(createdMonth, (userGrowth.get(createdMonth) ?? 0) + 1)
+    const registrationMonth = getMonthKey(user.createdAt)
+    const userMonthData = userGrowth.find(
+      (month) => month.key === registrationMonth
+    )
+
+    if (userMonthData) {
+      userMonthData.users += 1
     }
   }
 
-  const bookingStatusOrder = [
-    ['pending', 'Pending'],
-    ['confirmed', 'Confirmed'],
-    ['completed', 'Completed'],
-    ['cancelled', 'Cancelled'],
-  ]
+  const bookingStatuses = [
+    { value: 'pending', label: 'Pending' },
+    { value: 'confirmed', label: 'Confirmed' },
+    { value: 'completed', label: 'Completed' },
+    { value: 'cancelled', label: 'Cancelled' },
+  ].map((status) => ({
+    status: status.label,
+    count: rentals.filter((rental) => rental.bookingStatus === status.value)
+      .length,
+  }))
 
   return {
-    monthlyRevenue: months.map(({ key, label }) => ({
-      month: label,
-      revenue: monthlyRevenue.get(key) ?? 0,
+    monthlyRevenue: monthlyRevenue.map((month) => ({
+      month: month.label,
+      revenue: month.revenue,
     })),
-    monthlyBookings: months.map(({ key, label }) => ({
-      month: label,
-      bookings: monthlyBookings.get(key) ?? 0,
+    monthlyBookings: monthlyBookings.map((month) => ({
+      month: month.label,
+      bookings: month.bookings,
     })),
-    bookingStatuses: bookingStatusOrder.map(([status, label]) => ({
-      status: label,
-      count: rentals.filter((rental) => rental.bookingStatus === status).length,
-    })),
-    userGrowth: months.map(({ key, label }) => ({
-      month: label,
-      users: userGrowth.get(key) ?? 0,
+    bookingStatuses,
+    userGrowth: userGrowth.map((month) => ({
+      month: month.label,
+      users: month.users,
     })),
   }
 }
-// export const getOwnerMonthlyEarnings = (
-//   rentals: BookingRental[],
-//   now = new Date()
-// ) => {
-//   const timeZone = 'Asia/Dhaka'
-//   const monthParts = new Intl.DateTimeFormat('en-US', {
-//     timeZone,
-//     year: 'numeric',
-//     month
-//   })
-// }
 
 export const getOwnerDashboardStats = (
   equipments: Equipment[],
   rentals: BookingRental[]
 ): StatsCardProps[] => {
-  const today = startOfDay(new Date())
-  const currentMonth = today.getMonth()
-  const currentYear = today.getFullYear()
+  const today = getStartOfDay(new Date())
   const paidRentals = rentals.filter(
-    (rental) =>
-      rental.bookingStatus !== 'cancelled' &&
-      rental.paymentStatus === 'paid' &&
-      rental.payment?.paymentStatus === 'paid'
+    (rental) => rental.bookingStatus !== 'cancelled' && isPaidRental(rental)
   )
-  const totalEarnings = paidRentals.reduce(
-    (total, rental) => total + rental.totalAmount,
-    0
-  )
-  const monthlyEarnings = paidRentals.reduce((total, rental) => {
-    const paidAt = new Date(rental.payment?.paidAt ?? '')
-    if (
-      Number.isNaN(paidAt.getTime()) ||
-      paidAt.getMonth() !== currentMonth ||
-      paidAt.getFullYear() !== currentYear
-    ) {
-      return total
-    }
+  const totalEarnings = getPaidRentalTotal(paidRentals)
+  const currentMonth = getMonthKey(today)
 
-    return total + rental.totalAmount
-  }, 0)
+  let monthlyEarnings = 0
+
+  for (const rental of paidRentals) {
+    const paymentDate = rental.payment?.paidAt
+
+    if (paymentDate && getMonthKey(paymentDate) === currentMonth) {
+      monthlyEarnings += rental.totalAmount
+    }
+  }
+
+  const activeEquipment = equipments.filter(
+    (equipment) => equipment.status === 'approved'
+  ).length
+  const pendingEquipment = equipments.filter(
+    (equipment) => equipment.status === 'pending'
+  ).length
+  const activeRentals = rentals.filter((rental) =>
+    isActiveRental(rental, today)
+  ).length
+  const completedRentals = rentals.filter(isCompletedRental).length
 
   return [
     {
@@ -284,16 +323,14 @@ export const getOwnerDashboardStats = (
       icon: BadgeCheck,
       title: 'Active Equipment',
       color: 'teal',
-      value: equipments.filter((equipment) => equipment.status === 'approved')
-        .length,
+      value: activeEquipment,
       description: 'Approved listings',
     },
     {
       icon: Clock3,
       title: 'Pending Equipment',
       color: 'orange',
-      value: equipments.filter((equipment) => equipment.status === 'pending')
-        .length,
+      value: pendingEquipment,
       description: 'Listings awaiting review',
     },
     {
@@ -307,7 +344,7 @@ export const getOwnerDashboardStats = (
       icon: Wrench,
       title: 'Active Rentals',
       color: 'sky',
-      value: rentals.filter((rental) => isActiveRental(rental, today)).length,
+      value: activeRentals,
       description: 'Confirmed rentals in progress',
     },
     {
@@ -328,8 +365,7 @@ export const getOwnerDashboardStats = (
       icon: CheckCircle2,
       title: 'Completed Rentals',
       color: 'emerald',
-      value: rentals.filter((rental) => rental.bookingStatus === 'confirmed')
-        .length,
+      value: completedRentals,
       description: 'Bookings marked as completed',
     },
   ]
@@ -339,7 +375,11 @@ export const getCustomerDashboardStats = (
   rentals: BookingRental[],
   favoriteEquipmentCount: number
 ): StatsCardProps[] => {
-  const today = startOfDay(new Date())
+  const today = getStartOfDay(new Date())
+  const activeRentals = rentals.filter((rental) =>
+    isActiveRental(rental, today)
+  ).length
+  const totalSpent = getPaidRentalTotal(rentals)
 
   return [
     {
@@ -349,27 +389,13 @@ export const getCustomerDashboardStats = (
       value: rentals.length,
       description: 'Your rental booking records',
     },
-    // {
-    //   icon: Clock3,
-    //   title: 'Pending Bookings',
-    //   value: rentals.filter((rental) => rental.bookingStatus === 'pending')
-    //     .length,
-    //   description: 'Bookings awaiting confirmation',
-    // },
     {
       icon: Wrench,
       title: 'Active Rentals',
       color: 'sky',
-      value: rentals.filter((rental) => isActiveRental(rental, today)).length,
+      value: activeRentals,
       description: 'Confirmed rentals in progress',
     },
-    // {
-    //   icon: CheckCircle2,
-    //   title: 'Completed Rentals',
-    //   value: rentals.filter((rental) => isCompletedRental(rental, today))
-    //     .length,
-    //   description: 'Rentals whose end date has passed',
-    // },
     {
       icon: Heart,
       title: 'Favorite Equipment',
@@ -381,7 +407,7 @@ export const getCustomerDashboardStats = (
       icon: Wallet,
       title: 'Total Spent',
       color: 'amber',
-      value: formatMoney(countPaidAmount(rentals)),
+      value: formatMoney(totalSpent),
       description: 'From paid rentals',
     },
   ]

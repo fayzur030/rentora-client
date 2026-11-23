@@ -11,9 +11,9 @@ import {
   YAxis,
 } from 'recharts'
 
-interface MonthlyEarningsChartProps {
-  rental: Rental[]
-}
+// interface MonthlyEarningsChartProps {
+//   rental: Rental[]
+// }
 const data = [
   { month: 'Jun', earnings: 12000 },
   { month: 'Jul', earnings: 18000 },
@@ -23,7 +23,7 @@ const data = [
   { month: 'Nov', earnings: 32000 },
 ]
 
-const MonthlyEarningsChart = ({ rental }: MonthlyEarningsChartProps) => {
+const MonthlyEarningsChart = () => {
   return (
     <div className='h-[350px] w-full'>
       <ResponsiveContainer width='100%' height='100%'>
