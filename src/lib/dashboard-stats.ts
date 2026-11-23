@@ -468,6 +468,8 @@ export const getCustomerDashboardStats = (
     return isPaid ? sum + rental.totalAmount : sum
   }, 0)
 
+
+
   return [
     {
       icon: CalendarDays,

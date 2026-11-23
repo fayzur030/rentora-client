@@ -43,6 +43,7 @@ export const ownerNavItems: DashboardNavItem[] = [
     label: 'Dashboard',
     href: '/dashboard/owner',
     icon: LayoutDashboard,
+    exact: true,
   },
   {
     label: 'Add Equipment',
@@ -66,7 +67,12 @@ export const ownerNavItems: DashboardNavItem[] = [
 // Admin dashboard navigation
 // ---------------------------------------------------------------
 export const adminNavItems: DashboardNavItem[] = [
-  { label: 'Dashboard', href: '/dashboard/admin', icon: LayoutDashboard },
+  {
+    label: 'Dashboard',
+    href: '/dashboard/admin',
+    icon: LayoutDashboard,
+    exact: true,
+  },
   { label: 'All Users', href: '/dashboard/admin/users', icon: Users },
   { label: 'All Equipment', href: '/dashboard/admin/equipment', icon: Package },
   {
@@ -104,10 +110,6 @@ export const isNavItemActive = (
   return pathname === item.href || pathname.startsWith(`${item.href}/`)
 }
 
-// Finds the nav item that matches the current URL.
-// Used by the navbar to show the section and page title.
-// When several items match, the most specific one (longest href) wins,
-// so a parent link never hides the real page title.
 export const findActiveNavItem = (
   pathname: string
 ): { role: DashboardRole; item: DashboardNavItem } | null => {
