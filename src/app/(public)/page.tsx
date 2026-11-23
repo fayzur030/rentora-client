@@ -20,8 +20,8 @@ export default function Home() {
       <PopularEquipments />
       <FeaturedEquipments />
       <HowItWorks />
-      <WhyChooseUs />
       <CustomerReviews />
+      <WhyChooseUs />
       <RecentlyAddedEquipments />
     </div>
   )

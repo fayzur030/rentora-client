@@ -98,11 +98,11 @@ const HeroCarousel = ({ categories }: HeroCarouselProps) => {
             animate='show'
             className='flex w-full flex-col items-center lg:items-start'
           >
-            <motion.div variants={fadeDownVariants}>
+            {/* <motion.div variants={fadeDownVariants}>
               <span className='inline-flex items-center rounded-full border border-hero-foreground/25 bg-hero-foreground/5 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-hero-foreground/90 backdrop-blur-sm sm:px-4 sm:text-xs md:text-sm'>
                 Your Trusted Rental Marketplace
               </span>
-            </motion.div>
+            </motion.div> */}
 
             {activeCategory && (
               <motion.p
@@ -112,7 +112,7 @@ const HeroCarousel = ({ categories }: HeroCarouselProps) => {
                 transition={{ duration: 0.35 }}
                 className='mt-5 text-xs font-bold uppercase tracking-[0.2em] text-hero-accent sm:text-sm'
               >
-                {activeCategory.name}
+                ⚡ {activeCategory.name}
               </motion.p>
             )}
 

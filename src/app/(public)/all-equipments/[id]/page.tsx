@@ -39,6 +39,7 @@ const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
   const isAvailable = equipment.availableQuantity > 0
   const session = await getSessionFromServer()
   const user = session?.user
+
   const favorites = user?.id ? await getFavorites(user.id) : []
   const isFavorite = favorites.some(
     (favorite) =>

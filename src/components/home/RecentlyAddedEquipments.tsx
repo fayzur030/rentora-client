@@ -8,7 +8,7 @@ const RecentlyAddedEquipments = async () => {
   const recentlyAddedEquipments = await getRecentlyAddedEquipments()
   return (
     <div>
-      <div className='mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8'>
+      <div className='mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 mt-10'>
         <div className='mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between'>
           <div>
             <p className='text-sm font-semibold uppercase tracking-[0.18em] text-primary'>

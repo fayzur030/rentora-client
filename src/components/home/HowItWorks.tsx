@@ -10,9 +10,8 @@ const steps = [
     description:
       'Explore a wide range of quality equipment and find exactly what you need for your next project.',
     icon: Search,
-    cardStyle:
-      'border-white/10 from-white/[0.08] via-white/[0.04] to-white/[0.02] hover:border-[var(--accent)]/45',
-    iconStyle: 'bg-[var(--accent)] text-[var(--brand-ink)]',
+    cardStyle: 'border-primary/10 hover:border-[var(--accent)]/50',
+    iconStyle: 'bg-[var(--accent)]/15 text-[var(--warning)]',
   },
   {
     number: '02',
@@ -20,9 +19,8 @@ const steps = [
     description:
       'Choose your rental dates, provide your details, and complete your booking with secure online payment.',
     icon: CreditCard,
-    cardStyle:
-      'border-[var(--accent)]/25 from-[var(--accent)]/15 via-white/[0.05] to-white/[0.02] hover:border-[var(--accent)]/55',
-    iconStyle: 'bg-[var(--accent)] text-[var(--brand-ink)]',
+    cardStyle: 'border-[var(--accent)]/35 hover:border-[var(--accent)]/60',
+    iconStyle: 'bg-[var(--accent)]/20 text-[var(--warning)]',
   },
   {
     number: '03',
@@ -30,9 +28,8 @@ const steps = [
     description:
       'Receive your equipment, get your work done, and return it when your rental period ends.',
     icon: PackageCheck,
-    cardStyle:
-      'border-white/10 from-white/[0.08] via-white/[0.04] to-white/[0.02] hover:border-[var(--accent)]/45',
-    iconStyle: 'bg-[var(--accent)] text-[var(--brand-ink)]',
+    cardStyle: 'border-primary/10 hover:border-[var(--accent)]/50',
+    iconStyle: 'bg-[var(--accent)]/15 text-[var(--warning)]',
   },
 ]
 
@@ -48,17 +45,17 @@ const stepVariants = {
 const HowItWorks = () => {
   return (
     <MotionConfig reducedMotion='user'>
-      <section className='relative isolate overflow-hidden bg-[var(--brand-ink)] py-20 sm:py-24 lg:py-28'>
+      <section className='relative isolate overflow-hidden bg-[color-mix(in_oklab,var(--background)_97%,var(--accent)_3%)] px-4 py-20 sm:px-6 sm:py-24 lg:px-8 lg:py-28'>
         <div
           className='pointer-events-none absolute -left-28 top-16 -z-10 size-80 rounded-full bg-[var(--accent)]/10 blur-3xl'
           aria-hidden='true'
         />
         <div
-          className='pointer-events-none absolute -right-20 bottom-0 -z-10 size-96 rounded-full bg-sky-300/10 blur-3xl'
+          className='pointer-events-none absolute -right-20 bottom-0 -z-10 size-96 rounded-full bg-primary/5 blur-3xl'
           aria-hidden='true'
         />
 
-        <div className='mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8'>
+        <div className='mx-auto w-full max-w-7xl'>
           <motion.div
             initial='hidden'
             whileInView='show'
@@ -71,20 +68,20 @@ const HowItWorks = () => {
           >
             <motion.p
               variants={stepVariants}
-              className='inline-flex items-center gap-2 rounded-full border border-[var(--accent)]/25 bg-[var(--accent)]/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--accent)] sm:text-xs'
+              className='inline-flex items-center gap-2 rounded-full border border-[var(--accent)]/25 bg-card/80 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--warning)] sm:text-xs'
             >
               <span className='size-1.5 rounded-full bg-[var(--accent)]' aria-hidden='true' />
               A smoother way to rent
             </motion.p>
             <motion.h2
               variants={stepVariants}
-              className='mt-5 font-heading text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl'
+              className='mt-5 font-heading text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl'
             >
               How It Works
             </motion.h2>
             <motion.p
               variants={stepVariants}
-              className='mx-auto mt-4 max-w-xl text-sm leading-7 text-white/65 sm:text-base'
+              className='mx-auto mt-4 max-w-xl text-sm leading-7 text-muted-foreground sm:text-base'
             >
               Renting the right equipment has never been easier. Get started in
               just three simple steps.
@@ -116,31 +113,31 @@ const HowItWorks = () => {
                     variants={stepVariants}
                     whileHover={{ y: -6 }}
                     transition={{ duration: 0.22, ease: 'easeOut' }}
-                    className={`group relative rounded-3xl border bg-gradient-to-br p-6 pt-12 shadow-[0_20px_60px_-35px_rgba(0,0,0,0.7)] backdrop-blur-sm transition-[border-color,box-shadow,transform] duration-300 hover:shadow-[0_25px_70px_-35px_rgba(233,168,58,0.25)] sm:p-8 sm:pt-14 ${step.cardStyle}`}
+                    className={`group relative rounded-3xl border bg-gradient-to-br from-card via-card to-background p-6 pt-12 shadow-[0_20px_60px_-35px_rgba(29,43,58,0.22)] transition-[border-color,box-shadow,transform] duration-300 hover:shadow-[0_25px_70px_-35px_rgba(233,168,58,0.25)] sm:p-8 sm:pt-14 ${step.cardStyle}`}
                   >
                     <span
-                      className='pointer-events-none absolute right-5 top-3 select-none font-heading text-7xl font-extrabold leading-none tracking-tighter text-white/[0.07] sm:right-7 sm:top-4 sm:text-8xl'
+                      className='pointer-events-none absolute right-5 top-3 select-none font-heading text-7xl font-extrabold leading-none tracking-tighter text-primary/[0.06] sm:right-7 sm:top-4 sm:text-8xl'
                       aria-hidden='true'
                     >
                       {step.number}
                     </span>
 
-                    <div className='absolute -top-9 left-1/2 z-10 flex size-[4.5rem] -translate-x-1/2 items-center justify-center rounded-2xl border border-primary-foreground/80 bg-card shadow-lg shadow-primary/10 ring-1 ring-border/70'>
+                    <div className='absolute -top-9 left-1/2 z-10 flex size-[4.5rem] -translate-x-1/2 items-center justify-center rounded-2xl border border-border bg-card shadow-lg shadow-primary/10 ring-1 ring-border/70'>
                       <div
-                        className={`flex size-12 items-center justify-center rounded-xl shadow-lg shadow-black/15 transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-3 ${step.iconStyle}`}
+                        className={`flex size-12 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-105 group-hover:-rotate-3 ${step.iconStyle}`}
                       >
                         <Icon className='size-5' aria-hidden='true' />
                       </div>
                     </div>
 
                     <div className='relative text-center'>
-                      <p className='text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--accent)]'>
+                      <p className='text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--warning)]'>
                         {step.number}
                       </p>
-                      <h3 className='mt-3 font-heading text-lg font-bold tracking-tight text-white sm:text-xl'>
+                      <h3 className='mt-3 font-heading text-lg font-bold tracking-tight text-foreground sm:text-xl'>
                         {step.title}
                       </h3>
-                      <p className='mx-auto mt-3 max-w-sm text-sm leading-6 text-white/60'>
+                      <p className='mx-auto mt-3 max-w-sm text-sm leading-6 text-muted-foreground'>
                         {step.description}
                       </p>
                     </div>
